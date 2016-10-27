@@ -33,7 +33,8 @@
     "flow-bin": "^0.25.0",
     "jest-cli": "^13.0.0",
     "static-server": "^2.0.3",
-    "uglify-js": "^2.6.4"
+    "uglify-js": "^2.6.4",
+    "whatwg-fetch": "^1.0.0"
   },
   "scripts": {},
   "browserify": {
@@ -44,6 +45,5 @@
   "jest": {
     "rootDir": "./src"
   },
-  "keywords": [
-  ]
+  "keywords": []
 }
