@@ -12,7 +12,7 @@ const combine = (...args) => {
   }
 }
 
-// Side-efectul Combinators
+// Side-effectful Combinators
 const log = (prefix, combinator) => s => {
   console.log(performance.now()|0, prefix, "=>", s)
   return combinator(s)
