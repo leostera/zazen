@@ -1,0 +1,10 @@
+node_modules
+build
+dist
+TODO
+src/metadata.js
+
+*.sw*
+.build.sh
+.travis_build
+.bin

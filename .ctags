@@ -1,0 +1,4 @@
+-w
+--recurse=yes
+--exclude=@.ctagsignore
+-o tags
