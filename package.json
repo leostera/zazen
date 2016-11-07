@@ -14,11 +14,14 @@
   "main": "src/app.js",
   "dependencies": {
     "babel-eslint": "^6.1.0",
+    "babel-jest": "^16.0.0",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-plugin-transform-flow-strip-types": "^6.8.0",
     "babel-plugin-transform-function-bind": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.16.1",
     "babel-polyfill": "^6.16.0",
     "babel-preset-es2015": "^6.9.0",
+    "babel-preset-jest": "^16.0.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-preset-stage-1": "^6.5.0",
@@ -31,11 +34,12 @@
     "eslint-plugin-react": "^5.2.2",
     "exorcist": "^0.4.0",
     "flow-bin": "^0.25.0",
-    "jest-cli": "^13.0.0",
-    "kalachakra": "^0.0.1",
+    "jest": "^16.0.2",
+    "jest-cli": "^16.0.2",
+    "jsverify": "^0.7.4",
+    "regenerator": "^0.8.46",
     "static-server": "^2.0.3",
-    "uglify-js": "^2.6.4",
-    "whatwg-fetch": "^1.0.0"
+    "uglify-js": "^2.6.4"
   },
   "scripts": {},
   "browserify": {
@@ -46,5 +50,7 @@
   "jest": {
     "rootDir": "./src"
   },
-  "keywords": []
+  "keywords": [
+    "streams"
+  ]
 }

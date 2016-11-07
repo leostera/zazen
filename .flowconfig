@@ -5,9 +5,7 @@ all=true
 .*/src/.*
 .*/node_modules/zazen/.*
 
-[libs]
-.*/node_modules/.*
-
 [ignore]
-.*/node_modules/fbjs
-.*/build/.*
+.*/__tests__/.*
+.*/node_modules/.*
+.*/lib/.*

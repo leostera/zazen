@@ -1,6 +1,7 @@
-//@flow
-
-import { log } from './log'
+import {
+  tick as now,
+  log
+} from 'zazen/utils'
 
 type Arrow = {
   id(): Function;
@@ -11,6 +12,6 @@ type Arrow = {
 // arrrow :: (b -> c) -> Arrow b c
 const arrow = (f: Function): Arrow  => {
   f.id   = () => f
-  f. = g => x => g(f(x))
+  f.next = g => x => g(f(x))
   return f
 }
