@@ -1,6 +1,7 @@
 import {
   tick as now,
-  log
+  log,
+  atom,
 } from 'zazen/utils'
 
 type Arrow = {
@@ -10,8 +11,23 @@ type Arrow = {
 
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
-const arrow = (f: Function): Arrow  => {
+const arrow = (a: Function): Arrow  => {
+  const f = g => x => g(a(x))
+
   f.id   = () => f
-  f.next = g => x => g(f(x))
+  f.toString = () => `[Arrow]`
+
   return f
 }
+
+type Operator = [ Symbol, Function ]
+
+// Arrows Operators to define
+const operators: Operator[] = [
+  [atom('>>>'), compose],
+  [atom('&&&'), fork],
+  [atom('***'), combine],
+  [atom('|||'), choose],
+  [atom('+++'), join],
+  [atom('<+>'), or],
+]
