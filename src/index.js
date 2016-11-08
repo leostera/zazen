@@ -1,13 +1,3 @@
-import kalachakra from 'kalachakra'
-
-import {
-  tick as now,
-  log,
-  atom,
-} from 'zazen/utils'
-
-log(kalachakra)
-
 type Pair<T>  = [ T, T ]
 type Arrow = {
   first():  Arrow;
@@ -38,6 +28,3 @@ const arrow = (f: Function): Arrow  => {
 const stream = (f: Function): Arrow => arrow( a => a.map(f) )
 
 export { arrow, stream }
-
-window.arrow = arrow
-window.stream = stream
