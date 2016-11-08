@@ -4,30 +4,38 @@ import {
   atom,
 } from 'zazen/utils'
 
+// Lift an arrow into a an arrow of tuples
+const first  = (a: Arrow) => arrow( (a,b) => (a.f(a),b) )
+const second = (a: Arrow) => arrow( (a,b) => (a,a.f(b)) )
+
+const id = (x) => () => x
+const compose = f => g => x => f(g(x))
+
 type Arrow = {
-  id(): Function;
-  next(g: Function): Function;
+  id(): Arrow;
+  compose(a: Function): Arrow;
 }
 
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
-const arrow = (a: Function): Arrow  => {
-  const f = g => x => g(a(x))
+const arrow = (f: Function): Arrow  => ({
+  f: f,
+  id: () => arrow(f),
+  compose: g => arrow( x => f(g(x)) ),
+  [atom("name")]: "Arrow",
+})
 
-  f.id   = () => f
-  f.toString = () => `[Arrow]`
-
-  return f
+type Stream = {
+  run(inputs: mixed): [mixed];
 }
 
-type Operator = [ Symbol, Function ]
+// Lifts a function into a Stream Arrow
+// stream ::(b -> c) -> Arrow [b] [c]
+const stream = (f: Function): Stream => ({
+  ...arrow(f),
+  run: (...a) => a.map(f),
+  [atom("name")]: "Stream",
+})
 
-// Arrows Operators to define
-const operators: Operator[] = [
-  [atom('>>>'), compose],
-  [atom('&&&'), fork],
-  [atom('***'), combine],
-  [atom('|||'), choose],
-  [atom('+++'), join],
-  [atom('<+>'), or],
-]
+window.arrow = arrow
+window.stream = stream

@@ -42,7 +42,7 @@ test:
 lint:
 	$(BIN_DIR)/eslint ./src
 
-source:
+build:
 	$(BIN_DIR)/browserify \
 		src/index.js \
 		--debug \
