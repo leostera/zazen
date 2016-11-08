@@ -4,32 +4,32 @@ import {
   atom,
 } from 'zazen/utils'
 
-type Pair = {
-  first: mixed;
-  second: mixed;
-}
-const pair = (a, b) => [a, b]
-const first  = ({a}: Pair) => a
-const second = ({b}: Pair) => b
-
-// Lift an arrow into a an arrow of tuples
-// const first  = (a: Arrow) => arrow( (a,b) => (a.f(a),b) )
-// const second = (a: Arrow) => arrow( (a,b) => (a,a.f(b)) )
-
+type Pair<T>  = [ T, T ]
 type Arrow = {
-  id(): Arrow;
-  compose(a: Function): Arrow;
+  first():  Arrow;
+  second(): Arrow;
+  compose(b: Arrow): Arrow;
+  combine(b: Arrow): Arrow;
+  fanout (b: Arrow): Arrow;
 }
 
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
-const arrow = (f: Function): Arrow  => ({
-  combine: g => (p: Pair) => pair( f(first(p)), g(second(p)) ),
+const arrow = (f: Function): Arrow  => {
+  const first  = () => arrow( ([a, _]: Pair): Pair => [f(a), _] )
+  const second = () => arrow( ([_, b]: Pair): Pair => [_, f(b)] )
+  const compose = (g) => arrow( x => f(g(x)) )
+  const combine = (g) => arrow( ([a, b]) => [f(a),g(b)] )
+  const fanout  = (g) => combine(g).compose( arrow( x => [x,x] ) )
 
-  // Implementatino Specific
-  [atom("object_name")]: "Arrow",
-  f: f,
-})
+  f.first  = first
+  f.second = second
+  f.compose = compose
+  f.combine = combine
+  f.fanout  = fanout
+
+  return f
+}
 
 type Stream = {
   run(inputs: mixed): [mixed];
@@ -37,11 +37,8 @@ type Stream = {
 
 // Lifts a function into a Stream Arrow
 // stream :: (b -> c) -> Arrow [b] [c]
-const stream = (f: Function): Stream => ({
-  ...arrow(f),
-  run: (...a) => a.map(f),
-  [atom("object_name")]: "Stream",
-})
+const stream = (f: Function): Stream => {
+}
 
 window.arrow = arrow
 window.stream = stream
