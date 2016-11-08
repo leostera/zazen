@@ -25,6 +25,9 @@ const arrow = (f: Function): Arrow  => {
 
 // Lifts a function into a Stream Arrow
 // stream :: (b -> c) -> Arrow [b] [c]
-const stream = (f: Function): Arrow => arrow( a => a.map(f) )
+const stream = (f: Function): Arrow => (arrow( a => a.map(f) ))
 
 export { arrow, stream }
+
+window.arrow = arrow
+window.stream = stream
