@@ -4,6 +4,14 @@ import {
   atom,
 } from 'zazen/utils'
 
+type Pair = {
+  first: mixed;
+  second: mixed;
+}
+const pair = (a, b) => [a, b]
+const first  = ({a}: Pair) => a
+const second = ({b}: Pair) => b
+
 // Lift an arrow into a an arrow of tuples
 // const first  = (a: Arrow) => arrow( (a,b) => (a.f(a),b) )
 // const second = (a: Arrow) => arrow( (a,b) => (a,a.f(b)) )
@@ -16,10 +24,11 @@ type Arrow = {
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
 const arrow = (f: Function): Arrow  => ({
+  combine: g => (p: Pair) => pair( f(first(p)), g(second(p)) ),
+
+  // Implementatino Specific
+  [atom("object_name")]: "Arrow",
   f: f,
-  id: () => arrow(f),
-  compose: g => arrow( x => f(g(x)) ),
-  [atom("name")]: "Arrow",
 })
 
 type Stream = {
@@ -31,7 +40,7 @@ type Stream = {
 const stream = (f: Function): Stream => ({
   ...arrow(f),
   run: (...a) => a.map(f),
-  [atom("name")]: "Stream",
+  [atom("object_name")]: "Stream",
 })
 
 window.arrow = arrow
