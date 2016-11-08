@@ -24,30 +24,30 @@ const check = (name, predicate) => {
   })
 }
 
-check('it returns the value when called',
+check("an Arrow returns its function's value when called",
   forall('json -> json', 'json', nat(100),
     (f, x) => arrow( () => f(x) )() == f(x) ))
 
-check('is composable with regular functions',
+check('an Arrow is composable with regular functions',
   forall('json -> json', 'json', nat(100),
     (f, x) => arrow(f).compose( () => x )() == f(x) ))
 
-check('is composable with other arrows',
+check('an Arrow is composable with other arrows',
   forall('json -> json', 'json', nat(100),
     (f, x) => arrow(f).compose( arrow(() => x) )() == f(x) ))
 
-check('is combinable with regular functions',
+check('an Arrow is combinable with regular functions',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(arrow(f).combine(f)([x,x]), [f(x),f(x)])))
 
-check('is combinable with other arrows',
+check('an Arrow is combinable with other arrows',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(arrow(f).combine(arrow(f))([x,x]), [f(x),f(x)])))
 
-check('is fanout-able with regular functions',
+check('an Arrow is fanout-able with regular functions',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(arrow(f).fanout(x => add1(f(x)))(x), [f(x),add1(f(x))])))
 
-check('is fanout-able with other arrows',
+check('an Arrow is fanout-able with other arrows',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(arrow(f).fanout(arrow(x => add1(f(x))))(x), [f(x),add1(f(x))])))

@@ -1,3 +1,5 @@
+import { log } from 'zazen/utils'
+
 type Pair<T>  = [ T, T ]
 type Arrow = {
   first():  Arrow;
@@ -13,12 +15,12 @@ const arrow = (f: Function): Arrow  => {
   f.first  = () => arrow( ([a, _]: Pair): Pair => [f(a), _] )
   f.second = () => arrow( ([_, b]: Pair): Pair => [_, f(b)] )
 
-  const compose = (g) => arrow( x => f(g(x)) )
-  const combine = (g) => arrow( ([a, b]) => [f(a),g(b)] )
+  const compose = g => arrow( x => f(g(x)) )
+  const combine = g => arrow( ([a, b]) => [f(a),g(b)] )
 
   f.compose = compose
   f.combine = combine
-  f.fanout  = (g) => combine(g).compose( arrow( x => [x,x] ) )
+  f.fanout  = g => combine(g).compose( arrow( x => [x,x] ) )
 
   return f
 }
@@ -27,7 +29,11 @@ const arrow = (f: Function): Arrow  => {
 // stream :: (b -> c) -> Arrow [b] [c]
 const stream = (f: Function): Arrow => (arrow( a => a.map(f) ))
 
+let push = stream( x => x )
+
 export { arrow, stream }
 
 window.arrow = arrow
 window.stream = stream
+
+window.push = push
