@@ -5,11 +5,8 @@ import {
 } from 'zazen/utils'
 
 // Lift an arrow into a an arrow of tuples
-const first  = (a: Arrow) => arrow( (a,b) => (a.f(a),b) )
-const second = (a: Arrow) => arrow( (a,b) => (a,a.f(b)) )
-
-const id = (x) => () => x
-const compose = f => g => x => f(g(x))
+// const first  = (a: Arrow) => arrow( (a,b) => (a.f(a),b) )
+// const second = (a: Arrow) => arrow( (a,b) => (a,a.f(b)) )
 
 type Arrow = {
   id(): Arrow;
