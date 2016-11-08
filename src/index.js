@@ -42,8 +42,12 @@ type Stream = Arrow & {
 const stream = (m: Function): Stream => {
   const f = a => a.map(m)
 
+  const compose = (g) => arrow( x => f(g(x)) )
+
   f.first  = () => arrow( ([a, _]: Pair): Pair => [f(a), _] )
   f.second = () => arrow( ([_, b]: Pair): Pair => [_, f(b)] )
+
+  f.compose = compose
 
   return f
 }
