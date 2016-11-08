@@ -22,6 +22,9 @@ STAMP     = $(REVISION).$(shell date +%s)
 
 all: build lint check test bench
 
+dirs:
+	mkdir -p $(DIST_DIR) $(BUILD_DIR)
+
 setup:
 	$(SCRIPT_DIR)/symlink.sh
 
@@ -42,7 +45,7 @@ test:
 lint:
 	$(BIN_DIR)/eslint ./src
 
-build:
+build: dirs
 	$(BIN_DIR)/browserify \
 		src/index.js \
 		--debug \

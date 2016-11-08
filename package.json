@@ -37,6 +37,7 @@
     "jest": "^16.0.2",
     "jest-cli": "^16.0.2",
     "jsverify": "^0.7.4",
+    "kalachakra": "^0.0.1",
     "regenerator": "^0.8.46",
     "static-server": "^2.0.3",
     "uglify-js": "^2.6.4"
@@ -48,9 +49,17 @@
     ]
   },
   "jest": {
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "preprocessorIgnorePatterns": [
+      ".*/node_modules/(?!(zazen)/).*/"
+    ],
+    "testPathIgnorePatterns": [
+      ".*/perf/.*"
+    ]
   },
   "keywords": [
-    "streams"
+    "streams",
+    "small",
+    "arrows"
   ]
 }
