@@ -27,7 +27,7 @@ type Stream = {
 }
 
 // Lifts a function into a Stream Arrow
-// stream ::(b -> c) -> Arrow [b] [c]
+// stream :: (b -> c) -> Arrow [b] [c]
 const stream = (f: Function): Stream => ({
   ...arrow(f),
   run: (...a) => a.map(f),
