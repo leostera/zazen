@@ -18,12 +18,14 @@ type Arrow = {
 const arrow = (f: Function): Arrow  => {
   const first  = () => arrow( ([a, _]: Pair): Pair => [f(a), _] )
   const second = () => arrow( ([_, b]: Pair): Pair => [_, f(b)] )
+
   const compose = (g) => arrow( x => f(g(x)) )
   const combine = (g) => arrow( ([a, b]) => [f(a),g(b)] )
   const fanout  = (g) => combine(g).compose( arrow( x => [x,x] ) )
 
   f.first  = first
   f.second = second
+
   f.compose = compose
   f.combine = combine
   f.fanout  = fanout
@@ -31,13 +33,19 @@ const arrow = (f: Function): Arrow  => {
   return f
 }
 
-type Stream = {
-  run(inputs: mixed): [mixed];
+type Stream = Arrow & {
+  (a: mixed[]): mixed[];
 }
 
 // Lifts a function into a Stream Arrow
 // stream :: (b -> c) -> Arrow [b] [c]
-const stream = (f: Function): Stream => {
+const stream = (m: Function): Stream => {
+  const f = a => a.map(m)
+
+  f.first  = () => arrow( ([a, _]: Pair): Pair => [f(a), _] )
+  f.second = () => arrow( ([_, b]: Pair): Pair => [_, f(b)] )
+
+  return f
 }
 
 window.arrow = arrow
