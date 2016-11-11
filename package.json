@@ -10,9 +10,9 @@
     "url": "https://github.com/ostera/zazen/issues"
   },
   "license": "MIT",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1-rc.0",
   "main": "src/app.js",
-  "dependencies": {
+  "devDependencies": {
     "babel-eslint": "^6.1.0",
     "babel-jest": "^16.0.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
@@ -37,7 +37,6 @@
     "jest": "^16.0.2",
     "jest-cli": "^16.0.2",
     "jsverify": "^0.7.4",
-    "kalachakra": "^0.0.1",
     "regenerator": "^0.8.46",
     "static-server": "^2.0.3",
     "uglify-js": "^2.6.4"
