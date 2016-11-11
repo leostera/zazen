@@ -1,1 +1,1 @@
-export { arrow } from 'zazen/arrow'
+export { arrow } from './arrow'
