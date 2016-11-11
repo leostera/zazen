@@ -9,13 +9,6 @@ type Arrow = {
   fanout (b: Arrow): Arrow;
 }
 
-const flatten = (list, depth) => {
-  return depth === 0 ?
-    list :
-    flatten(list.reduce( (acc,e) => acc.concat(e), [] ), depth-1)
-}
-const nested_pairs = (n) => (x) => (n===0) ? x : [].concat([nested_pairs(n-1)(x), x])
-
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
 const arrow = (f: Function): Arrow  => {
@@ -28,17 +21,6 @@ const arrow = (f: Function): Arrow  => {
   f.compose = compose
   f.combine = combine
   f.fanout  = g => combine(g).compose( arrow( x => [x,x] ) )
-
-  f.merge = (...a: Arrow[]): Arrow => {
-    let d = a.reduce( (b, c) => {
-      return b.combine(c)
-    }, arrow( x => x ))
-    let flat = arrow( x => flatten(x, a.length) )
-    return f.compose(
-      flat.compose(
-        d.compose(
-          nested_pairs(a.length))))
-  }
 
   return f
 }
@@ -69,9 +51,24 @@ let inputs = arrow( x => x )
 //  [ [[a,b],c], d ] => [ [ [f(a), keys(b)], clicks(c) ], trusted(d) ]
 //  x => [ [ [f(x), keys(x)], clicks(x) ], trusted(x) ]
 //
+const flatten = (list, depth) => {
+  return depth === 0 ?
+    list :
+    flatten(list.reduce( (acc,e) => acc.concat(e), [] ), depth-1)
+}
+const nested_pairs = (n) => (x) => (n===0) ? x : [].concat([nested_pairs(n-1)(x), x])
+const arrowify = (combinators) => {
+  let a = combinators.reduce( (arr, c) => {
+    return arr.combine(c)
+  }, arrow( x => x ))
+  return arrow( x => x )
+    .compose(arrow( x => flatten(x, combinators.length) )
+      .compose(a
+        .compose(nested_pairs(combinators.length))))
+}
 let inputsify =
   arrow(log.ns("Inputsify"))
-    .merge( [keys, clicks, trusted ] )
+    .compose(arrowify( [keys, clicks, trusted ] ))
 
 document.addEventListener('mousedown', inputsify)
 document.addEventListener('keydown', inputsify)
