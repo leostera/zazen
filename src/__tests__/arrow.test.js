@@ -12,7 +12,8 @@ import {
 import { arrow } from 'zazen'
 
 const options = {
-  tests: 1000
+  quiet: true,
+  tests: 1000,
 }
 
 const str  = JSON.stringify
