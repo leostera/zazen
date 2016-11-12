@@ -1,4 +1,6 @@
-import { atom } from 'zazen/utils'
+import {
+  atom,
+} from 'zazen/utils'
 
 const id   = (a: mixed): mixed => a
 
