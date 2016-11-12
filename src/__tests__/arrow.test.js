@@ -4,7 +4,10 @@ import {
   nat,
 } from 'jsverify'
 
-import { log } from 'zazen/utils'
+import {
+  log,
+  atom,
+} from 'zazen/utils'
 
 import { arrow } from 'zazen'
 
@@ -15,7 +18,12 @@ const options = {
 const str  = JSON.stringify
 const add1 = x => x+1
 
-const eq = ([a,b], [c,d]) => a === c && b === d
+const equal_pairs = ([a,b], [c,d]) => a === c && b === d
+
+const eq = (a,b) => {
+  if( a.length === 2 && b.length === 2 ) return equal_pairs(a,b)
+  else return a === b
+}
 
 const check = (name, predicate) => {
   test(name, () => {
@@ -38,16 +46,48 @@ check('an Arrow is composable with other arrows',
 
 check('an Arrow is combinable with regular functions',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq(arrow(f).combine(f)([x,x]), [f(x),f(x)])))
+    (f, x) => eq(
+      arrow(f).combine(f)([x,x]),
+      [f(x),f(x)])))
 
 check('an Arrow is combinable with other arrows',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq(arrow(f).combine(arrow(f))([x,x]), [f(x),f(x)])))
+    (f, x) => eq(
+      arrow(f).combine(arrow(f))([x,x]),
+      [f(x),f(x)])))
 
 check('an Arrow is fanout-able with regular functions',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq(arrow(f).fanout(x => add1(f(x)))(x), [f(x),add1(f(x))])))
+    (f, x) => eq(
+      arrow(f).fanout(x => add1(f(x)))(x),
+      [f(x),add1(f(x))])))
 
 check('an Arrow is fanout-able with other arrows',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq(arrow(f).fanout(arrow(x => add1(f(x))))(x), [f(x),add1(f(x))])))
+    (f, x) => eq(
+      arrow(f).fanout(arrow(x => add1(f(x))))(x),
+      [f(x),add1(f(x))])))
+
+check('an Arrow is summable with other arrows on Left',
+  forall('integer -> integer', 'integer', nat(100),
+    (f, x) => eq(
+      arrow(f).sum(arrow(x => add1(f(x))))([atom('Left'), x]),
+      [atom('Left'), f(x)])))
+
+check('an Arrow is summable with other arrows on Right',
+  forall('integer -> integer', 'integer', nat(100),
+    (f, x) => eq(
+      arrow(f).sum(arrow(x => add1(f(x))))([atom('Right'), x]),
+      [atom('Right'), add1(f(x))])))
+
+check('an Arrow is fanin-able with other arrows on Left',
+  forall('integer -> integer', 'integer', nat(100),
+    (f, x) => eq(
+      arrow(f).fanin(arrow(x => add1(f(x))))([atom('Left'), x]),
+      f(x))))
+
+check('an Arrow is fanin-able with other arrows on Right',
+  forall('integer -> integer', 'integer', nat(100),
+    (f, x) => eq(
+      arrow(f).fanin(arrow(x => add1(f(x))))([atom('Right'), x]),
+      add1(f(x)))))
