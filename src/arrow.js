@@ -12,11 +12,13 @@ const id   = (a: mixed): mixed => a
 const flip = ([a,b]: Pair): Pair => [b,a]
 const dupe = (x): Pair => [x,x]
 
-type Either<T> = {
-  left?:  T;
-  right?: T;
+type Left  = atom('Left')
+type Right = atom('Right')
+type Either<T> = [ Left | Right, mixed ]
+const either = (f, g, [LR, a]: Either) => {
+  if( LR === atom('Left')  ) return f(a)
+  if( LR === atom('Right') ) return g(a)
 }
-const either = (f, g, {left, right}: Either) => left && f(left) || g(right)
 
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
@@ -30,7 +32,7 @@ const arrow = (f: Function): Arrow  => {
   f.combine = g => arrow( ([a, b]) => [f(a),g(b)] )
   f.fanout  = g => arrow(dupe).pipe(f.combine(g))
 
-  f.fanin   = g => m => f.combine(g).pipe(m)
+  f.fanin   = g => f.combine(g).pipe(m)
 
   f.left  = _ => {}
   f.right = _ => {}
