@@ -18,11 +18,11 @@ const mirrored_left  = [atom('Right'), 1]
 const mirrored_right = [atom('Left'), 2]
 
 test("an Either executes f for Left", () => {
-  expect( either(id, id, left) ).toEqual(1)
+  expect( either(id, id, left) ).toEqual(left)
 })
 
 test("an Either executes g for Right", () => {
-  expect( either(id, id, right) ).toEqual(2)
+  expect( either(id, id, right) ).toEqual(right)
 })
 
 test("an Either Left becomes an Either Right when mirrored", () => {

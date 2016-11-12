@@ -10,9 +10,9 @@ export type Left  = Atom
 export type Right = Atom
 export type Either<T> = [ Left | Right, T ]
 
-const either = (f: Function, g: Function, [LR, a]: Either): mixed => {
-  if( LR === atom('Left')  ) return f(a)
-  if( LR === atom('Right') ) return g(a)
+const either = (f: Function, g: Function, [LR, a]: Either): ?Either => {
+  if( LR === atom('Left')  ) return [atom('Left'),  f(a)]
+  if( LR === atom('Right') ) return [atom('Right'), g(a)]
 }
 
 const mirror = ([LR, a]: Either): ?Either => {

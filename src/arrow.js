@@ -7,10 +7,10 @@ import type {
 } from 'zazen/either'
 
 import {
+  either,
   mirror,
+  untag,
 } from 'zazen/either'
-
-const id   = (a: mixed): mixed => a
 
 type Pair  = [ mixed, mixed ]
 const flip = ([a,b]: Pair): Pair => [b,a]
@@ -19,17 +19,30 @@ const dupe = (x): Pair => [x,x]
 type Arrow = {
   first():  Arrow<Pair>;
   second(): Arrow<Pair>;
-  combine(b: Arrow): Arrow;
+
   compose(b: Arrow): Arrow;
-  fanout (b: Arrow): Arrow;
   pipe(b: Arrow):    Arrow;
+
+  combine(b: Arrow): Arrow;
+  fanout (b: Arrow): Arrow;
+
+  left(x: mixed):  Either;
+  right(x: mixed): Either;
+
+  sum(b: Arrow):   Arrow;
+  fanin(b: Arrow): mixed;
 }
 
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
 const arrow = (f: Function): Arrow  => {
-  f.first   = _ => arrow( ([a, b]: Pair): Pair => [f(a), id(b)] )
-  f.second  = _ => arrow( ([a, b]: Pair): Pair => [id(a), f(b)] )
+  f.id = x => x
+
+  /***
+   * Arrow
+   ***/
+  f.first   = _ => arrow( ([a, b]: Pair): Pair => [f(a), f.id(b)] )
+  f.second  = _ => arrow( ([a, b]: Pair): Pair => [f.id(a), f(b)] )
 
   f.compose = g => arrow( x => f(g(x)) )
   f.pipe    = g => arrow( x => g(f(x)) ) //reverse compose
@@ -37,11 +50,14 @@ const arrow = (f: Function): Arrow  => {
   f.combine = g => arrow( ([a, b]) => [f(a),g(b)] )
   f.fanout  = g => arrow(dupe).pipe(f.combine(g))
 
-  f.left  = _ => arrow( (a: Either): Either => [atom('Left'),  a] )
-  f.right = _ => arrow( (a: Either): Either => [atom('Right'), a] )
+  /***
+   * ArrowChoice
+   ***/
+  f.left  = x => f.sum(f.id)([atom('Left'),  x])
+  f.right = x => f.sum(f.id)([atom('Right'), x])
 
-  f.sum     = g => f.left().pipe(mirror).pipe(g.left()).pipe(mirror)
-  f.fanin   = (g, m) => f.combine(g).pipe(m)
+  f.sum   = g => arrow( (e: Either): ?Either => either(f, g, e) )
+  f.fanin = g => f.sum(g).pipe(arrow(untag))
 
   return f
 }
