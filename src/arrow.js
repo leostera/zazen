@@ -2,6 +2,14 @@ import {
   atom,
 } from 'zazen/utils'
 
+import type {
+  Either,
+} from 'zazen/either'
+
+import {
+  mirror,
+} from 'zazen/either'
+
 const id   = (a: mixed): mixed => a
 
 type Pair  = [ mixed, mixed ]
@@ -29,10 +37,11 @@ const arrow = (f: Function): Arrow  => {
   f.combine = g => arrow( ([a, b]) => [f(a),g(b)] )
   f.fanout  = g => arrow(dupe).pipe(f.combine(g))
 
-  f.fanin   = (g, m) => f.combine(g).pipe(m)
+  f.left  = _ => arrow( (a: Either): Either => [atom('Left'),  a] )
+  f.right = _ => arrow( (a: Either): Either => [atom('Right'), a] )
 
-  f.left  = _ => {}
-  f.right = _ => {}
+  f.sum     = g => f.left().pipe(mirror).pipe(g.left()).pipe(mirror)
+  f.fanin   = (g, m) => f.combine(g).pipe(m)
 
   return f
 }

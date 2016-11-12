@@ -6,9 +6,9 @@ import {
   atom,
 } from 'zazen/utils'
 
-type Left  = Atom
-type Right = Atom
-type Either<T> = [ Left | Right, T ]
+export type Left  = Atom
+export type Right = Atom
+export type Either<T> = [ Left | Right, T ]
 
 const either = (f: Function, g: Function, [LR, a]: Either): mixed => {
   if( LR === atom('Left')  ) return f(a)
