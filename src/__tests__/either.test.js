@@ -12,7 +12,7 @@ import {
 const id = x => x
 const left  = [atom('Left'), 1]
 const right = [atom('Right'), 2]
-const center = [atom('Center'), 2]
+const center = [atom('Center'), Infinity]
 
 const mirrored_left  = [atom('Right'), 1]
 const mirrored_right = [atom('Left'), 2]
