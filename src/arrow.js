@@ -1,4 +1,20 @@
+import { atom } from 'zazen/utils'
+
+const id   = (a: mixed): mixed => a
+
 type Pair  = [ mixed, mixed ]
+const flip = ([a,b]: Pair): Pair => [b,a]
+const dupe = (x): Pair => [x,x]
+
+type Left  = Symbol
+type Right = Symbol
+type Either<T> = [ Left | Right, T ]
+
+const either = (f, g, [LR, a]: Either) => {
+  if( LR === atom('Left')  ) return f(a)
+  if( LR === atom('Right') ) return g(a)
+}
+
 type Arrow = {
   first():  Arrow<Pair>;
   second(): Arrow<Pair>;
@@ -6,18 +22,6 @@ type Arrow = {
   compose(b: Arrow): Arrow;
   fanout (b: Arrow): Arrow;
   pipe(b: Arrow):    Arrow;
-}
-
-const id   = (a: mixed): mixed => a
-const flip = ([a,b]: Pair): Pair => [b,a]
-const dupe = (x): Pair => [x,x]
-
-type Left  = atom('Left')
-type Right = atom('Right')
-type Either<T> = [ Left | Right, mixed ]
-const either = (f, g, [LR, a]: Either) => {
-  if( LR === atom('Left')  ) return f(a)
-  if( LR === atom('Right') ) return g(a)
 }
 
 // Lifts a function into an Arrow
@@ -32,12 +36,10 @@ const arrow = (f: Function): Arrow  => {
   f.combine = g => arrow( ([a, b]) => [f(a),g(b)] )
   f.fanout  = g => arrow(dupe).pipe(f.combine(g))
 
-  f.fanin   = g => f.combine(g).pipe(m)
+  f.fanin   = (g, m) => f.combine(g).pipe(m)
 
   f.left  = _ => {}
   f.right = _ => {}
-
-  f.loop  = 
 
   return f
 }
