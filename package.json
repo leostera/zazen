@@ -33,7 +33,7 @@
     "eslint": "^3.0.0",
     "eslint-plugin-react": "^5.2.2",
     "exorcist": "^0.4.0",
-    "flow-bin": "^0.25.0",
+    "flow-bin": "^0.35.0",
     "jest": "^16.0.2",
     "jest-cli": "^16.0.2",
     "jsverify": "^0.7.4",
@@ -60,5 +60,7 @@
     "streams",
     "small",
     "arrows"
-  ]
+  ],
+  "dependencies": {
+  }
 }

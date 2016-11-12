@@ -3,6 +3,7 @@
 readonly FILES=$(
   find src \
     -name "*.js" \
+    -not -name "*index.js" \
     -not -name "*.test.js" \
     -not -name "*.perf.js" \
   | sort

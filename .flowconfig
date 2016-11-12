@@ -2,8 +2,8 @@
 all=true
 
 [include]
-.*/src/.*
 .*/node_modules/zazen/.*
+.*/src/.*
 
 [ignore]
 .*/__tests__/.*

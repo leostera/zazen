@@ -8,7 +8,7 @@ import {
 
 export type Left  = Atom
 export type Right = Atom
-export type Either<T> = [ Left | Right, T ]
+export type Either = [ Left | Right, mixed ]
 
 const either = (f: Function, g: Function, [LR, a]: Either): ?Either => {
   if( LR === atom('Left')  ) return [atom('Left'),  f(a)]
