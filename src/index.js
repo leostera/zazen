@@ -1,1 +1,6 @@
-export { arrow } from './arrow'
+export {
+  arrow,
+  sf,
+} from './arrow'
+
+window.zazen = module.exports
