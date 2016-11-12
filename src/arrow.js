@@ -13,8 +13,6 @@ import {
 } from 'zazen/either'
 
 type Pair  = [ mixed, mixed ]
-const flip = ([a,b]: Pair): Pair => [b,a]
-const dupe = (x): Pair => [x,x]
 
 type Arrow = {
   first():  Arrow<Pair>;
@@ -41,14 +39,14 @@ const arrow = (f: Function): Arrow  => {
   /***
    * Arrow
    ***/
-  f.first   = _ => arrow( ([a, b]: Pair): Pair => [f(a), f.id(b)] )
-  f.second  = _ => arrow( ([a, b]: Pair): Pair => [f.id(a), f(b)] )
+  f.first   = x => arrow( ([a, b]: Pair): Pair => [f(a), f.id(b)] )(x)
+  f.second  = x => arrow( ([a, b]: Pair): Pair => [f.id(a), f(b)] )(x)
 
   f.compose = g => arrow( x => f(g(x)) )
   f.pipe    = g => arrow( x => g(f(x)) ) //reverse compose
 
   f.combine = g => arrow( ([a, b]) => [f(a),g(b)] )
-  f.fanout  = g => arrow(dupe).pipe(f.combine(g))
+  f.fanout  = g => arrow( (x): Pair => [x,x] ).pipe(f.combine(g))
 
   /***
    * ArrowChoice
