@@ -12,6 +12,12 @@ const id   = (a: mixed): mixed => a
 const flip = ([a,b]: Pair): Pair => [b,a]
 const dupe = (x): Pair => [x,x]
 
+type Either<T> = {
+  left?:  T;
+  right?: T;
+}
+const either = (f, g, {left, right}: Either) => left && f(left) || g(right)
+
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
 const arrow = (f: Function): Arrow  => {
@@ -28,6 +34,8 @@ const arrow = (f: Function): Arrow  => {
 
   f.left  = _ => {}
   f.right = _ => {}
+
+  f.loop  = 
 
   return f
 }
