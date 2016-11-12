@@ -91,3 +91,11 @@ check('an Arrow is fanin-able with other arrows on Right',
     (f, x) => eq(
       arrow(f).fanin(arrow(x => add1(f(x))))([atom('Right'), x]),
       add1(f(x)))))
+
+check('an Arrow is left-able',
+  forall('integer -> integer', 'integer', nat(100),
+    (f, x) => eq( arrow(f).left(x), [atom('Left'), f(x)] )))
+
+check('an Arrow is right-able',
+  forall('integer -> integer', 'integer', nat(100),
+    (f, x) => eq( arrow(f).right(x), [atom('Right'), x] )))
