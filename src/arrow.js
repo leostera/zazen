@@ -6,15 +6,6 @@ type Pair  = [ mixed, mixed ]
 const flip = ([a,b]: Pair): Pair => [b,a]
 const dupe = (x): Pair => [x,x]
 
-type Left  = Symbol
-type Right = Symbol
-type Either<T> = [ Left | Right, T ]
-
-const either = (f, g, [LR, a]: Either) => {
-  if( LR === atom('Left')  ) return f(a)
-  if( LR === atom('Right') ) return g(a)
-}
-
 type Arrow = {
   first():  Arrow<Pair>;
   second(): Arrow<Pair>;
