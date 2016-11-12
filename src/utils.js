@@ -25,8 +25,9 @@ log.ns = (namespace: string): Function => log.bind({}, namespace)
 const error: Function = log.ns("ERROR:")
 const info:  Function = log.ns("INFO:")
 
-const atom = (...args: Array<string>): Symbol | Symbol[] => {
-  let keys: Symbol[] = args.map(Symbol.for)
+export type Atom = Symbol | Symbol[]
+const atom = (...args: Array<string>): Atom => {
+  let keys: Symbol[]= args.map(Symbol.for)
   return keys.length === 1 ? keys[0] : keys
 }
 
