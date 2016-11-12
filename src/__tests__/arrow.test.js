@@ -33,15 +33,15 @@ const check = (name, predicate) => {
 }
 
 check("an Arrow returns its function's value when called",
-  forall('json -> json', 'json', nat(100),
+  forall('integer -> integer', 'integer', nat(100),
     (f, x) => arrow( () => f(x) )() == f(x) ))
 
 check('an Arrow is composable with regular functions',
-  forall('json -> json', 'json', nat(100),
+  forall('integer -> integer', 'integer', nat(100),
     (f, x) => arrow(f).compose( () => x )() == f(x) ))
 
 check('an Arrow is composable with other arrows',
-  forall('json -> json', 'json', nat(100),
+  forall('integer -> integer', 'integer', nat(100),
     (f, x) => arrow(f).compose( arrow(() => x) )() == f(x) ))
 
 check('an Arrow is combinable with regular functions',
