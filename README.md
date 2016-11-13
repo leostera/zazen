@@ -1,4 +1,4 @@
-# zazen [![Travis-CI](https://api.travis-ci.org/ostera/zazen.svg)](https://travis-ci.org/ostera/zazen)
+# zazen [![Travis-CI](https://api.travis-ci.org/ostera/zazen.js.svg)](https://travis-ci.org/ostera/zazen.js)
 > 🙏 sit, breathe, stream.
 
 ## Contributing
