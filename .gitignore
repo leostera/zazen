@@ -1,12 +1,13 @@
+.cache
 coverage
 node_modules
 lib
 dist
-TODO
 
-*.sw*
 .build.sh
 .travis_build
 .bin
+
+*.sw*
 tags*
 .ctagsignore
