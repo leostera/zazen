@@ -1,4 +1,4 @@
-# zazen [![Travis-CI](https://api.travis-ci.org/ostera/zazen.js.svg)](https://travis-ci.org/ostera/zazen.js) [![Codecov branch](https://img.shields.io/codecov/c/github/ostera/zazen.js/master.svg)](https://github.com/ostera/zazen.js/)
+# zazen [![Travis-CI](https://api.travis-ci.org/ostera/zazen.js.svg)](https://travis-ci.org/ostera/zazen.js) [![Codecov branch](https://img.shields.io/codecov/c/github/ostera/zazen.js/master.svg)](https://codecov.io/gh/ostera/zazen.js)
 > 🙏 sit, breathe, stream.
 
 ## Contributing
