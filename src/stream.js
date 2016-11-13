@@ -6,7 +6,7 @@ import {
   arrow,
 } from 'zazen/arrow'
 
-const stream = (f: Function): Arrow => (arrow( (...x) => x.map(f)))
+const stream = (f: Function): Arrow => (arrow( (x: mixed[]) => x.map(f)))
 
 export {
   stream,
