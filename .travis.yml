@@ -22,4 +22,4 @@ script:
   - NODE_ENV=production make package
 
 after_success:
-  - ./node_modules/.bin/codecov
+  - ./node_modules/.bin/codecov -p coverage
