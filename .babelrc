@@ -11,5 +11,10 @@
     "stage-2",
     "stage-3"
   ],
-  "sourceMaps": "inline"
+  "sourceMaps": "inline",
+  "env": {
+    "test": {
+      "plugins": ["istanbul"]
+    }
+  }
 }

@@ -40,7 +40,7 @@ $(PERF_DIR)/%.perf.js:
 	$(NODE) $@
 
 test:
-	$(BIN_DIR)/jest --verbose
+	NODE_ENV=test $(BIN_DIR)/jest -c .jestrc
 
 lint:
 	$(BIN_DIR)/eslint ./src
