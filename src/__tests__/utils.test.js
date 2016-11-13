@@ -16,5 +16,7 @@ test("atom returns a list of global Symbols", () => {
 
 jest.useFakeTimers()
 test("tick returns some number bigger or equal to 0", () => {
-  expect(tick()).toBeGreaterThanOrEqual(0)
+  for(let i=0; i<1000; i++) {
+    expect(tick()).toBeGreaterThanOrEqual(0)
+  }
 })
