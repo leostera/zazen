@@ -69,9 +69,9 @@ tags: .ctagsignore
 	ls -fd1 node_modules/* > $@
 
 clean:
-	rm -rf $(BUILD_DIR) $(DIST_DIR) tags coverage
+	rm -rf $(BUILD_DIR) $(DIST_DIR) tags
 
 cleanall: clean
-	rm -rf node_modules yarn.lock
+	rm -rf node_modules yarn.lock $(COVERAGE_DIR)
 
 FORCE:
