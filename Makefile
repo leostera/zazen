@@ -4,12 +4,13 @@
 
 LIB_NAME   = zazen.js
 
-DIST_DIR   = ./dist
-BUILD_DIR  = ./lib
-BIN_DIR    = ./node_modules/.bin
-SCRIPT_DIR = ./scripts
-TEST_DIR   = ./tests
-PERF_DIR	 = ./tests/perf
+COVERAGE_DIR = ./coverage
+DIST_DIR     = ./dist
+BUILD_DIR    = ./lib
+BIN_DIR      = ./node_modules/.bin
+SCRIPT_DIR   = ./scripts
+TEST_DIR     = ./tests
+PERF_DIR     = ./tests/perf
 
 PERF_TESTS = $(shell find $(PERF_DIR) -name "*.perf.js")
 
@@ -23,9 +24,9 @@ STAMP     = $(REVISION).$(shell date +%s)
 all: build lint check test bench
 
 dirs:
-	mkdir -p $(DIST_DIR) $(BUILD_DIR)
+	mkdir -p $(DIST_DIR) $(BUILD_DIR) $(COVERAGE_DIR)
 
-setup:
+setup: dirs
 	$(SCRIPT_DIR)/symlink.sh
 
 flow-stop:
