@@ -12,9 +12,9 @@ import {
   untag,
 } from 'zazen/either'
 
-type Pair  = [ mixed, mixed ]
+export type Pair  = [ mixed, mixed ]
 
-type Arrow = Function & {
+export type Arrow = Function & {
   id(b: mixed): mixed;
 
   first(p: Pair):  Arrow<Pair>;
