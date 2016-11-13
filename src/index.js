@@ -8,4 +8,8 @@ export {
   untag,
 } from './either'
 
+export {
+  stream,
+} from './stream'
+
 window.zazen = module.exports
