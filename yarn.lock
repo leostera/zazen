@@ -1032,7 +1032,7 @@ browserify-des@^1.0.0:
     des.js "^1.0.0"
     inherits "^2.0.1"
 
-browserify-incremental:
+browserify-incremental@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/browserify-incremental/-/browserify-incremental-3.1.1.tgz#0713cb7587247a632a9f08cf1bd169b878b62a8a"
   dependencies:
