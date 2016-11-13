@@ -1,17 +1,19 @@
 {
   "rootDir": ".",
-    "cache": false,
-    "verbose": true,
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**"
-    ],
-    "coverageDirectory": "coverage/",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/perf/"
-    ],
-    "transformIgnorePatterns": [
-      ".*/node_modules/(?!(zazen)/).*/"
-    ]
+  "cache": true,
+  "cacheDirectory": "<rootDir>/.cache",
+  "bail": false,
+  "coverageDirectory": "<rootDir>/coverage",
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "src/**"
+  ],
+  "coverageDirectory": "coverage/",
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+  "/perf/"
+  ],
+  "transformIgnorePatterns": [
+    ".*/node_modules/(?!(zazen)/).*/"
+  ]
 }

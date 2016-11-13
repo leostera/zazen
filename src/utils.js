@@ -9,10 +9,7 @@ const _now_time = (): string => (new Date()).toTimeString().split(' ')[0]
 const now = (): string => `${_now_time()}:${tick()}`
 
 const log = (...args: any[]): void => {
-  // @todo: use ${NODE_ENV} here instead
-  // let envsubst do the job
-  ("${NODE_ENV}" !== "production")
-    && console.log(now(), ...args)
+  ("${NODE_ENV}" !== "production") && console.log(now(), ...args)
 }
 
 log.ns = (namespace: string): Function => log.bind({}, namespace)
@@ -31,5 +28,5 @@ export {
   error,
   info,
   log,
-  tick
+  tick,
 }

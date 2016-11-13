@@ -25,7 +25,7 @@ STAMP     = $(REVISION).$(shell date +%s)
 all: build lint check test bench
 
 dirs:
-	mkdir -p $(DIST_DIR) $(BUILD_DIR) $(COVERAGE_DIR)
+	mkdir -p $(DIST_DIR) $(BUILD_DIR) $(COVERAGE_DIR) $(CACHE_DIR)
 
 setup: dirs
 	$(SCRIPT_DIR)/symlink.sh
