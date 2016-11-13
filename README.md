@@ -1,5 +1,13 @@
-# zazen [![Travis-CI](https://api.travis-ci.org/ostera/zazen.js.svg)](https://travis-ci.org/ostera/zazen.js) [![Codecov branch](https://img.shields.io/codecov/c/github/ostera/zazen.js/master.svg)](https://codecov.io/gh/ostera/zazen.js)
+# zazen
+
+<img src="https://raw.githubusercontent.com/ostera/zazen.js/master/assets/zazen-600.png" align="right" height="100" />
+
 > 🙏 sit, breathe, stream.
+
+[![Travis-CI](https://api.travis-ci.org/ostera/zazen.js.svg)](https://travis-ci.org/ostera/zazen.js)
+[![Codecov branch](https://img.shields.io/codecov/c/github/ostera/zazen.js/master.svg)](https://codecov.io/gh/ostera/zazen.js)
+[![Zero Deps](https://david-dm.org/ostera/zazen.js.svg)](https://david-dm.org/ostera/zazen.js)
+[![Dev Deps](https://david-dm.org/ostera/zazen.js/dev-status.svg)](https://david-dm.org/ostera/zazen.js#info=devDependencies)
 
 ## Contributing
 
