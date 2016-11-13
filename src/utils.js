@@ -1,12 +1,7 @@
 
 // https://www.w3.org/TR/hr-time/#monotonic-clock
 const tick = (): number => {
-  let t = -1
-  if (window.performance && window.performance.now) {
-    t = window.performance.now()|0
-  } else if (process && process.hrtime) {
-    t = [process.hrtime()].reduce( (a,b) => b[0]*1e9+b[1], 0)
-  }
+  let t = window.performance && window.performance.now()|0 || -1
   return t < 0 ? 0 : t
 }
 
