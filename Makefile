@@ -4,13 +4,14 @@
 
 LIB_NAME   = zazen.js
 
+BIN_DIR      = ./node_modules/.bin
+BUILD_DIR    = ./lib
+CACHE_DIR    = ./.cache
 COVERAGE_DIR = ./coverage
 DIST_DIR     = ./dist
-BUILD_DIR    = ./lib
-BIN_DIR      = ./node_modules/.bin
+PERF_DIR     = ./tests/perf
 SCRIPT_DIR   = ./scripts
 TEST_DIR     = ./tests
-PERF_DIR     = ./tests/perf
 
 PERF_TESTS = $(shell find $(PERF_DIR) -name "*.perf.js")
 
@@ -47,7 +48,8 @@ lint:
 	$(BIN_DIR)/eslint ./src
 
 build: dirs
-	$(BIN_DIR)/browserify \
+	$(BIN_DIR)/browserifyinc \
+		--cache $(CACHE_DIR)/browserify.json \
 		src/index.js \
 		--debug \
 		-t babelify \
@@ -69,7 +71,7 @@ tags: .ctagsignore
 	ls -fd1 node_modules/* > $@
 
 clean:
-	rm -rf $(BUILD_DIR) $(DIST_DIR) tags
+	rm -rf $(BUILD_DIR) $(DIST_DIR) $(CACHE_DIR) tags
 
 cleanall: clean
 	rm -rf node_modules yarn.lock $(COVERAGE_DIR)
