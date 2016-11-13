@@ -31,6 +31,8 @@ type Arrow = Function & {
 
   sum(b: Arrow):   Arrow;
   fanin(b: Arrow): mixed;
+
+  loop(b: Object, g: Arrow): mixed;
 }
 
 // Lifts a function into an Arrow
@@ -58,6 +60,11 @@ const arrow = (f: Function): Arrow  => {
 
   f.sum   = g => arrow( (e: Either): ?Either => either(f, g, e) )
   f.fanin = g => f.sum(g).pipe(arrow(untag))
+
+  /***
+   * ArrowLoop
+   ***/
+  f.loop = (s, g) => arrow(x => arrow( (a, b) => g(a, b) )(x, s))
 
   return f
 }
