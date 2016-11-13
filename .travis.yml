@@ -11,6 +11,9 @@ cache:
   directories:
     - node_modules
 
+before_install:
+  - sudo apt-get install bc -y
+
 script:
   - make setup
   - make check
