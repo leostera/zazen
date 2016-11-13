@@ -9,13 +9,10 @@ const _now_time = (): string => (new Date()).toTimeString().split(' ')[0]
 const now = (): string => `${_now_time()}:${tick()}`
 
 const log = (...args: any[]): void => {
-  ("${NODE_ENV}" !== "production") && console.log(now(), ...args)
+  ("${NODE_ENV}"!=="production") && console.log(now(), ...args)
 }
 
 log.ns = (namespace: string): Function => log.bind({}, namespace)
-
-const error: Function = log.ns("ERROR:")
-const info:  Function = log.ns("INFO:")
 
 export type Atom = Symbol | Symbol[]
 const atom = (...args: Array<string>): Atom => {
@@ -25,8 +22,6 @@ const atom = (...args: Array<string>): Atom => {
 
 export {
   atom,
-  error,
-  info,
   log,
   tick,
 }

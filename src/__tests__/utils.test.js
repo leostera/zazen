@@ -20,3 +20,8 @@ test("tick returns some number bigger or equal to 0", () => {
     expect(tick()).toBeGreaterThanOrEqual(0)
   }
 })
+
+test("log exists", () => {
+  expect(log).toBeInstanceOf(Function)
+  expect(log()).toBe(undefined)
+})
