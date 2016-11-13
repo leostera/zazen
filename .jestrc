@@ -7,6 +7,10 @@
       "src/**"
     ],
     "coverageDirectory": "coverage/",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/perf/"
+    ],
     "transformIgnorePatterns": [
       ".*/node_modules/(?!(zazen)/).*/"
     ]
