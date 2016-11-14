@@ -10,7 +10,7 @@
     "url": "https://github.com/ostera/zazen/issues"
   },
   "license": "MIT",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "lib/zazen.js",
   "devDependencies": {
     "babel-core": "^6.18.2",
