@@ -11,5 +11,3 @@ export {
 export {
   stream,
 } from './stream'
-
-window.zazen = module.exports

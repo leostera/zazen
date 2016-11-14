@@ -53,6 +53,7 @@ build: dirs
 	$(BIN_DIR)/browserifyinc \
 		src/index.js \
 		--debug \
+		--standalone $(LIB_NAME) \
 		-t babelify \
 		| $(BIN_DIR)/exorcist $(BUILD_DIR)/$(LIB_NAME).map \
 		> $(BUILD_DIR)/_$(LIB_NAME)
