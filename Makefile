@@ -47,14 +47,14 @@ test:
 lint:
 	$(BIN_DIR)/eslint ./src
 
-build: dirs
+build: setup dirs
+	$(BIN_DIR)/babel src -d lib
 	touch $(CACHE_DIR)/browserify-cache.json
 	mv $(CACHE_DIR)/browserify-cache.json browserify-cache.json
 	$(BIN_DIR)/browserifyinc \
-		src/index.js \
+		lib/index.js \
 		--debug \
 		--standalone $(LIB_NAME) \
-		-t babelify \
 		| $(BIN_DIR)/exorcist $(BUILD_DIR)/$(LIB_NAME).map \
 		> $(BUILD_DIR)/_$(LIB_NAME)
 	mv $(BUILD_DIR)/_$(LIB_NAME) $(BUILD_DIR)/$(LIB_NAME)
