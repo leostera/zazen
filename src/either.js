@@ -1,10 +1,10 @@
 import type {
   Atom,
-} from 'zazen/utils'
+} from './utils'
 
 import {
   atom,
-} from 'zazen/utils'
+} from './utils'
 
 export type Left  = Atom
 export type Right = Atom
