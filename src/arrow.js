@@ -1,6 +1,6 @@
 import {
   atom,
-} from 'zazen/utils'
+} from './utils'
 
 import type {
   Either,
