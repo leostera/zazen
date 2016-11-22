@@ -4,13 +4,13 @@ import {
 
 import type {
   Either,
-} from 'zazen/either'
+} from './either'
 
 import {
   either,
   mirror,
   untag,
-} from 'zazen/either'
+} from './either'
 
 export type Pair  = [ mixed, mixed ]
 
