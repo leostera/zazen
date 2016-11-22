@@ -13,6 +13,7 @@
   "version": "0.0.8",
   "main": "lib/zazen.js",
   "devDependencies": {
+    "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
     "babel-eslint": "7.1.0",
     "babel-jest": "17.0.0",
@@ -45,15 +46,11 @@
     "uglify-js": "^2.6.4"
   },
   "scripts": {},
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
-  },
   "keywords": [
     "streams",
     "small",
     "arrows"
   ],
-  "dependencies": {}
+  "dependencies": {
+  }
 }
