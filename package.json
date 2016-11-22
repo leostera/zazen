@@ -47,11 +47,6 @@
   "scripts": {
     "prepublish": "make clean setup build"
   },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
-  },
   "keywords": [
     "streams",
     "small",
