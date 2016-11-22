@@ -30,7 +30,7 @@ dirs:
 setup: dirs .npmignore
 	$(SCRIPT_DIR)/symlink.sh
 
-.npmignore: .gitignore
+.npmignore: .gitignore FORCE
 	cat .gitignore | grep -v lib > $@
 
 flow-stop:
