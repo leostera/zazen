@@ -61,8 +61,7 @@ build: dirs
 		--standalone $(LIB_NAME) \
 		-t babelify \
 		| $(BIN_DIR)/exorcist $(BUILD_DIR)/$(LIB_NAME).map \
-		> $(BUILD_DIR)/_$(LIB_NAME)
-	mv $(BUILD_DIR)/_$(LIB_NAME) $(BUILD_DIR)/$(LIB_NAME)
+		> $(BUILD_DIR)/$(LIB_NAME)
 	mv browserify-cache.json $(CACHE_DIR)/browserify-cache.json
 
 package: clean build
