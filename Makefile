@@ -77,6 +77,6 @@ clean:
 	rm -rf $(BUILD_DIR) $(DIST_DIR) $(CACHE_DIR) tags
 
 cleanall: clean
-	rm -rf node_modules yarn.lock $(COVERAGE_DIR)
+	rm -rf node_modules $(COVERAGE_DIR)
 
 FORCE:
