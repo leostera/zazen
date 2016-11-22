@@ -52,9 +52,11 @@ lint:
 
 build: dirs
 	touch $(CACHE_DIR)/browserify-cache.json
+	$(BIN_DIR)/babel src -d lib
+	sed -i '/require/s/zazen/./' lib/**.js
 	mv $(CACHE_DIR)/browserify-cache.json browserify-cache.json
 	$(BIN_DIR)/browserifyinc \
-		src/index.js \
+		lib/index.js \
 		--debug \
 		--standalone $(LIB_NAME) \
 		-t babelify \
