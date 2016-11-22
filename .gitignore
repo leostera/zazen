@@ -11,3 +11,4 @@ dist
 *.sw*
 tags*
 .ctagsignore
+.npmignore

@@ -27,8 +27,11 @@ all: setup build lint check test bench
 dirs:
 	mkdir -p $(DIST_DIR) $(BUILD_DIR) $(COVERAGE_DIR) $(CACHE_DIR)
 
-setup: dirs
+setup: dirs .npmignore
 	$(SCRIPT_DIR)/symlink.sh
+
+.npmignore: .gitignore
+	cat .gitignore | grep -v lib > $@
 
 flow-stop:
 	$(BIN_DIR)/flow stop

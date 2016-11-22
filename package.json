@@ -44,7 +44,9 @@
     "static-server": "^2.0.3",
     "uglify-js": "^2.6.4"
   },
-  "scripts": {},
+  "scripts": {
+    "prepublish": "make clean setup build"
+  },
   "browserify": {
     "transform": [
       "babelify"
