@@ -22,4 +22,13 @@ script:
   - NODE_ENV=production make package
 
 after_success:
-  - ./node_modules/.bin/codecov
+  - "./node_modules/.bin/codecov"
+
+deploy:
+  provider: npm
+  email: leandro@ostera.io
+  api_key:
+    secure: FMM3fX2Shp9qMXLOLpgReG6JK1sfiJRZmuu9MKhtrkKBC4LZ+Vui/eqYETeVIKuhQoDkeDsXl5ApuJoXb35i3yNF5FSMy1RbpE2ejV8BRXulp8p7hMA2KQz8edDGWWVTPJmo6b43bF/2KSMavb5Szicd6XpmLrEJNkdBeDxjVBI5F7Xcejb+AR/6OWPqWU2Gr5DKBjHFYv1CeWS0RPdh1QrmpoS6plWnzyOr8GQJes61Cj0xQ4ArpslMx4FaaevtwKtqF7n95LzmoTB6koPOBSiNivUaoVrb7mKs01pEeAoBYhsgeGlFr8s0gWKRYjhn6vtHI5l09217vuWoENnS6kgKJ3KZeroZ3C1Od4IHPKr+rQtEwGsoev185xSv76wPVRb65crH3Zde0ThIFj4O3LbxlMx98t006odZ9qqy5TiX1i+tv1j+TB9pRjmQ52920ZtquOYrPXlqDBmzy1XCsZQv+EVxIHrnDkNbCG5CE5I/BHfUFZEVZzMx/ZLwlodlCDt4OupXZfBSrO0B7vbiFwD4vM7XUUYU6uT32/UoOH4TaxD1weVUncYfuQHcX0W3tIQG2s3RDov5NqjERuEQOTJsmgnnp9yHxvAjl9lb83H6cqh5eVRItH6I5yOjXD8cRU5qR1VnMwBoDH9VVGQz/KRZIB7lDKmCLksrGmFcVlY=
+  on:
+    tags: true
+    repo: ostera/zazen.js
