@@ -13,3 +13,4 @@ tags*
 .ctagsignore
 .npmignore
 browserify-cache.json
+.nyc*
