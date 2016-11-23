@@ -84,3 +84,20 @@ koan(`an arrow can be combined with another arrow`, ({deepEquals, end}) => {
   end()
 
 })
+
+koan(`an arrow can be also bypass it's function`, ({deepEquals, end}) => {
+
+  const arr3 = arrow(mul3)
+
+  deepEquals(
+    [9, 3], arr3.___([3, 3]),
+    `Bypass the second element`)
+
+  deepEquals(
+    [__, ___], arr3.second([3, 3]),
+    `Bypass the first element`)
+
+
+  end()
+
+})
