@@ -14,6 +14,8 @@ import {
  * Helpers
  */
 
+const focus = koan.only
+
 const ___ = null
 
 const add1 = x => x+1
@@ -54,10 +56,10 @@ koan(`an arrow can be composed with another arrow`, ({ok, end}) => {
   ok(6 == arr1.___(arr3)(1),
     `the output of arr1 goes into arr3`)
 
-  ok(6 == arr3.___(arr1)(1),
+  ok(10 == arr3.pipe(arr1)(___),
     `the output of arr1 goes into arr3`)
 
-  ok(4 == arr3.__(arr1)(1),
+  ok(9 == arr3.compose(arr1)(___),
     `the output of arr3 goes into arr1`)
 
   end()
