@@ -1,6 +1,6 @@
 .PHONY: all
 .PHONY: bench test lint build check package
-.PHONY: server clean tags
+.PHONY: clean tags
 
 LIB_NAME   = zazen.js
 
