@@ -57,10 +57,10 @@ koan(`an arrow can be composed with another arrow`, ({ok, end}) => {
     `the output of arr1 goes into arr3`)
 
   ok(10 == arr3.pipe(arr1)(___),
-    `the output of arr1 goes into arr3`)
+    `the output of arr3 goes into arr1`)
 
   ok(9 == arr3.compose(arr1)(___),
-    `the output of arr3 goes into arr1`)
+    `the output of arr1 goes into arr3`)
 
   end()
 
