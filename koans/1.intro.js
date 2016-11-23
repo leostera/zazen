@@ -1,21 +1,31 @@
-const {
-  test,
-  ok,
-  notOk
-} = require('tap')
-
-const options = []
-
-const koan = (name, fn) => test(name, options, fn)
-
 /*
- * An Arrow is just a function.
- *
- * It has some more capabilities, but ultimately it's just a function.
- *
- * Let's try to make an arrow...
+ * Dependencies
  */
 
-koan('an arrow is just a function', () => {
-  ok(true, 'this is fine')
+import {
+  test as koan,
+} from 'tape'
+
+import {
+  arrow,
+} from 'zazen'
+
+/*
+ * Koan 1: Intro
+ */
+
+koan('an arrow is just a function', ({equal, end}) => {
+  const anArrow = arrow( x => x )
+
+  equal(
+    typeof anArrow,
+    'Function',
+    'the type of an arrow is function')
+
+  equal(
+    anArrow(1),
+    2,
+    'we can invoke an arrow')
+
+  end()
 })

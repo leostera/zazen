@@ -3,9 +3,11 @@
   "version": "0.0.1",
   "description": "A collection of examples of usage",
   "scripts": {
-    "test": "tap *.js"
+    "test": "babel-tape-runner *.js | colortape"
   },
-  "dependencies": {
-    "tap": "^8.0.1"
+  "devDependencies": {
+    "babel-tape-runner": "^2.0.1",
+    "colortape": "^0.1.1",
+    "tape": "^4.6.3"
   }
 }
