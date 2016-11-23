@@ -14,17 +14,13 @@ import {
  * Koan 1: Intro
  */
 
-koan('an arrow is just a function', ({equal, end}) => {
+koan('an arrow is just a function', ({ok, end}) => {
   const anArrow = arrow( x => x )
 
-  equal(
-    typeof anArrow,
-    'Function',
+  ok(typeof anArrow == 'wat',
     'the type of an arrow is function')
 
-  equal(
-    anArrow(1),
-    2,
+  ok(anArrow == 2,
     'we can invoke an arrow')
 
   end()
