@@ -97,7 +97,6 @@ koan(`an arrow can be also bypass it's function`, ({deepEquals, end}) => {
     [__, ___], arr3.second([3, 3]),
     `Bypass the first element`)
 
-
   end()
 
 })
