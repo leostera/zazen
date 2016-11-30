@@ -41,7 +41,7 @@
     "jest": "^17.0.0",
     "jest-cli": "^17.0.0",
     "jsverify": "^0.7.4",
-    "regenerator": "^0.8.46",
+    "regenerator": "^0.9.0",
     "static-server": "^2.0.3",
     "uglify-js": "^2.6.4"
   },
