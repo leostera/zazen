@@ -7,6 +7,8 @@ import type {
 } from 'zazen/either'
 
 import {
+  left,
+  right,
   either,
   mirror,
   untag,
@@ -55,8 +57,8 @@ const arrow = (f: Function): Arrow  => {
   /***
    * ArrowChoice
    ***/
-  f.left  = x => f.sum(f.id)( ([atom('Left'),  x]: Either) )
-  f.right = x => f.sum(f.id)( ([atom('Right'), x]: Either) )
+  f.left  = x => f.sum(f.id)( left(x)  )
+  f.right = x => f.sum(f.id)( right(x) )
 
   f.sum   = g => arrow( (e: Either): ?Either => either(f, g, e) )
   f.fanin = g => f.sum(g).pipe(arrow(untag))
