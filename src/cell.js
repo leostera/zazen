@@ -1,16 +1,19 @@
 import {
   arrow,
-} from 'zazen'
+} from 'zazen/arrow'
 
-const dirty = () => true
+const dirty = (oldArgs, newArgs) => true
 
 const cell = (fn, child) => {
   const cell_fn = arrow((...args) => {
+    const arg_s = `(${args.join(', ')})`
     if(cell_fn.last_args[0] !== args[0]) {
-      console.log(`Recalculating cell with ${args}`)
+      console.log(`Recalculating cell with ${arg_s}`)
       cell_fn.last_args = args
       cell_fn.last_val = fn.apply({}, args)
       child(cell_fn.last_val)
+    } else {
+      console.log(`Skipping recalculation for ${arg_s}`)
     }
     return cell_fn.last_val
   })
@@ -22,16 +25,6 @@ const cell = (fn, child) => {
   return cell_fn
 }
 
-const adder = n => x => {
-  const y = x+n
-  console.log(`adder(${n})(${x}) -> ${y}`)
-  return y
+export {
+  cell,
 }
-
-cell( adder(1) ,
-  cell( adder(2),
-    cell(
-      cell( adder(3), adder(4) ),
-        adder(10) )))(1)
-
-
