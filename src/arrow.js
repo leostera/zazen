@@ -42,10 +42,11 @@ const dupe = x => [x,x]
 
 const compose = f => g => x => f(g(x))
 
+const id = x => x
+
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
 const arrow = (f: Function): Arrow  => {
-  f.id = x => x
 
   /***
    * Arrow
@@ -62,8 +63,8 @@ const arrow = (f: Function): Arrow  => {
   /***
    * ArrowChoice
    ***/
-  f.left  = x => f.sum(left)
-  f.right = x => f.sum(right)
+  f.left  = x => f.sum(id)(left(x))
+  f.right = x => f.sum(id)(right(x))
 
   f.sum   = g => arrow( either(f)(g) )
   f.fanin = g => f.sum(g).pipe(untag)

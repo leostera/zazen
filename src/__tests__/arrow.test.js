@@ -97,14 +97,6 @@ check('an Arrow is fanin-able with other arrows on Right',
       arrow(f).fanin(arrow(x => add1(f(x))))(right(x)),
       add1(f(x)))))
 
-check('an Arrow is left-able',
-  forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq( arrow(f).left(x), left(x) )))
-
-check('an Arrow is right-able',
-  forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq( arrow(f).right(x), right(x) )))
-
 test('an Arrow is loop-able', () => {
   let loop = arrow(x=>x+1).loop( {n: 0}, (x,s) => { s.n+=x; return s.n })
   expect(loop(1)).toBe(1)
