@@ -37,6 +37,11 @@ export type Arrow = Function & {
   loop(b: Object, g: Arrow): mixed;
 }
 
+const pair = f => g => ([a,b]) => [f(a), g(b)]
+const dupe = x => [x,x]
+
+const compose = f => g => x => f(g(x))
+
 // Lifts a function into an Arrow
 // arrrow :: (b -> c) -> Arrow b c
 const arrow = (f: Function): Arrow  => {
@@ -45,14 +50,14 @@ const arrow = (f: Function): Arrow  => {
   /***
    * Arrow
    ***/
-  f.first   = x => arrow( ([a, b]: Pair): Pair => [f(a), f.id(b)] )(x)
-  f.second  = x => arrow( ([a, b]: Pair): Pair => [f.id(a), f(b)] )(x)
+  f.first   = x => arrow( pair(f)(id) )(x)
+  f.second  = x => arrow( pair(id)(f) )(x)
 
-  f.compose = g => arrow( (x: mixed): mixed => f(g(x)) )
-  f.pipe    = g => arrow( (x: mixed): mixed => g(f(x)) ) //reverse compose
+  f.compose = g => arrow( compose(f)(g) )
+  f.pipe    = g => arrow( compose(g)(f) ) //reverse compose
 
-  f.combine = g => arrow( ([a, b]: Pair): Pair => [f(a),g(b)] )
-  f.fanout  = g => arrow( (x: mixed): Pair => [x,x] ).pipe(f.combine(g))
+  f.combine = g => arrow( pair(f)(g) )
+  f.fanout  = g => arrow( dupe ).pipe(f.combine(g))
 
   /***
    * ArrowChoice
@@ -66,7 +71,7 @@ const arrow = (f: Function): Arrow  => {
   /***
    * ArrowLoop
    ***/
-  f.loop = (s, g) => arrow(x => arrow( (a, b) => g(a, b) )(x, s))
+  f.loop = s => g => arrow(x => arrow( (a, b) => g(a, b) )(x, s))
 
   return f
 }

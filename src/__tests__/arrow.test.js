@@ -26,7 +26,6 @@ const add1 = x => x+1
 const equal_pairs = ([a,b], [c,d]) => a === c && b === d
 
 const eq = (a,b) => {
-  console.log(a, b)
   if( a.length === 2 && b.length === 2 ) return equal_pairs(a,b)
   else return a === b
 }
