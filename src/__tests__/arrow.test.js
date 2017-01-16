@@ -11,6 +11,8 @@ import {
 
 import {
   arrow,
+  left,
+  right,
 } from 'zazen'
 
 const options = {
@@ -24,6 +26,7 @@ const add1 = x => x+1
 const equal_pairs = ([a,b], [c,d]) => a === c && b === d
 
 const eq = (a,b) => {
+  console.log(a, b)
   if( a.length === 2 && b.length === 2 ) return equal_pairs(a,b)
   else return a === b
 }
@@ -74,34 +77,34 @@ check('an Arrow is fanout-able with other arrows',
 check('an Arrow is summable with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arrow(f).sum(arrow(x => add1(f(x))))([atom('Left'), x]),
+      arrow(f).sum(arrow(x => add1(f(x))))(left(x)),
       [atom('Left'), f(x)])))
 
 check('an Arrow is summable with other arrows on Right',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arrow(f).sum(arrow(x => add1(f(x))))([atom('Right'), x]),
+      arrow(f).sum(arrow(x => add1(f(x))))(right(x)),
       [atom('Right'), add1(f(x))])))
 
 check('an Arrow is fanin-able with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arrow(f).fanin(arrow(x => add1(f(x))))([atom('Left'), x]),
+      arrow(f).fanin(arrow(x => add1(f(x))))(left(x)),
       f(x))))
 
 check('an Arrow is fanin-able with other arrows on Right',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arrow(f).fanin(arrow(x => add1(f(x))))([atom('Right'), x]),
+      arrow(f).fanin(arrow(x => add1(f(x))))(right(x)),
       add1(f(x)))))
 
 check('an Arrow is left-able',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq( arrow(f).left(x), [atom('Left'), f(x)] )))
+    (f, x) => eq( arrow(f).left(x), left(x) )))
 
 check('an Arrow is right-able',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq( arrow(f).right(x), [atom('Right'), x] )))
+    (f, x) => eq( arrow(f).right(x), right(x) )))
 
 test('an Arrow is loop-able', () => {
   let loop = arrow(x=>x+1).loop( {n: 0}, (x,s) => { s.n+=x; return s.n })

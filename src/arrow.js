@@ -57,8 +57,8 @@ const arrow = (f: Function): Arrow  => {
   /***
    * ArrowChoice
    ***/
-  f.left  = x => f.sum(f.id)( left(x)  )
-  f.right = x => f.sum(f.id)( right(x) )
+  f.left  = x => f.sum(left)
+  f.right = x => f.sum(right)
 
   f.sum   = g => arrow( either(f)(g) )
   f.fanin = g => f.sum(g).pipe(untag)
