@@ -9,7 +9,9 @@ import {
   atom,
 } from 'zazen/utils'
 
-import { arrow } from 'zazen'
+import {
+  arrow,
+} from 'zazen'
 
 const options = {
   quiet: true,
@@ -102,7 +104,7 @@ check('an Arrow is right-able',
     (f, x) => eq( arrow(f).right(x), [atom('Right'), x] )))
 
 test('an Arrow is loop-able', () => {
-  let loop = arrow(x=>x).loop( {n: 0}, (x,s) => { s.n+=x; return s.n })
+  let loop = arrow(x=>x+1).loop( {n: 0}, (x,s) => { s.n+=x; return s.n })
   expect(loop(1)).toBe(1)
   expect(loop(1)).toBe(2)
   expect(loop(1)).toBe(3)

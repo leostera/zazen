@@ -6,7 +6,7 @@ import {
 import {
   either,
   mirror,
-  untag
+  untag,
 } from 'zazen'
 
 const id = x => x
@@ -18,11 +18,11 @@ const mirrored_left  = [atom('Right'), 1]
 const mirrored_right = [atom('Left'), 2]
 
 test("an Either executes f for Left", () => {
-  expect( either(id, id, left) ).toEqual(left)
+  expect( either(id)(id)(left) ).toEqual(left)
 })
 
 test("an Either executes g for Right", () => {
-  expect( either(id, id, right) ).toEqual(right)
+  expect( either(id)(id)(right) ).toEqual(right)
 })
 
 test("an Either Left becomes an Either Right when mirrored", () => {
@@ -50,5 +50,5 @@ test("mirror does nothing if it's not tagged Left or Right", () => {
 })
 
 test("either does nothing if it's not tagged Left or Right", () => {
-  expect( either(id, id, center) ).toEqual(undefined)
+  expect( either(id)(id)(center) ).toEqual(undefined)
 })

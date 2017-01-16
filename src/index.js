@@ -13,7 +13,3 @@ export {
 export {
   stream,
 } from './stream'
-
-export {
-  cell,
-} from './cell'

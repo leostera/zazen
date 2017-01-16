@@ -1,6 +1,6 @@
 import {
-  arrow,
-} from 'zazen/arrow'
+  arrow as arr,
+} from 'zazen'
 
 const dirty = (oldArgs, newArgs) => true
 
@@ -21,6 +21,37 @@ const cell = (fn, child) => {
 
   return cell_fn
 }
+
+
+// const effect = (effect) => {
+//   let theNext = () => {}
+//   const listener = effect(theNext)
+//
+//   return ({next, state}) => {
+//     theNext = next
+//     return listener(state)
+//   }
+// }
+
+const effect = (f) => {
+  let state = { }
+  const g = f(state)
+
+  return cell( x => x )
+    .loop(state, (...args) => (g.apply({}, args)) )
+}
+
+effect(
+  (next) => {
+    const onClick = () => next({type: 'CLICKED'})
+
+    return cell((state) => ({
+      type: 'div',
+      props: [{name: 'onClick', value: onClick}],
+      children: []
+    }), x => x)
+  }
+)
 
 export {
   cell,

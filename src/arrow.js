@@ -60,8 +60,8 @@ const arrow = (f: Function): Arrow  => {
   f.left  = x => f.sum(f.id)( left(x)  )
   f.right = x => f.sum(f.id)( right(x) )
 
-  f.sum   = g => arrow( (e: Either): ?Either => either(f, g, e) )
-  f.fanin = g => f.sum(g).pipe(arrow(untag))
+  f.sum   = g => arrow( either(f)(g) )
+  f.fanin = g => f.sum(g).pipe(untag)
 
   /***
    * ArrowLoop
