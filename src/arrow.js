@@ -71,7 +71,7 @@ const arrow = (f: Function): Arrow  => {
   /***
    * ArrowLoop
    ***/
-  f.loop = s => g => arrow(x => arrow( (a, b) => g(a, b) )(x, s))
+  f.loop = (s, g) => arrow(x => arrow( (a, b) => g(a, b) )(x, s))
 
   return f
 }
