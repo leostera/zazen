@@ -3,11 +3,8 @@ export {
 } from './arrow'
 
 export {
-  left,
-  right,
-  either,
-  mirror,
-  untag,
+  Left,
+  Right,
 } from './either'
 
 export {

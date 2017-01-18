@@ -1,36 +1,18 @@
-import type {
-  Atom,
-} from 'zazen/utils'
+export type _Left<A>  = ['Left',  A]
+export type _Right<B> = ['Right', B]
+type Either<A, B> = _Left<A> | _Right<B>
 
-import {
-  atom,
-} from 'zazen/utils'
+const Left  = (a: mixed): _Left<*>  => ['Left',  a]
+const Right = (b: mixed): _Right<*> => ['Right', b]
 
-export type Left  = Atom
-export type Right = Atom
-export type Either = [ Left | Right, mixed ]
-
-const left  = (a: mixed): Either => [atom('Left'), a]
-const right = (a: mixed): Either => [atom('Right'), a]
-
-const either = (f: Function) => (g: Function) => ([tag, a]: Either): ?Either => {
-  if( tag == atom('Left')  ) return left(f(a))
-  if( tag == atom('Right') ) return right(g(a))
-}
-
-const mirror = ([tag, a]: Either): ?Either => {
-  if( tag == atom('Left')  ) return right(a)
-  if( tag == atom('Right') ) return left(a)
-}
-
-const untag = ([tag, a]: Either): mixed => {
-  if ( tag == atom('Left') || tag === atom('Right') ) return a
-}
+type EitherFn<C> = (f:((a:A)=>C)) => (g:((b:B)=>C)) => (e:Either<A,B>) => C
+const either: EitherFn<*> = f => g => ([tag, a]) =>
+  tag === 'Left'  ? f(a) :
+  tag === 'Right' ? g(a) :
+  undefined
 
 export {
-  left,
-  right,
+  Left,
+  Right,
   either,
-  mirror,
-  untag,
 }
