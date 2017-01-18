@@ -5,7 +5,7 @@ import {
 const dirty = (oldArgs, newArgs) => true
 
 const cell = (fn, child) => {
-  const cell_fn = arrow((...args) => {
+  const cell_fn = arr((...args) => {
     const arg_s = `(${args.join(', ')})`
     if(cell_fn.last_args[0] !== args[0]) {
       cell_fn.last_args = args

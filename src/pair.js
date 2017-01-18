@@ -1,4 +1,3 @@
-
 export type Pair<A, B>  = [A, B]
 export type TaggedPair<A> = Pair<string, A>
 

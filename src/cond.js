@@ -1,44 +1,28 @@
-const eq = (a, b) => () => a === b
-const ap = (f, a) => () => f(a)
+import type {
+  Pair,
+} from './pair'
 
-const run = a => typeof a == 'function' && a() || a
-const run_cond = ([pred, branch]) => run(pred) && run(branch)
-const reducer = (a, cond) => a || run_cond(cond) || a
+const eq = (a: mixed, b: mixed):    PredicateFn => () => a === b
+const ap = (f: Function, a: mixed): PredicateFn => () => f(a)
 
-type Cond = (...pairs: Array<[mixed, mixed]>) => mixed
+type PredicateFn  = (...args: *) => boolean
+type Predicate = mixed | PredicateFn
+export type CondPair = Pair<Predicate, mixed>
+
+const run = (a: Predicate): mixed => typeof a == 'function' && a() || a
+
+const run_cond = ([pred, branch]: CondPair): mixed => run(pred) && run(branch)
+
+const reducer = (a: mixed, cond: CondPair): mixed => a || run_cond(cond) || a
+
+export type Cond = (...pairs: Array<CondPair>) => mixed
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
-console.log(run(1) === 1)
-console.log(run( () => 1 ) === 1)
-console.log(run_cond([1, () => 2]) === 2)
-console.log(reducer(undefined, [ 1, () => 2 ]) === 2)
-console.log(reducer(undefined, [ false, () => 2 ]) === undefined)
-
-console.log("cond with else branch", "=>",
-  cond(
-    [false, "I'm always ignored"],
-    [true, "else!"]))
-
-const x = 1
-console.log("cond with variable check", "=>",
-  cond(
-    [x, () => `I'm always true: ${x}`],
-    [true, "else!"]))
-
-console.log("cond with function predicate", "=>",
-  cond(
-    [false, () => "I'm always ignored"],
-    [() => 1 < 2, () => "I'm always a run-time success!"],
-    [true, "else!"]))
-
-console.log("cond with blowing up function predicate", "=>",
-  cond(
-    [false, () => "I'm always ignored"],
-    [() => a < 2, () => "I'm always a run-time error!"],
-    [true, "else!"]))
-
 export {
+  ap,
   cond,
   eq,
-  ap,
+  reducer,
+  run,
+  run_cond,
 }

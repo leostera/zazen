@@ -1,20 +1,13 @@
 import {
-  atom,
-} from './utils'
-
-import type {
-  Either,
-} from 'zazen/either'
+  Left,
+  Right,
+  either,
+} from './either'
 
 import {
-  left,
-  right,
-  either,
-  mirror,
+  swap,
   untag,
-} from 'zazen/either'
-
-export type Pair  = [ mixed, mixed ]
+} from './pair'
 
 export type Arrow = Function & {
   id(b: mixed): mixed;
