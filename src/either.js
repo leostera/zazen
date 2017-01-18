@@ -1,4 +1,8 @@
 import {
+  untag,
+} from './pair'
+
+import {
   ap,
   cond,
   eq,
@@ -14,12 +18,14 @@ const Right = (b: mixed): _Right<*> => ['Right', b]
 type EitherFn<C> = (f:((a:A)=>C)) => (g:((b:B)=>C)) => (e:Either<A,B>) => C
 const either: EitherFn<*> = f => g => ([tag, a]) =>
   cond(
-    [eq(tag, 'Left'), ap(f,a)],
     [eq(tag, 'Right'), ap(g, a)],
-    [true, undefined])
+    [eq(tag, 'Left'), ap(f,a)])
+
+const mirror = either(Right)(Left)
 
 export {
   Left,
   Right,
   either,
+  mirror,
 }

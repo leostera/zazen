@@ -5,6 +5,8 @@ export {
 export {
   Left,
   Right,
+  either,
+  mirror,
 } from './either'
 
 export {
