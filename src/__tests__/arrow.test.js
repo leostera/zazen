@@ -77,13 +77,13 @@ check('an Arrow is summable with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
       arrow(f).sum(arrow(x => add1(f(x))))(Left(x)),
-      [atom('Left'), f(x)])))
+      Left(f(x)))))
 
 check('an Arrow is summable with other arrows on Right',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
       arrow(f).sum(arrow(x => add1(f(x))))(Right(x)),
-      [atom('Right'), add1(f(x))])))
+      Right(add1(f(x))))))
 
 check('an Arrow is fanin-able with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
