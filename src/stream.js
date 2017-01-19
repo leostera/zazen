@@ -3,10 +3,10 @@ import type {
 } from 'zazen/arrow'
 
 import {
-  arrow,
+  arr,
 } from 'zazen/arrow'
 
-const stream = (f: Function): Arrow => (arrow( (x: mixed[]) => x.map(f)))
+const stream = (f: Function): Arrow => (arr( (x: mixed[]) => x.map(f)))
 
 export {
   stream,

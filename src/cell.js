@@ -3,7 +3,7 @@ import type {
 } from 'zazen/arrow'
 
 import {
-  arrow as arr,
+  arr,
 } from 'zazen'
 
 const dirty = (oldArgs, newArgs) => true

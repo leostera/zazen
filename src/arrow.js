@@ -17,6 +17,11 @@ import {
   untag,
 } from './pair'
 
+import {
+  eq,
+  cond,
+} from './cond'
+
 export type Arrow = Function & {
   id(b: mixed): mixed;
 
@@ -45,39 +50,42 @@ const compose = f => g => x => f(g(x))
 
 const id = x => x
 
-// Lifts a function into an Arrow
-// arrrow :: (b -> c) -> Arrow b c
-const arrow = (f: Function): Arrow  => {
+// Lifts a function into an arr
+// arrrow :: (b -> c) -> arr b c
+const arr = (f: Function): Arrow  => {
 
   /***
-   * Arrow
+   * arr
    ***/
-  f.first   = x => arrow( pair(f)(id) )(x)
-  f.second  = x => arrow( pair(id)(f) )(x)
+  f.first   = x => arr( pair(f)(id) )(x)
+  f.second  = x => arr( pair(id)(f) )(x)
 
-  f.compose = g => arrow( compose(f)(g) )
-  f.pipe    = g => arrow( compose(g)(f) ) //reverse compose
+  f.compose = g => arr( compose(f)(g) )
+  f.pipe    = g => arr( compose(g)(f) ) //reverse compose
 
-  f.combine = g => arrow( pair(f)(g) )
-  f.fanout  = g => arrow( dupe ).pipe(f.combine(g))
+  f.combine = g => arr( pair(f)(g) )
+  f.fanout  = g => f.combine(g).compose(dupe)
 
   /***
-   * ArrowChoice
+   * arrChoice
    ***/
-  f.left  = x => f.sum(id)(Left(x))
-  f.right = x => f.sum(id)(Right(x))
+  f.left  = x => f.sum(id)
+  f.right = x => arr(id).sum(f)
 
-  f.sum   = g => arrow( either(f)(g) )
+  f.sum   = g => arr( ([t,a]: Either<*,*>) =>
+    cond(
+      [eq(t, 'Left'),  Left(f(a))],
+      [eq(t, 'Right'), Right(g(a))]))
   f.fanin = g => f.sum(g).pipe(untag)
 
   /***
-   * ArrowLoop
+   * arrLoop
    ***/
-  f.loop = (s, g) => arrow(x => arrow( (a, b) => g(a, b) )(x, s))
+  f.loop = (s, g) => arr(x => arr( (a, b) => g(a, b) )(x, s))
 
   return f
 }
 
 export {
-  arrow,
+  arr,
 }
