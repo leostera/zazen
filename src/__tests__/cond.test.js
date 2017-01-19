@@ -30,6 +30,11 @@ test("branching returns function value", assert(
     [x, () => x],
     [true, "else!"]) === 1 ))
 
+test("branching with no matches is undefined", assert(
+  cond(
+    [false, 2],
+    [false, 1]) === undefined ))
+
 test("branching with function predicate", assert(
   cond(
     [false, () => 2],
