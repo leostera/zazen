@@ -2,18 +2,24 @@ import type {
   Pair,
 } from './pair'
 
-const eq = (a: mixed, b: mixed):    PredicateFn => () => a === b
-const ap = (f: Function, a: mixed): PredicateFn => () => f(a)
-
 type PredicateFn  = (...args: *) => boolean
 type Predicate = mixed | PredicateFn
 export type CondPair = Pair<Predicate, mixed>
 
-const run = (a: Predicate): mixed => typeof a == 'function' && a() || a
+type Eq = (a: mixed, b: mixed) => PredicateFn
+const eq: Eq = (a,b) => () => a === b
 
-const run_cond = ([pred, branch]: CondPair): mixed => run(pred) && run(branch)
+type Ap = (f: Function, a: mixed) => PredicateFn
+const ap: Ap = (f, a) => () => f(a)
 
-const reducer = (a: mixed, cond: CondPair): mixed => a || run_cond(cond) || a
+type Run = (a: Predicate) => mixed
+const run: Run = a => typeof a == 'function' && a() || a
+
+type RunCond = (a: CondPair) => mixed
+const run_cond: RunCond = ([pred, branch]) => run(pred) && run(branch)
+
+type Reducer = (a: mixed, b: CondPair) => mixed
+const reducer: Reducer = (a, cond) => a || run_cond(cond) || a
 
 export type Cond = (...pairs: Array<CondPair>) => mixed
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
