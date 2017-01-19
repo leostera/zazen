@@ -1,13 +1,29 @@
 export {
-  arrow,
+  arr,
 } from './arrow'
 
 export {
+  cell,
+} from './cell'
+
+export {
+  Left,
+  Right,
   either,
   mirror,
-  untag,
 } from './either'
 
 export {
   stream,
 } from './stream'
+
+export {
+  ap,
+  eq,
+  cond,
+} from './cond'
+
+export {
+  swap,
+  untag,
+} from './pair'

@@ -1,24 +1,32 @@
-import {
-  atom,
-} from './utils'
-
 import type {
   Either,
-} from 'zazen/either'
+} from './either'
 
 import {
+  Left,
+  Right,
   either,
-  mirror,
-  untag,
-} from 'zazen/either'
+} from './either'
 
-export type Pair  = [ mixed, mixed ]
+import type {
+  Pair,
+} from './pair'
+
+import {
+  swap,
+  untag,
+} from './pair'
+
+import {
+  eq,
+  cond,
+} from './cond'
 
 export type Arrow = Function & {
   id(b: mixed): mixed;
 
-  first(p: Pair):  Arrow<Pair>;
-  second(p: Pair): Arrow<Pair>;
+  first(p: Pair<mixed, mixed>):  Arrow;
+  second(p: Pair<mixed, mixed>): Arrow;
 
   compose(b: Arrow): Arrow;
   pipe(b: Arrow):    Arrow;
@@ -26,8 +34,8 @@ export type Arrow = Function & {
   combine(b: Arrow): Arrow;
   fanout (b: Arrow): Arrow;
 
-  left(x: mixed):  Either;
-  right(x: mixed): Either;
+  Left(x: mixed):  Either<mixed, mixed>;
+  Right(x: mixed): Either<mixed, mixed>;
 
   sum(b: Arrow):   Arrow;
   fanin(b: Arrow): mixed;
@@ -35,40 +43,54 @@ export type Arrow = Function & {
   loop(b: Object, g: Arrow): mixed;
 }
 
-// Lifts a function into an Arrow
-// arrrow :: (b -> c) -> Arrow b c
-const arrow = (f: Function): Arrow  => {
-  f.id = x => x
+const pair = f => g => ([a,b]) => [f(a), g(b)]
+const dupe = x => [x,x]
+
+const compose = f => g => x => f(g(x))
+
+const id = x => x
+
+// Lifts a function into an arr
+// arrrow :: (b -> c) -> arr b c
+const arr = (f: Function): Arrow  => {
 
   /***
-   * Arrow
+   * arr
    ***/
-  f.first   = x => arrow( ([a, b]: Pair): Pair => [f(a), f.id(b)] )(x)
-  f.second  = x => arrow( ([a, b]: Pair): Pair => [f.id(a), f(b)] )(x)
+  f.first   = x => arr( pair(f)(id) )(x)
+  f.second  = x => arr( pair(id)(f) )(x)
 
-  f.compose = g => arrow( (x: mixed): mixed => f(g(x)) )
-  f.pipe    = g => arrow( (x: mixed): mixed => g(f(x)) ) //reverse compose
+  f.compose = g => arr( compose(f)(g) )
+  f.pipe    = g => arr( compose(g)(f) ) //reverse compose
 
-  f.combine = g => arrow( ([a, b]: Pair): Pair => [f(a),g(b)] )
-  f.fanout  = g => arrow( (x: mixed): Pair => [x,x] ).pipe(f.combine(g))
+  f.combine = g => arr( pair(f)(g) )
+  f.fanout  = g => f.combine(g).compose(dupe)
 
   /***
-   * ArrowChoice
+   * arrChoice
    ***/
-  f.left  = x => f.sum(f.id)( ([atom('Left'),  x]: Either) )
-  f.right = x => f.sum(f.id)( ([atom('Right'), x]: Either) )
+  f.left  = x => f.sum(id)
+  f.right = x => arr(id).sum(f)
 
-  f.sum   = g => arrow( (e: Either): ?Either => either(f, g, e) )
-  f.fanin = g => f.sum(g).pipe(arrow(untag))
+  // arr ([t,a]: Either<*,*> ): Either<*,*>
+  // raises a type check error on `t` being `Left` instead of `Right`
+  // and `Right` instead of `Left`
+  // :(
+  f.sum = g => arr( ([t,a]) =>
+    cond(
+      [eq(t, 'Left'),  Left(f(a))],
+      [eq(t, 'Right'), Right(g(a))]))
+
+  f.fanin = g => f.sum(g).pipe(untag)
 
   /***
-   * ArrowLoop
+   * arrLoop
    ***/
-  f.loop = (s, g) => arrow(x => arrow( (a, b) => g(a, b) )(x, s))
+  f.loop = (s, g) => arr(x => arr( (a, b) => g(a, b) )(x, s))
 
   return f
 }
 
 export {
-  arrow,
+  arr,
 }

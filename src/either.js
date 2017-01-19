@@ -1,32 +1,33 @@
-import type {
-  Atom,
-} from 'zazen/utils'
+import {
+  untag,
+} from './pair'
 
 import {
-  atom,
-} from 'zazen/utils'
+  ap,
+  cond,
+  eq,
+} from './cond'
 
-export type Left  = Atom
-export type Right = Atom
-export type Either = [ Left | Right, mixed ]
+type _Left<A>  = ['Left',  A]
+type _Right<B> = ['Right', B]
+export type Either<A, B> = _Left<A> | _Right<B>
 
-const either = (f: Function, g: Function, [LR, a]: Either): ?Either => {
-  if( LR === atom('Left')  ) return [atom('Left'),  f(a)]
-  if( LR === atom('Right') ) return [atom('Right'), g(a)]
-}
+const Left  = (a: mixed): _Left<*>  => ['Left',  a]
+const Right = (b: mixed): _Right<*> => ['Right', b]
 
-const mirror = ([LR, a]: Either): ?Either => {
-  if (LR === atom('Left')  ) return [atom('Right'), a]
-  if (LR === atom('Right') ) return [atom('Left'), a]
-}
+type C = ?mixed
+// Can A and B be inferred here?
+type EitherFn = (f:((a:*)=>C)) => (g:((b:*)=>C)) => (e:Either<*,*>) => C
+const either: EitherFn = f => g => ([tag, a]) =>
+  cond(
+    [eq(tag, 'Right'), ap(g, a)],
+    [eq(tag, 'Left'),  ap(f, a)])
 
-const untag = ([LR, a]: Either): ?mixed => {
-  if (LR === atom('Left')  ) return a
-  if (LR === atom('Right') ) return a
-}
+const mirror = either(Right)(Left)
 
 export {
+  Left,
+  Right,
   either,
   mirror,
-  untag,
 }

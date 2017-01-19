@@ -4,25 +4,33 @@ import {
 } from 'zazen/utils'
 
 import {
+  Left,
+  Right,
   either,
   mirror,
-  untag
+  untag,
 } from 'zazen'
 
 const id = x => x
-const left  = [atom('Left'), 1]
-const right = [atom('Right'), 2]
-const center = [atom('Center'), Infinity]
 
-const mirrored_left  = [atom('Right'), 1]
-const mirrored_right = [atom('Left'), 2]
+const left   = Left(1)
+const right  = Right(2)
+const center = ['Center', Infinity]
+
+const mirrored_left  = Right(1)
+const mirrored_right = Left(2)
+
 
 test("an Either executes f for Left", () => {
-  expect( either(id, id, left) ).toEqual(left)
+  expect( either(id)(id)(left) ).toEqual(untag(left))
 })
 
 test("an Either executes g for Right", () => {
-  expect( either(id, id, right) ).toEqual(right)
+  expect( either(id)(id)(right) ).toEqual(untag(right))
+})
+
+test("either does nothing if it's not tagged Left or Right", () => {
+  expect( either(id)(id)(center) ).toEqual(undefined)
 })
 
 test("an Either Left becomes an Either Right when mirrored", () => {
@@ -39,16 +47,4 @@ test("an Either Right can be untagged to it's value", () => {
 
 test("an Either Left can be untagged to it's value", () => {
   expect( untag(left) ).toEqual(1)
-})
-
-test("untag does nothing if it's not tagged Left or Right", () => {
-  expect( untag(center) ).toEqual(undefined)
-})
-
-test("mirror does nothing if it's not tagged Left or Right", () => {
-  expect( mirror(center) ).toEqual(undefined)
-})
-
-test("either does nothing if it's not tagged Left or Right", () => {
-  expect( either(id, id, center) ).toEqual(undefined)
 })
