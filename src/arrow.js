@@ -72,7 +72,11 @@ const arr = (f: Function): Arrow  => {
   f.left  = x => f.sum(id)
   f.right = x => arr(id).sum(f)
 
-  f.sum = g => arr( ([t,a]: Either<*,*>) =>
+  // arr ([t,a]: Either<*,*> ): Either<*,*>
+  // raises a type check error on `t` being `Left` instead of `Right`
+  // and `Right` instead of `Left`
+  // :(
+  f.sum = g => arr( ([t,a]) =>
     cond(
       [eq(t, 'Left'),  Left(f(a))],
       [eq(t, 'Right'), Right(g(a))]))
