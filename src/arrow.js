@@ -1,8 +1,16 @@
+import type {
+  Either,
+} from './either'
+
 import {
   Left,
   Right,
   either,
 } from './either'
+
+import type {
+  Pair,
+} from './pair'
 
 import {
   swap,
@@ -12,8 +20,8 @@ import {
 export type Arrow = Function & {
   id(b: mixed): mixed;
 
-  first(p: Pair):  Arrow<Pair>;
-  second(p: Pair): Arrow<Pair>;
+  first(p: Pair<mixed, mixed>):  Arrow;
+  second(p: Pair<mixed, mixed>): Arrow;
 
   compose(b: Arrow): Arrow;
   pipe(b: Arrow):    Arrow;
@@ -21,8 +29,8 @@ export type Arrow = Function & {
   combine(b: Arrow): Arrow;
   fanout (b: Arrow): Arrow;
 
-  left(x: mixed):  Either;
-  right(x: mixed): Either;
+  Left(x: mixed):  Either<mixed, mixed>;
+  Right(x: mixed): Either<mixed, mixed>;
 
   sum(b: Arrow):   Arrow;
   fanin(b: Arrow): mixed;
@@ -56,8 +64,8 @@ const arrow = (f: Function): Arrow  => {
   /***
    * ArrowChoice
    ***/
-  f.left  = x => f.sum(id)(left(x))
-  f.right = x => f.sum(id)(right(x))
+  f.left  = x => f.sum(id)(Left(x))
+  f.right = x => f.sum(id)(Right(x))
 
   f.sum   = g => arrow( either(f)(g) )
   f.fanin = g => f.sum(g).pipe(untag)
