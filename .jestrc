@@ -11,7 +11,8 @@
   "coverageDirectory": "coverage/",
   "testPathIgnorePatterns": [
     "/node_modules/",
-  "/perf/"
+    "/perf/",
+    "/lib/"
   ],
   "transformIgnorePatterns": [
     ".*/node_modules/(?!(zazen)/).*/"
