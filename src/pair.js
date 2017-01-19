@@ -1,9 +1,11 @@
-export type Pair<A, B>  = [A, B]
+export type Pair<A, B> = [A, B]
 export type TaggedPair<A> = Pair<string, A>
 
-const swap = ([a: A, b: B]: Pair<A, B>): Pair<B, A> => [b,a]
+type Swap = (p: Pair<*, *>) => Pair<*, *>
+const swap: Swap = ([a, b]) => [b,a]
 
-const untag = ([tag, value]: TaggedPair<A>): A => value
+type Untag = (p: TaggedPair<*>) => ?mixed
+const untag: Untag = ([tag, value]) => value
 
 export {
   swap,
