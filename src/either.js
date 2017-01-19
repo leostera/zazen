@@ -8,9 +8,9 @@ import {
   eq,
 } from './cond'
 
-export type _Left<A>  = ['Left',  A]
-export type _Right<B> = ['Right', B]
-type Either<A, B> = _Left<A> | _Right<B>
+type _Left<A>  = ['Left',  A]
+type _Right<B> = ['Right', B]
+export type Either<A, B> = _Left<A> | _Right<B>
 
 const Left  = (a: mixed): _Left<*>  => ['Left',  a]
 const Right = (b: mixed): _Right<*> => ['Right', b]
