@@ -4,9 +4,7 @@ import type {
 
 import {
   arr,
-} from 'zazen'
-
-const dirty = (oldArgs, newArgs) => true
+} from './arrow'
 
 export type Cell = Arrow & {
   last_args: [];
