@@ -5,7 +5,7 @@
 > 🙏 sit, breathe, stream.
 
 [![Travis-CI](https://api.travis-ci.org/ostera/zazen.svg)](https://travis-ci.org/ostera/zazen)
-[![Codecov branch](https://img.shields.io/codecov/c/github/ostera/zazen/master.svg)](https://codecov.io/gh/ostera/zazen)
+[![Codecov branch](https://codecov.io/gh/ostera/zazen/master.svg)](https://codecov.io/gh/ostera/zazen)
 [![Zero Deps](https://david-dm.org/ostera/zazen.svg)](https://david-dm.org/ostera/zazen)
 [![Dev Deps](https://david-dm.org/ostera/zazen/dev-status.svg)](https://david-dm.org/ostera/zazen#info=devDependencies)
 
