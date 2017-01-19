@@ -15,8 +15,9 @@ export type Either<A, B> = _Left<A> | _Right<B>
 const Left  = (a: mixed): _Left<*>  => ['Left',  a]
 const Right = (b: mixed): _Right<*> => ['Right', b]
 
-type EitherFn<C> = (f:((a:A)=>C)) => (g:((b:B)=>C)) => (e:Either<A,B>) => C
-const either: EitherFn<*> = f => g => ([tag, a]) =>
+type C = ?mixed
+type EitherFn = (f:((a:A)=>C)) => (g:((b:B)=>C)) => (e:Either<A,B>) => C
+const either: EitherFn = f => g => ([tag, a]) =>
   cond(
     [eq(tag, 'Right'), ap(g, a)],
     [eq(tag, 'Left'), ap(f,a)])

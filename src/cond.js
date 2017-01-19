@@ -12,8 +12,11 @@ const eq: Eq = (a,b) => () => a === b
 type Ap = (f: Function, a: mixed) => PredicateFn
 const ap: Ap = (f, a) => () => f(a)
 
+type Just<A> = (a: A) => () => A
+const just: Just<*> = a => () => a
+
 type Run = (a: Predicate) => mixed
-const run: Run = a => typeof a == 'function' && a() || a
+const run: Run = a => ((typeof a == 'function' && a || just(a))())
 
 type RunCond = (a: CondPair) => mixed
 const run_cond: RunCond = ([pred, branch]) => run(pred) && run(branch)

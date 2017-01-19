@@ -30,10 +30,16 @@ test("branching returns function value", assert(
     [x, () => x],
     [true, "else!"]) === 1 ))
 
-test("branching with no matches is undefined", assert(
-  cond(
-    [false, 2],
-    [false, 1]) === undefined ))
+test("branching with no matches is undefined", () => {
+  const isLeft  = a => () => a === 'Left'
+  const isRight = a => () => a === 'Right'
+
+  const run = a => cond( [isLeft(a), 1], [isRight(a), 2] )
+
+  expect( run(1) ).toEqual(undefined)
+  expect( run('Left') ).toEqual( 1 )
+  expect( run('Right') ).toEqual( 2 )
+})
 
 test("branching with function predicate", assert(
   cond(

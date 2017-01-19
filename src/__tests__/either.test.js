@@ -15,7 +15,7 @@ const id = x => x
 
 const left   = Left(1)
 const right  = Right(2)
-const center = [atom('Center'), Infinity]
+const center = ['Center', Infinity]
 
 const mirrored_left  = Right(1)
 const mirrored_right = Left(2)
