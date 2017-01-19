@@ -3,6 +3,10 @@ export {
 } from './arrow'
 
 export {
+  cell,
+} from './cell'
+
+export {
   Left,
   Right,
   either,
