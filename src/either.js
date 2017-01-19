@@ -16,8 +16,8 @@ const Left  = (a: mixed): _Left<*>  => ['Left',  a]
 const Right = (b: mixed): _Right<*> => ['Right', b]
 
 type C = ?mixed
-// Can A and B be inferred here? How?
-type EitherFn = (f:((a:A)=>C)) => (g:((b:B)=>C)) => (e:Either<A,B>) => C
+// Can A and B be inferred here?
+type EitherFn = (f:((a:*)=>C)) => (g:((b:*)=>C)) => (e:Either<*,*>) => C
 const either: EitherFn = f => g => ([tag, a]) =>
   cond(
     [eq(tag, 'Right'), ap(g, a)],
