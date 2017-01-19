@@ -72,10 +72,11 @@ const arr = (f: Function): Arrow  => {
   f.left  = x => f.sum(id)
   f.right = x => arr(id).sum(f)
 
-  f.sum   = g => arr( ([t,a]: Either<*,*>) =>
+  f.sum = g => arr( ([t,a]: Either<*,*>) =>
     cond(
       [eq(t, 'Left'),  Left(f(a))],
       [eq(t, 'Right'), Right(g(a))]))
+
   f.fanin = g => f.sum(g).pipe(untag)
 
   /***
