@@ -7,47 +7,61 @@ import {
   cond,
 } from 'zazen/cond'
 
-
 const assert = (x) => () => expect(x).toEqual(true)
 
-/*
- * @todo: turn these into tests
- */
-test("an Either executes f for Left", assert( run(1) === 1 ))
-test("", assert( run( () => 1 ) === 1) )
-test("", assert( run_cond([1, () => 2]) === 2) )
-test("", assert( reducer(undefined, [ 1, () => 2 ]) === 2) )
-test("", assert( reducer(undefined, [ false, () => 2 ]) === undefined) )
+test("Run returns the value if it's a value",
+  assert( run(1) === 1 ))
 
-test("branching", assert(
-  cond(
-    [false, 0],
-    [true, 1]) === 1 ))
+test("Run returns the resulting value if it's passed a function",
+  assert( run( () => 1 ) === 1) )
 
-const x = 1
-test("branching returns function value", assert(
-  cond(
-    [x, () => x],
-    [true, "else!"]) === 1 ))
+test("A condition evaluates to it's branch function's return value",
+  assert( run_cond([1, () => 2]) === 2) )
 
-test("branching with no matches is undefined", () => {
-  const isLeft  = a => () => a === 'Left'
-  const isRight = a => () => a === 'Right'
+test("A condition evaluates to it's branch value",
+  assert( run_cond([1, 2]) === 2) )
 
-  const run = a => cond( [isLeft(a), 1], [isRight(a), 2] )
+test("Reducing always returns the first match",
+  assert(
+    reducer(
+      undefined,
+      [ 1, () => 1 ],
+      [ 2, () => 2 ] ) === 1) )
 
-  expect( run(1) ).toEqual(undefined)
-  expect( run('Left') ).toEqual( 1 )
-  expect( run('Right') ).toEqual( 2 )
+test("Reducing is it's default value if there are no matches",
+  assert(
+    reducer(
+      undefined,
+      [ false, () => 2 ] ) === undefined) )
+
+test("Cond always returns the value of the first matching branch",
+  assert(
+    cond(
+      [false, 0],
+      [true, 1],
+      [true, 2] ) === 1 ))
+
+test("Cond returns the matching branch function's return value", () => {
+  const x = 1
+  const r = cond( [x, () => x] )
+
+  expect(r).toEqual(1)
 })
 
-test("branching with function predicate", assert(
+test("Cond branching with no matches is undefined", () => {
+  const run = a => cond( [ () => a === 'Match', 1] )
+
+  expect( run(1) ).toEqual(undefined)
+  expect( run('Match') ).toEqual( 1 )
+})
+
+test("Cond branching with function predicate", assert(
   cond(
     [false, () => 2],
     [() => 1 < 2, () => 1],
     [true, 0]) === 1 ))
 
-test("branching  with blowing up function predicate", () => {
+test("Cond branching with blowing up function predicate", () => {
   const c = () => {
     return cond(
       [false, () => "I'm always ignored"],
