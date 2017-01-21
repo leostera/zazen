@@ -7,7 +7,7 @@ import {
 } from 'tape'
 
 import {
-  arrow,
+  arr,
 } from 'zazen'
 
 /*
@@ -32,7 +32,7 @@ const mul3 = x => x*3
 
 koan(`an arrow is just a function`, ({ok, end}) => {
 
-  const arr = arrow(add1)
+  const arr1 = arr(add1)
 
   ok(`function` == typeof ___,
     `the type of an arrow is function`)
@@ -46,9 +46,9 @@ koan(`an arrow is just a function`, ({ok, end}) => {
 
 koan(`an arrow can be composed with another arrow`, ({ok, end}) => {
 
-  const arr1 = arrow(add1)
+  const arr1 = arr(add1)
 
-  const arr3 = arrow(mul3)
+  const arr3 = arr(mul3)
 
   ok(4 == arr1.___(arr3)(1),
     `the output of arr3 goes into arr1`)
@@ -68,9 +68,9 @@ koan(`an arrow can be composed with another arrow`, ({ok, end}) => {
 
 koan(`an arrow can be combined with another arrow`, ({deepEquals, end}) => {
 
-  const arr1 = arrow(add1)
+  const arr1 = arr(add1)
 
-  const arr3 = arrow(mul3)
+  const arr3 = arr(mul3)
 
   deepEquals(
     [2, 3], ___.combine(___)([1, 1]),
@@ -87,7 +87,7 @@ koan(`an arrow can be combined with another arrow`, ({deepEquals, end}) => {
 
 koan(`an arrow can be also bypass it's function`, ({deepEquals, end}) => {
 
-  const arr3 = arrow(mul3)
+  const arr3 = arr(mul3)
 
   deepEquals(
     [9, 3], arr3.___([3, 3]),
