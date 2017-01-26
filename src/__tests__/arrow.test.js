@@ -10,7 +10,7 @@ import {
 } from 'zazen/utils'
 
 import {
-  arr,
+  Arrow,
   Left,
   Right,
 } from 'zazen'
@@ -39,66 +39,66 @@ const check = (name, predicate) => {
 
 check("an Arrow returns its function's value when called",
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => arr( () => f(x) )() == f(x) ))
+    (f, x) => Arrow( () => f(x) )() == f(x) ))
 
 check('an Arrow is composable with regular functions',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => arr(f).compose( () => x )() == f(x) ))
+    (f, x) => Arrow(f).compose( () => x )() == f(x) ))
 
 check('an Arrow is composable with other arrows',
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => arr(f).compose( arr(() => x) )() == f(x) ))
+    (f, x) => Arrow(f).compose( Arrow(() => x) )() == f(x) ))
 
 check('an Arrow is combinable with regular functions',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).combine(f)([x,x]),
+      Arrow(f).combine(f)([x,x]),
       [f(x),f(x)])))
 
 check('an Arrow is combinable with other arrows',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).combine(arr(f))([x,x]),
+      Arrow(f).combine(Arrow(f))([x,x]),
       [f(x),f(x)])))
 
 check('an Arrow is fanout-able with regular functions',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).fanout(x => add1(f(x)))(x),
+      Arrow(f).fanout(x => add1(f(x)))(x),
       [f(x),add1(f(x))])))
 
 check('an Arrow is fanout-able with other arrows',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).fanout(arr(x => add1(f(x))))(x),
+      Arrow(f).fanout(Arrow(x => add1(f(x))))(x),
       [f(x),add1(f(x))])))
 
 check('an Arrow is summable with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).sum(arr(x => add1(f(x))))(Left(x)),
+      Arrow(f).sum(Arrow(x => add1(f(x))))(Left(x)),
       Left(f(x)))))
 
 check('an Arrow is summable with other arrows on Right',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).sum(arr(x => add1(f(x))))(Right(x)),
+      Arrow(f).sum(Arrow(x => add1(f(x))))(Right(x)),
       Right(add1(f(x))))))
 
 check('an Arrow is fanin-able with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).fanin(arr(x => add1(f(x))))(Left(x)),
+      Arrow(f).fanin(Arrow(x => add1(f(x))))(Left(x)),
       f(x))))
 
 check('an Arrow is fanin-able with other arrows on Right',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      arr(f).fanin(arr(x => add1(f(x))))(Right(x)),
+      Arrow(f).fanin(Arrow(x => add1(f(x))))(Right(x)),
       add1(f(x)))))
 
 test('an Arrow is loop-able', () => {
-  let loop = arr(x=>x+1).loop( {n: 0}, (x,s) => { s.n+=x; return s.n })
+  let loop = Arrow(x=>x+1).loop( {n: 0}, (x,s) => { s.n+=x; return s.n })
   expect(loop(1)).toBe(1)
   expect(loop(1)).toBe(2)
   expect(loop(1)).toBe(3)

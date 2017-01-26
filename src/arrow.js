@@ -22,25 +22,25 @@ import {
   cond,
 } from './cond'
 
-export type Arrow = Function & {
+export type ArrowT = Function & {
   id(b: mixed): mixed;
 
-  first(p: Pair<mixed, mixed>):  Arrow;
-  second(p: Pair<mixed, mixed>): Arrow;
+  first(p: Pair<mixed, mixed>):  ArrowT;
+  second(p: Pair<mixed, mixed>): ArrowT;
 
-  compose(b: Arrow): Arrow;
-  pipe(b: Arrow):    Arrow;
+  compose(b: ArrowT): ArrowT;
+  pipe(b: ArrowT):    ArrowT;
 
-  combine(b: Arrow): Arrow;
-  fanout (b: Arrow): Arrow;
+  combine(b: ArrowT): ArrowT;
+  fanout (b: ArrowT): ArrowT;
 
   Left(x: mixed):  Either<mixed, mixed>;
   Right(x: mixed): Either<mixed, mixed>;
 
-  sum(b: Arrow):   Arrow;
-  fanin(b: Arrow): mixed;
+  sum(b: ArrowT):   ArrowT;
+  fanin(b: ArrowT): mixed;
 
-  loop(b: Object, g: Arrow): mixed;
+  loop(b: Object, g: ArrowT): mixed;
 }
 
 const pair = f => g => ([a,b]) => [f(a), g(b)]
@@ -52,31 +52,31 @@ const id = x => x
 
 // Lifts a function into an arr
 // arrrow :: (b -> c) -> arr b c
-const arr = (f: Function): Arrow  => {
+const Arrow = (f: Function): ArrowT  => {
 
   /***
    * arr
    ***/
-  f.first   = x => arr( pair(f)(id) )(x)
-  f.second  = x => arr( pair(id)(f) )(x)
+  f.first   = x => Arrow( pair(f)(id) )(x)
+  f.second  = x => Arrow( pair(id)(f) )(x)
 
-  f.compose = g => arr( compose(f)(g) )
-  f.pipe    = g => arr( compose(g)(f) ) //reverse compose
+  f.compose = g => Arrow( compose(f)(g) )
+  f.pipe    = g => Arrow( compose(g)(f) ) //reverse compose
 
-  f.combine = g => arr( pair(f)(g) )
+  f.combine = g => Arrow( pair(f)(g) )
   f.fanout  = g => f.combine(g).compose(dupe)
 
   /***
    * arrChoice
    ***/
   f.left  = x => f.sum(id)
-  f.right = x => arr(id).sum(f)
+  f.right = x => Arrow(id).sum(f)
 
   // arr ([t,a]: Either<*,*> ): Either<*,*>
   // raises a type check error on `t` being `Left` instead of `Right`
   // and `Right` instead of `Left`
   // :(
-  f.sum = g => arr( ([t,a]) =>
+  f.sum = g => Arrow( ([t,a]) =>
     cond(
       [eq(t, 'Left'),  Left(f(a))],
       [eq(t, 'Right'), Right(g(a))]))
@@ -86,11 +86,11 @@ const arr = (f: Function): Arrow  => {
   /***
    * arrLoop
    ***/
-  f.loop = (s, g) => arr(x => arr( (a, b) => g(a, b) )(x, s))
+  f.loop = (s, g) => Arrow(x => Arrow( (a, b) => g(a, b) )(x, s))
 
   return f
 }
 
 export {
-  arr,
+  Arrow,
 }

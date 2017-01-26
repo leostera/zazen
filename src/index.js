@@ -1,5 +1,5 @@
 export {
-  arr,
+  Arrow,
 } from './arrow'
 
 export {

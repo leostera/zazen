@@ -1,12 +1,14 @@
 import type {
-  Arrow,
+  ArrowT,
 } from 'zazen/arrow'
 
 import {
-  arr,
+  Arrow,
 } from 'zazen/arrow'
 
-const stream = (f: Function): Arrow => (arr( (x: mixed[]) => x.map(f)))
+type StreamT = ArrowT
+
+const stream = (f: Function): StreamT => (Arrow( (x: mixed[]) => x.map(f)))
 
 export {
   stream,
