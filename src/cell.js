@@ -17,7 +17,7 @@ export type CellT = ArrowT & {
 }
 
 export type CellFn = (fn: Function, child: CellT) => CellT
-const cell: CellFn = (fn, child) => {
+const Cell: CellFn = (fn, child) => {
 
   const _call = args => () => {
     cell_fn.last_args = args
@@ -41,5 +41,5 @@ const cell: CellFn = (fn, child) => {
 }
 
 export {
-  cell,
+  Cell,
 }

@@ -3,7 +3,7 @@ export {
 } from './arrow'
 
 export {
-  cell,
+  Cell,
 } from './cell'
 
 export {
