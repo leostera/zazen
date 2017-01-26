@@ -14,7 +14,7 @@ export {
 } from './either'
 
 export {
-  stream,
+  Stream,
 } from './stream'
 
 export {

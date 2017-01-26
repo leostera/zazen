@@ -9,7 +9,9 @@ import {
   atom,
 } from 'zazen/utils'
 
-import { stream } from 'zazen'
+import {
+  Stream,
+} from 'zazen'
 
 const options = {
   quiet: true,
@@ -35,4 +37,4 @@ const check = (name, predicate) => {
 
 check("a Stream Arrow maps over all it's arguments with it's function",
   forall('integer -> integer', 'integer', nat(100),
-    (f, x) => eq(stream(f)([x,x]), [f(x),f(x)])))
+    (f, x) => eq(Stream(f)([x,x]), [f(x),f(x)])))

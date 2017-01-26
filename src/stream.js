@@ -8,8 +8,8 @@ import {
 
 type StreamT = ArrowT
 
-const stream = (f: Function): StreamT => (Arrow( (x: mixed[]) => x.map(f)))
+const Stream = (f: Function): StreamT => (Arrow( (x: mixed[]) => x.map(f)))
 
 export {
-  stream,
+  Stream,
 }
