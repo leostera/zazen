@@ -42,11 +42,11 @@ koan(`an Arrow can hold two code paths`, ({deepEqual, end}) => {
 
   deepEqual(
     Left(4),
-    add_or_mul(Left(3)),
+    ___(Left(3)),
     `the left side of the arrow adds 1`)
 
   deepEqual(
-    Right(9),
+    ___(9),
     add_or_mul(Right(3)),
     `the right side of the arrow multiplies by 3`)
 
@@ -59,13 +59,13 @@ koan(`an Arrow can run only on Left values`, ({deepEqual, end}) => {
   const arr1 = Arrow(add1)
 
   deepEqual(
-    Left(4),
-    arr1.left(Left(3)),
+    ___(4),
+    arr1.left(___(3)),
     `the left side of the arrow adds 1`)
 
   deepEqual(
     Right(3),
-    arr1.left(Right(3)),
+    arr1.___(Right(3)),
     `the right side of the arrow multiplies by 3`)
 
   end()
@@ -77,12 +77,12 @@ koan(`an Arrow can run only on Right values`, ({deepEqual, end}) => {
   const arr1 = Arrow(add1)
 
   deepEqual(
-    Right(4),
-    arr1.right(Right(3)),
+    ___(4),
+    arr1.___(Right(3)),
     `the left side of the arrow adds 1`)
 
   deepEqual(
-    Left(3),
+    ___(3),
     arr1.right(Left(3)),
     `the right side of the arrow multiplies by 3`)
 
