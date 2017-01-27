@@ -64,6 +64,13 @@ koan(`a cond takes N conditions and returns the first match`, ({ok, end}) => {
     `the returning expression can be a function that will be evaluated
      if and only if the predicate passes`)
 
+  ok(
+    cond(
+      [ () => false, 1 ],
+      [ () => false, 2 ],
+      [ true, 3 ]) == ___,
+    `a final true can be used like an else`)
+
   end()
 
 })
