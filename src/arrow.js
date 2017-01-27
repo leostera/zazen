@@ -34,8 +34,8 @@ export type ArrowT = Function & {
   combine(b: ArrowT): ArrowT;
   fanout (b: ArrowT): ArrowT;
 
-  Left(x: mixed):  Either<mixed, mixed>;
-  Right(x: mixed): Either<mixed, mixed>;
+  left(x: mixed):  Either<mixed, mixed>;
+  right(x: mixed): Either<mixed, mixed>;
 
   sum(b: ArrowT):   ArrowT;
   fanin(b: ArrowT): mixed;
@@ -69,9 +69,6 @@ const Arrow = (f: Function): ArrowT  => {
   /***
    * arrChoice
    ***/
-  f.left  = x => f.sum(id)
-  f.right = x => Arrow(id).sum(f)
-
   // arr ([t,a]: Either<*,*> ): Either<*,*>
   // raises a type check error on `t` being `Left` instead of `Right`
   // and `Right` instead of `Left`
@@ -82,6 +79,9 @@ const Arrow = (f: Function): ArrowT  => {
       [eq(t, 'Right'), Right(g(a))]))
 
   f.fanin = g => f.sum(g).pipe(untag)
+
+  f.left  = x => f.sum(id)(x)
+  f.right = x => Arrow(id).sum(f)(x)
 
   /***
    * arrLoop
