@@ -54,7 +54,7 @@ koan(`an Arrow can hold two code paths`, ({deepEqual, end}) => {
 
 })
 
-koan(`an Arrow can run only on Left values`, ({deepEqual, end}) => {
+koan(`an Arrow can be made to run only on Left values`, ({deepEqual, end}) => {
 
   const arr1 = Arrow(add1)
 
@@ -72,7 +72,7 @@ koan(`an Arrow can run only on Left values`, ({deepEqual, end}) => {
 
 })
 
-koan(`an Arrow can run only on Right values`, ({deepEqual, end}) => {
+koan(`an Arrow can be made to run only on Right values`, ({deepEqual, end}) => {
 
   const arr1 = Arrow(add1)
 
