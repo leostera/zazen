@@ -26,4 +26,5 @@ export {
 export {
   swap,
   untag,
+  Pair,
 } from './pair'
