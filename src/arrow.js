@@ -83,11 +83,6 @@ const Arrow = (f: Function): ArrowT  => {
   f.left  = x => f.sum(id)(x)
   f.right = x => Arrow(id).sum(f)(x)
 
-  /***
-   * arrLoop
-   ***/
-  f.loop = (s, g) => Arrow(x => Arrow( (a, b) => g(a, b) )(x, s))
-
   return f
 }
 

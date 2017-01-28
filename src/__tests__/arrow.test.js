@@ -96,10 +96,3 @@ check('an Arrow is fanin-able with other arrows on Right',
     (f, x) => eq(
       Arrow(f).fanin(Arrow(x => add1(f(x))))(Right(x)),
       add1(f(x)))))
-
-test('an Arrow is loop-able', () => {
-  let loop = Arrow(x=>x+1).loop( {n: 0}, (x,s) => { s.n+=x; return s.n })
-  expect(loop(1)).toBe(1)
-  expect(loop(1)).toBe(2)
-  expect(loop(1)).toBe(3)
-})
