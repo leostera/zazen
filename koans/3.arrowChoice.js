@@ -89,3 +89,24 @@ koan(`an Arrow can be made to run only on Right values`, ({deepEqual, end}) => {
   end()
 
 })
+
+koan(`an Arrow can fanned in to a single value on Either side`, ({deepEqual, end}) => {
+
+  const arr1 = Arrow(add1)
+  const arr3 = Arrow(mul3)
+  const add_or_mul = arr1.fanin(arr3)
+
+  deepEqual(
+    4,
+    ___(Left(3)),
+    `the left side of the arrow adds 1`)
+
+  deepEqual(
+    9,
+    add_or_mul(Right(3)),
+    `the right side of the arrow multiplies by 3`)
+
+  end()
+
+})
+
