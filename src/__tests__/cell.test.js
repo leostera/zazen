@@ -10,7 +10,7 @@ import {
 } from 'zazen/utils'
 
 import {
-  cell,
+  Cell,
 } from 'zazen'
 
 const options = {
@@ -23,30 +23,30 @@ const str  = JSON.stringify
 const add1 = x => x + 1
 
 test(`a Cell is just a function with dependants`, () => {
-  const c = cell( add1, id )
+  const c = Cell( add1, id )
 
   expect( typeof c ).toEqual('function')
   expect( c(1) ).toEqual(2)
 })
 
 test(`a Cell will pass it's value on to it's dependants`, () => {
-  const c = cell( add1, x => expect(x).toEqual(2) )
+  const c = Cell( add1, x => expect(x).toEqual(2) )
   c(1)
 })
 
-test(`a Cell's child can be another cell`, () => {
+test(`a Cell's child can be another Cell`, () => {
   const c =
-  cell( add1,
-    cell( add1,
-      cell( add1,
-        cell( add1,
+  Cell( add1,
+    Cell( add1,
+      Cell( add1,
+        Cell( add1,
           x => expect(x).toEqual(5)))))
   c(1)
 })
 
 test(`a Cell will only recompute on new parameters`, () => {
   let a = 0
-  const c = cell( add1, () => a++ )
+  const c = Cell( add1, () => a++ )
 
   expect( a ).toEqual(0)
   c(1)

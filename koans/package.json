@@ -1,0 +1,13 @@
+{
+  "name": "zazen-koans",
+  "version": "0.0.1",
+  "description": "A collection of examples of usage",
+  "scripts": {
+    "test": "babel-tape-runner *.js | colortape"
+  },
+  "devDependencies": {
+    "babel-tape-runner": "^2.0.1",
+    "colortape": "^0.1.2",
+    "tape": "^4.6.3"
+  }
+}

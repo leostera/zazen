@@ -1,5 +1,5 @@
 import type {
-  Arrow,
+  ArrowT,
 } from 'zazen/arrow'
 
 import {
@@ -7,17 +7,17 @@ import {
 } from './cond'
 
 import {
-  arr,
+  Arrow,
 } from './arrow'
 
-export type Cell = Arrow & {
+export type CellT = ArrowT & {
   last_args: [];
   last_val: ?mixed;
   dirty: Boolean;
 }
 
-export type CellFn = (fn: Function, child: Cell) => Cell
-const cell: CellFn = (fn, child) => {
+export type CellFn = (fn: Function, child: CellT) => CellT
+const Cell: CellFn = (fn, child) => {
 
   const _call = args => () => {
     cell_fn.last_args = args
@@ -28,7 +28,7 @@ const cell: CellFn = (fn, child) => {
 
   const _dirty = args => () => cell_fn.last_args[0] !== args [0]
 
-  const cell_fn = arr((...args) => cond(
+  const cell_fn = Arrow((...args) => cond(
     [ _dirty(args), _call(args) ],
     [ true, cell_fn.last_val ]
   ))
@@ -41,5 +41,5 @@ const cell: CellFn = (fn, child) => {
 }
 
 export {
-  cell,
+  Cell,
 }

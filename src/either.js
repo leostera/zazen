@@ -8,12 +8,12 @@ import {
   eq,
 } from './cond'
 
-type _Left<A>  = ['Left',  A]
-type _Right<B> = ['Right', B]
-export type Either<A, B> = _Left<A> | _Right<B>
+type LeftT<A>  = ['Left',  A]
+type RightT<B> = ['Right', B]
+export type Either<A, B> = LeftT<A> | RightT<B>
 
-const Left  = (a: mixed): _Left<*>  => ['Left',  a]
-const Right = (b: mixed): _Right<*> => ['Right', b]
+const Left  = (a: mixed): LeftT<*>  => ['Left',  a]
+const Right = (b: mixed): RightT<*> => ['Right', b]
 
 type C = ?mixed
 // Can A and B be inferred here?

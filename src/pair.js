@@ -1,13 +1,17 @@
-export type Pair<A, B> = [A, B]
-export type TaggedPair<A> = Pair<string, A>
+export type PairT<A, B> = [A, B]
+export type TaggedPairT<A> = PairT<string, A>
 
-type Swap = (p: Pair<*, *>) => Pair<*, *>
-const swap: Swap = ([a, b]) => [b,a]
+type SwapFn = (p: PairT<*, *>) => PairT<*, *>
+const swap: SwapFn = ([a, b]) => [b,a]
 
-type Untag = (p: TaggedPair<*>) => ?mixed
-const untag: Untag = ([tag, value]) => value
+type UntagFn = (p: TaggedPairT<*>) => ?mixed
+const untag: UntagFn = ([tag, value]) => value
+
+type PairFn = (a: mixed, b: mixed) => PairT<*,*>
+const Pair: PairFn = (a, b) => [a, b]
 
 export {
+  Pair,
   swap,
   untag,
 }

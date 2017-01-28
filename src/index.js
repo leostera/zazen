@@ -1,9 +1,9 @@
 export {
-  arr,
+  Arrow,
 } from './arrow'
 
 export {
-  cell,
+  Cell,
 } from './cell'
 
 export {
@@ -14,7 +14,7 @@ export {
 } from './either'
 
 export {
-  stream,
+  Stream,
 } from './stream'
 
 export {
@@ -26,4 +26,5 @@ export {
 export {
   swap,
   untag,
+  Pair,
 } from './pair'
