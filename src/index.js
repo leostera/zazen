@@ -26,7 +26,9 @@ export {
 } from './cond'
 
 export {
+  Pair,
+  first,
+  second,
   swap,
   untag,
-  Pair,
 } from './pair'

@@ -22,8 +22,7 @@ const Cell: CellFn = (fn, child) => {
   const _call = args => () => {
     cell_fn.last_args = args
     cell_fn.last_val = fn.apply({}, args)
-    child(cell_fn.last_val)
-    return cell_fn.last_val
+    return [cell_fn.last_val, child(cell_fn.last_val)]
   }
 
   const _dirty = args => () => cell_fn.last_args[0] !== args [0]
@@ -39,6 +38,7 @@ const Cell: CellFn = (fn, child) => {
 
   return cell_fn
 }
+
 
 export {
   Cell,
