@@ -31,7 +31,7 @@ export type ArrowT = Function & {
   compose(b: ArrowT): ArrowT;
   pipe(b: ArrowT):    ArrowT;
 
-  combine(b: ArrowT): ArrowT;
+  product(b: ArrowT): ArrowT;
   fanout (b: ArrowT): ArrowT;
 
   left(x: mixed):  Either<mixed, mixed>;
@@ -57,14 +57,14 @@ const Arrow = (f: Function): ArrowT  => {
   /***
    * arr
    ***/
-  f.first   = x => f.combine(id)(x)
+  f.first   = x => f.product(id)(x)
   f.second  = x => swap(f.first(id))(swap(x))
 
   f.compose = g => Arrow( compose(f)(g) )
   f.pipe    = g => Arrow(g).compose(f) //reverse compose
 
-  f.combine = g => Arrow( pair(f)(g) )
-  f.fanout  = g => f.combine(g).compose(dupe)
+  f.product = g => Arrow( pair(f)(g) )
+  f.fanout  = g => f.product(g).compose(dupe)
 
   /***
    * arrChoice
