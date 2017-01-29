@@ -1,44 +1,73 @@
-import type {
-  ArrowT,
-} from 'zazen/arrow'
+// let f
+// 
+// (a, b)
+// with b = (1, (2, (3, 4)))
+// 
+// 
+// f(a) === first(b) => Left (a, b)
+//                   => Right(a, (first(b), g(f(a), second(b))))
+//
+//
+//
 
 import {
   cond,
-} from './cond'
-
-import {
   Arrow,
-} from './arrow'
+  Left,
+  Right,
+} from 'zazen'
 
-export type CellT = ArrowT & {
-  last_args: [];
-  last_val: ?mixed;
-  dirty: Boolean;
+export type CellT = Function & {
+  id(b: mixed): mixed;
+
+  first(p: Pair<mixed, mixed>):  CellT;
+  second(p: Pair<mixed, mixed>): CellT;
+
+  compose(b: CellT): CellT;
+  pipe(b: CellT):    CellT;
+
+  product(b: CellT): CellT;
+  fanout (b: CellT): CellT;
+
+  left(x: mixed):  Either<mixed, mixed>;
+  right(x: mixed): Either<mixed, mixed>;
+
+  sum(b: CellT):   CellT;
+  fanin(b: CellT): mixed;
 }
 
-export type CellFn = (fn: Function, child: CellT) => CellT
-const Cell: CellFn = (fn, child) => {
+export type CellFn = (fn: Function) => CellT
+const Cell: CellFn = f => {
+  const _c = (x, [h, t]) => {
+    const fx = f(x)
 
-  const _call = args => () => {
-    cell_fn.last_args = args
-    cell_fn.last_val = fn.apply({}, args)
-    return [cell_fn.last_val, child(cell_fn.last_val)]
+    return cond(
+      [() => fx === h, Left([h, t])],
+      [true, Right([fx, t])])
   }
 
-  const _dirty = args => () => cell_fn.last_args[0] !== args [0]
+  _c.compose = g => 
 
-  const cell_fn = Arrow((...args) => cond(
-    [ _dirty(args), _call(args) ],
-    [ true, cell_fn.last_val ]
-  ))
+  _c.pipe = g => (Cell(id).sum(g)).compose(_c)
 
-  cell_fn.last_args = []
-  cell_fn.last_val = undefined
-  cell_fn.dirty = true
+  _c.sum = g => Cell( ([t,a]) =>
+    cond(
+      [eq(t, 'Left'),  Left(f(a))],
+      [eq(t, 'Right'), Right(g(a))]))
 
-  return cell_fn
+  return _c
 }
 
+const add1Cell = Cell( x => x + 1 )
+const mul2Cell = Cell( y => y * 2 )
+
+const add1ThenMul2Cell = add1Cell.pipe(mul2Cell)
+
+const add1Values = add1Cell(1, [1, 2]) // => Left([1, 2])
+const add1NewValues = add1Cell(2, [1, 2]) // => Right([2, 3])
+
+const values = add1ThenMul2Cell(1, [1, [2, 4]]) // Left([1, [2, 4]])
+const newValues = add1ThenMul2Cell(1, [2, [4, 6]]) // Right([2, Right([3, 6])])
 
 export {
   Cell,
