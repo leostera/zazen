@@ -66,14 +66,14 @@ koan(`an arrow can be composed with another arrow`, ({ok, end}) => {
 
 })
 
-koan(`an arrow can be combined with another arrow`, ({deepEquals, end}) => {
+koan(`two arrows can be combined to work with a product type`, ({deepEquals, end}) => {
 
   const arr1 = Arrow(add1)
 
   const arr3 = Arrow(mul3)
 
   deepEquals(
-    [2, 3], ___.combine(___)([1, 1]),
+    [2, 3], ___.product(___)([1, 1]),
     `Left input goes through left arrow to left output,
      right input goes through right arrow to right output`)
 

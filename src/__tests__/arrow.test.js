@@ -52,13 +52,13 @@ check('an Arrow is composable with other arrows',
 check('an Arrow is combinable with regular functions',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      Arrow(f).combine(f)([x,x]),
+      Arrow(f).product(f)([x,x]),
       [f(x),f(x)])))
 
 check('an Arrow is combinable with other arrows',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      Arrow(f).combine(Arrow(f))([x,x]),
+      Arrow(f).product(Arrow(f))([x,x]),
       [f(x),f(x)])))
 
 check('an Arrow is fanout-able with regular functions',
