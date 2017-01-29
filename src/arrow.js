@@ -57,11 +57,11 @@ const Arrow = (f: Function): ArrowT  => {
   /***
    * arr
    ***/
-  f.first   = x => Arrow( pair(f)(id) )(x)
-  f.second  = x => Arrow( pair(id)(f) )(x)
+  f.first   = x => f.combine(id)(x)
+  f.second  = x => swap(f.first(id))(swap(x))
 
   f.compose = g => Arrow( compose(f)(g) )
-  f.pipe    = g => Arrow( compose(g)(f) ) //reverse compose
+  f.pipe    = g => Arrow(g).compose(f) //reverse compose
 
   f.combine = g => Arrow( pair(f)(g) )
   f.fanout  = g => f.combine(g).compose(dupe)
