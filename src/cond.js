@@ -7,10 +7,10 @@ type Predicate = mixed | PredicateFn
 export type CondPairT = PairT<Predicate, mixed>
 
 type Eq = (a: mixed, b: mixed) => PredicateFn
-const eq: Eq = (a,b) => () => a === b
+const eq: Eq = (a,b) => () => (console.log(a, "===",  b), a === b)
 
 type Ap = (f: Function, a: mixed) => PredicateFn
-const ap: Ap = (f, a) => () => f(a)
+const ap: Ap = (f, a) => () => (console.log(f,"(",a,")"), f(a))
 
 type Just<A> = (a: A) => () => A
 const just: Just<*> = a => () => a
@@ -28,8 +28,8 @@ export type Cond = (...pairs: Array<CondPairT>) => mixed
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
 const matchToCond = matches => action => match => ([
-  () => action[Symbol.for('@@type')] === Symbol.for(match),
-  () => matches[match](action[Symbol.for('@@value')])
+  eq(action[Symbol.for('@@type')], Symbol.for(match)),
+  ap(matches[match], action[Symbol.for('@@value')])
 ])
 const mapKeys = a => f => Object.keys(a).map(f)
 const createConds = matches => action => mapKeys(matches)(matchToCond(matches)(action))
@@ -39,16 +39,18 @@ import { createType } from './type'
 
 const IncAction = createType('Inc')
 const DecAction = createType('Dec')
+const ResetAction = createType('Reset')
 const WhatAction = createType('What')
 
 const cata = match({
   Inc: x => x+1,
   Dec: x => x-1,
-  Reset: 0
+  Reset: x => 0
 })
 
 console.log(cata(IncAction.of(10)))
 console.log(cata(DecAction.of(10)))
+console.log(cata(ResetAction.of(null)))
 console.log(cata(WhatAction.of(100)))
 
 export {
