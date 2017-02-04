@@ -30,8 +30,8 @@ const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
 type matchToCondFn = (a: Object) => (b: *) => (a: *) => CondPairT
 const matchToCond: matchToCondFn = matches => action => match => ([
-  eq(action['@@type'], match),
-  ap(matches[match], action['@@value'])
+  eq(action['@@type'] || typeof action, match),
+  ap(matches[match], action['@@value'] || action)
 ])
 
 type _mapKeysFn = (a: Object) => (f: Function) => Array<*>

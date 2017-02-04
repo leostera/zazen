@@ -110,3 +110,18 @@ test(`Match on Object Types`, () => {
   expect(cata(WhatAction.of(100))).toEqual(undefined)
 
 })
+
+test(`Match works on Primitives`, () => {
+
+  const match = createMatch( x => x)
+  const cata = match({
+    number: x => x+1,
+    string: x => x+'!',
+    boolean: x => !x,
+  })
+
+  expect(cata(1)).toEqual(2)
+  expect(cata('hello')).toEqual('hello!')
+  expect(cata(true)).toEqual(false)
+
+})
