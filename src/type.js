@@ -19,7 +19,13 @@ const createType = <A>(name: string): TypeT<A> => {
     map: f => Object.freeze(of(f(x))),
   })
 
-  return Object.freeze({of})
+  map = (a: IncTag) => 
+
+
+  return Object.freeze({
+    of,
+    map: x => f => Object.freeze(of(f(x)))
+  })
 }
 
 export {
