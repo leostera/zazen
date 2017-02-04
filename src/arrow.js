@@ -58,9 +58,10 @@ const compose = f => g => x => f(g(x))
 const id = x => x
 
 // Lifts a function into an arr
-// arrrow :: (b -> c) -> arr b c
+// arrow :: (b -> c) -> arr b c
 const Arrow = (f: Function): ArrowT  => {
-  f['@@type'] = 'Arrow'
+  f['@@type']  = 'Arrow'
+  f['@@value'] = f
   f.inspect = () => `${f['@@type']}(${signature(f)})`
 
   /***
