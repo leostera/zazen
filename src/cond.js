@@ -31,8 +31,8 @@ export type Matches = Object
 
 type matchToCondFn = (a: Matches) => (b: *) => (a: *) => CondPairT
 const matchToCond: matchToCondFn = matches => action => match => ([
-  eq(action[0], match),
-  ap(matches[match], action[1])
+  eq(action['@@type'], match),
+  ap(matches[match], action['@@value'])
 ])
 
 type _mapKeysFn = (a: Object) => (f: Function) => Array<*>
