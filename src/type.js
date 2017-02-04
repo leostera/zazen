@@ -31,7 +31,7 @@ export type SemiGroup<A, B> = Type<A, B> & {
 }
 
 export type Monoid<A, B> = SemiGroup<A, B> & {
-  id: (): SemiGroup<A, B>
+  id(): Monoid<A, B>
 }
 
 /*
