@@ -1,9 +1,8 @@
 [options]
-all=true
 
 [include]
 .*/node_modules/zazen/.*
-.*/src/.*
+.*/src/type.js
 
 [ignore]
 .*/koans/.*

@@ -2,6 +2,10 @@ import type {
   PairT,
 } from './pair'
 
+import type {
+  ElementT,
+} from './type'
+
 type PredicateFn  = (...args: *) => boolean
 type Predicate = mixed | PredicateFn
 export type CondPairT = PairT<Predicate, mixed>
@@ -29,7 +33,7 @@ const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
 export type Matches = Object
 
-type matchToCondFn = (a: Matches) => (b: *) => (a: *) => CondPairT
+type matchToCondFn = (a: Matches) => (b: ElementT<*>) => (a: ElementT<*>) => CondPairT
 const matchToCond: matchToCondFn = matches => action => match => ([
   eq(action['@@type'], match),
   ap(matches[match], action['@@value'])
@@ -38,11 +42,11 @@ const matchToCond: matchToCondFn = matches => action => match => ([
 type _mapKeysFn = (a: Object) => (f: Function) => Array<*>
 const _mapKeys: _mapKeysFn = a => f => Object.keys(a).map(f)
 
-type createCondsFn = (a: Matches) => (b: *) => Array<CondPairT>
+type createCondsFn = (a: Matches) => (b: ElementT<*>) => Array<CondPairT>
 const createConds: createCondsFn = matches => action =>
   _mapKeys(matches)(matchToCond(matches)(action))
 
-type matchFn = (a: Matches) => (b: *) => mixed
+type matchFn = (a: Matches) => (b: ElementT<*>) => mixed
 const match: matchFn = matches => action => cond(...createConds(matches)(action))
 
 import { createType } from './type'

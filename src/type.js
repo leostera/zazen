@@ -1,21 +1,21 @@
-type Element = {
-  '@@type': string,
-  '@@value': string,
-  fold: (f: any => any) => any,
-  inspect: () => string,
-  map: (f: any => any) => Element
+// @flow
+export type ElementT<A, B> = {
+  '@@type': A,
+  '@@value': B,
+  map: (F: ((x: B) => B)) => B
 }
 
-type Type = {
-  of: (x: any) => Element
+
+export type TypeT<A> = {
+  of: (x: *) => ElementT<A, *>
 }
 
-const createType = (name: string): Type => {
-  const of = x => Object.freeze({
+const createType = <A>(name: string): TypeT<A> => {
+  const of = (x:*): ElementT<A, *> => Object.freeze({
     '@@type': name,
     '@@value': x,
     fold: f => f(x),
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${x.toString()})`,
     map: f => Object.freeze(of(f(x))),
   })
 
@@ -25,3 +25,10 @@ const createType = (name: string): Type => {
 export {
   createType,
 }
+
+type IncTag = 'Inc'
+
+const IncType: TypeT<IncTag> = createType('Inc')
+
+IncType.of(1)
+  .map(x => 'should fail')
