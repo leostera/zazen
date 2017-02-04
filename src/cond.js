@@ -22,7 +22,7 @@ type RunCond = (a: CondPairT) => mixed
 const run_cond: RunCond = ([pred, branch]) => run(pred) && run(branch)
 
 type Reducer = (a: mixed, b: CondPairT) => mixed
-const reducer: Reducer = (a, cond) => a || run_cond(cond) || a
+const reducer: Reducer = (a, cond) => a || ( b => (b === 0 ? 0 : (b || a)) )(run_cond(cond))
 
 export type Cond = (...pairs: Array<CondPairT>) => mixed
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
