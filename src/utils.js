@@ -20,8 +20,23 @@ const atom = (...args: Array<string>): Atom => {
   return keys.length === 1 ? keys[0] : keys
 }
 
+const signature = (fn: Function): String =>
+  fn.toString()
+    .split('function ')
+    .map( x =>
+      x
+        .split('{')[0]
+        .trim()
+        .replace(/\(|\)/gi, ' ')
+        .trim()
+        .split(' ')
+        .join(' :: ') )
+    .slice(1)
+    .join(' -> ')
+
 export {
   atom,
   log,
   tick,
+  signature,
 }

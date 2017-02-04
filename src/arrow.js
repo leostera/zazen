@@ -1,3 +1,7 @@
+import {
+  signature,
+} from './utils'
+
 import type {
   Either,
 } from './either'
@@ -23,6 +27,8 @@ import {
 } from './cond'
 
 export type ArrowT = Function & {
+  '@@type': 'Arrow';
+
   id(b: mixed): mixed;
 
   first(p: Pair<mixed, mixed>):  ArrowT;
@@ -44,6 +50,7 @@ export type ArrowT = Function & {
 }
 
 const pair = f => g => ([a,b]) => [f(a), g(b)]
+
 const dupe = x => [x,x]
 
 const compose = f => g => x => f(g(x))
@@ -54,7 +61,7 @@ const id = x => x
 // arrrow :: (b -> c) -> arr b c
 const Arrow = (f: Function): ArrowT  => {
   f['@@type'] = 'Arrow'
-  f.inspect = () => `${f['@@type']}(${f})`
+  f.inspect = () => `${f['@@type']}(${signature(f)})`
 
   /***
    * arr
