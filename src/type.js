@@ -13,6 +13,27 @@ export type Type<A, B> = {
   '@@value': B
 }
 
+export type Setoid<A, B> = Type<A, B> & {
+  equals(a: Setoid<A, B>): boolean
+}
+
+export type Functor<A, B> = Type<A, B> & {
+  map(f: (a: B) => B): Functor<A, B>
+}
+type Map = (f: (a: *) => *) => Functor<*, *>
+
+export type Foldable<A, B> = Type<A, B> & {
+  fold(f: (a: B) => B): B
+}
+
+export type SemiGroup<A, B> = Type<A, B> & {
+  concat(x: SemiGroup<A, B>): SemiGroup<A, B>
+}
+
+export type Monoid<A, B> = SemiGroup<A, B> & {
+  id: (): SemiGroup<A, B>
+}
+
 /*
  * Generic Data Type, used to ensure that all lifters can be properly
  * type-checked.
@@ -32,6 +53,21 @@ const createType = (name: any): any => ({
   })
 })
 
+const createFunctor = (map: Map) => (name: any): any => ({
+  of: x => ({
+    '@@type': name,
+    '@@value': x,
+    map: map(x)
+  })
+})
+
 export {
   createType,
+  createFunctor,
 }
+//
+// match({
+//   Left: match({
+//     Number:
+//   })
+// })
