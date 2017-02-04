@@ -1,4 +1,5 @@
 [options]
+all=true
 
 [include]
 .*/node_modules/zazen/.*
