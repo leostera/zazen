@@ -53,7 +53,8 @@ const id = x => x
 // Lifts a function into an arr
 // arrrow :: (b -> c) -> arr b c
 const Arrow = (f: Function): ArrowT  => {
-  f[Symbol.for('TypeName')] = 'Arrow'
+  f['@@type'] = 'Arrow'
+  f.inspect = () => `${f['@@type']}(${f})`
 
   /***
    * arr
