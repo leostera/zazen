@@ -1,10 +1,21 @@
 import {
+  createType,
+} from 'zazen/type'
+
+import type {
+  Data,
+  Type,
+  TypeChecker,
+} from 'zazen/type'
+
+import {
+  ap,
+  cond,
+  createMatch,
+  eq,
+  reducer,
   run,
   run_cond,
-  reducer,
-  ap,
-  eq,
-  cond,
 } from 'zazen/cond'
 
 const assert = (x) => () => expect(x).toEqual(true)
@@ -71,3 +82,31 @@ test("Cond branching with blowing up function predicate", () => {
   expect( c ).toThrow()
 })
 
+test(`Match on Object Types`, () => {
+
+  type IncT = Type<'Inc', number>
+  type DecT = Type<'Dec', number>
+  type ResetT = Type<'Reset', number>
+  type WhatT = Type<'What', number>
+
+  const IncAction: Data<IncT, number> = createType('Inc')
+  const DecAction: Data<DecT, number> = createType('Dec')
+  const ResetAction: Data<ResetT, null> = createType('Reset')
+  const WhatAction: Data<WhatT, number> = createType('What')
+
+  type ActionT = IncT | DecT | ResetT
+  const id: TypeChecker<ActionT> = x => x
+
+  const match = createMatch(id)
+  const cata = match({
+    Inc: x => x+1,
+    Dec: x => x-1,
+    Reset: x => 0
+  })
+
+  expect(cata(IncAction.of(10))).toEqual(11)
+  expect(cata(DecAction.of(10))).toEqual(9)
+  expect(cata(ResetAction.of(null))).toEqual(0)
+  expect(cata(WhatAction.of(100))).toEqual(undefined)
+
+})
