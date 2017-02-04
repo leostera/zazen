@@ -2,7 +2,7 @@
 
 [include]
 .*/node_modules/zazen/.*
-.*/src/.*
+.*/src/type.js
 
 [ignore]
 .*/.cache/.*

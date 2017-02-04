@@ -5,23 +5,41 @@ import {
 import {
   ap,
   cond,
+  match,
   eq,
 } from './cond'
 
-type LeftT<A>  = ['Left',  A]
-type RightT<B> = ['Right', B]
+import type {
+  ElementT,
+} from './type'
+
+type LeftTag = 'Left'
+type RightTag = 'Right'
+
+type LeftT<A>  = ElementT<LeftTag, A>
+
+type RightT<A>  = ElementT<RightTag, A>
+
 export type Either<A, B> = LeftT<A> | RightT<B>
 
-const Left  = (a: mixed): LeftT<*>  => ['Left',  a]
-const Right = (b: mixed): RightT<*> => ['Right', b]
+const Left  = (a: mixed): LeftT<*>  => ({
+  '@@type': 'Left',
+  '@@value': a
+})
+
+const Right = (b: mixed): RightT<*> => ({
+  '@@type': 'Right',
+  '@@value': b
+})
 
 type C = ?mixed
 // Can A and B be inferred here?
 type EitherFn = (f:((a:*)=>C)) => (g:((b:*)=>C)) => (e:Either<*,*>) => C
-const either: EitherFn = f => g => ([tag, a]) =>
-  cond(
-    [eq(tag, 'Right'), ap(g, a)],
-    [eq(tag, 'Left'),  ap(f, a)])
+const either: EitherFn = f => g =>
+  match({
+    Right: g,
+    Left: f
+  })
 
 const mirror = either(Right)(Left)
 
