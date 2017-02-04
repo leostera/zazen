@@ -21,6 +21,7 @@ export {
   ap,
   eq,
   cond,
+  createMatch,
 } from './cond'
 
 export {
