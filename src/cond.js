@@ -57,6 +57,7 @@ export {
   ap,
   cond,
   eq,
+  match,
   reducer,
   run,
   run_cond,

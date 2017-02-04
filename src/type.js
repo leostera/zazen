@@ -4,7 +4,7 @@ const createType = name => {
     [Symbol.for('@@value')]: x,
     fold: f => f(x),
     inspect: () => `${name}(${x})`,
-    map: f => of(f(x))
+    map: f => Object.freeze(of(f(x)))
   })
   return Object.freeze({of})
 }
