@@ -27,13 +27,23 @@ const reducer: Reducer = (a, cond) => a || ( b => (b === 0 ? 0 : (b || a)) )(run
 export type Cond = (...pairs: Array<CondPairT>) => mixed
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
-const matchToCond = matches => action => match => ([
+export type Matches = Object
+
+type matchToCondFn = (a: Matches) => (b: *) => (a: *) => CondPairT
+const matchToCond: matchToCondFn = matches => action => match => ([
   eq(action[Symbol.for('@@type')], Symbol.for(match)),
   ap(matches[match], action[Symbol.for('@@value')])
 ])
-const mapKeys = a => f => Object.keys(a).map(f)
-const createConds = matches => action => mapKeys(matches)(matchToCond(matches)(action))
-const match = matches => action => cond(...createConds(matches)(action))
+
+type _mapKeysFn = (a: Object) => (f: Function) => Array<*>
+const _mapKeys: _mapKeysFn = a => f => Object.keys(a).map(f)
+
+type createCondsFn = (a: Matches) => (b: *) => Array<CondPairT>
+const createConds: createCondsFn = matches => action =>
+  _mapKeys(matches)(matchToCond(matches)(action))
+
+type matchFn = (a: Matches) => (b: *) => mixed
+const match: matchFn = matches => action => cond(...createConds(matches)(action))
 
 import { createType } from './type'
 
