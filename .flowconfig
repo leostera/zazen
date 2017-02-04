@@ -1,11 +1,11 @@
 [options]
-all=true
 
 [include]
 .*/node_modules/zazen/.*
 .*/src/.*
 
 [ignore]
+.*/.cache/.*
 .*/koans/.*
 .*/coverage/.*
 .*/__tests__/.*
