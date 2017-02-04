@@ -42,16 +42,25 @@ type createCondsFn = (a: Matches) => (b: *) => Array<CondPairT>
 const createConds: createCondsFn = matches => action =>
   _mapKeys(matches)(matchToCond(matches)(action))
 
-type matchFn = (a: Matches) => (b: *) => mixed
-const match: matchFn = matches => action => cond(...createConds(matches)(action))
+type createMatchFn = (f: (x: *) => *) => (a: Matches) => (b: *) => mixed
+const createMatch: createMatchFn = typeChecker => matches => action => cond(...createConds(matches)(typeChecker(action)))
 
 import { createType } from './type'
+import type {Data, Type, TypeChecker} from './type'
 
-const IncAction = createType('Inc')
-const DecAction = createType('Dec')
-const ResetAction = createType('Reset')
-const WhatAction = createType('What')
+type IncT = Type<'Inc', number>
+type DecT = Type<'Dec', number>
+type ResetT = Type<'Reset', number>
+type WhatT = Type<'What', number>
+const IncAction: Data<IncT, number> = createType('Inc')
+const DecAction: Data<DecT, number> = createType('Dec')
+const ResetAction: Data<ResetT, number> = createType('Reset')
+const WhatAction: Data<WhatT, number> = createType('What')
 
+type ActionT = IncT | DecT | ResetT
+const id: TypeChecker<ActionT> = x => x
+
+const match = createMatch(id)
 const cata = match({
   Inc: x => x+1,
   Dec: x => x-1,
