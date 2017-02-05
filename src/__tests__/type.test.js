@@ -53,7 +53,8 @@ test(`Setoid actually behaves as expected`, () => {
 test(`Foldable actually behaves as expected`, () => {
 
   type IdentityFoldableT = Foldable<'IdentityFoldable', string>
-  const IdentityFoldable: Data<IdentityFoldableT, string> = foldable(x => f => f(x))(createType)('IdentityFoldable')
+  const IdentityFoldable: Data<IdentityFoldableT, string> =
+    foldable(x => f => f(x))(createType)('IdentityFoldable')
 
   const a = IdentityFoldable.of('str')
 
