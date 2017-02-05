@@ -10,6 +10,7 @@ import {
   check as verify,
   forall,
   nat,
+// $FlowIgnore
 } from 'jsverify'
 
 import {

@@ -1,5 +1,6 @@
 import {
 	Suite
+// $FlowIgnore
 } from 'benchmark'
 
 const id = x => x
