@@ -65,9 +65,3 @@ export {
   createType,
   createFunctor,
 }
-//
-// match({
-//   Left: match({
-//     Number:
-//   })
-// })
