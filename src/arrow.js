@@ -1,7 +1,3 @@
-import {
-  signature,
-} from './utils'
-
 import type {
   Either,
 } from './either'
@@ -62,7 +58,7 @@ const id = x => x
 const Arrow = (f: Function): ArrowT  => {
   f['@@type']  = 'Arrow'
   f['@@value'] = f
-  f.inspect = () => `${f['@@type']}(${signature(f)})`
+  f.inspect = () => `${f['@@type']}(${f.toString()})`
 
   /***
    * arr
