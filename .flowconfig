@@ -9,6 +9,5 @@ all=true
 .*/.cache/.*
 .*/koans/.*
 .*/coverage/.*
-.*/__tests__/.*
 .*/node_modules/.*
 .*/lib/.*
