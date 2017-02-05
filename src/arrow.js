@@ -1,5 +1,5 @@
 import type {
-  Either,
+  EitherT,
 } from './either'
 
 import {
@@ -36,8 +36,8 @@ export type ArrowT = Function & {
   product(b: ArrowT): ArrowT;
   fanout (b: ArrowT): ArrowT;
 
-  left(x: mixed):  Either<mixed, mixed>;
-  right(x: mixed): Either<mixed, mixed>;
+  left(x: mixed):  EitherT<mixed, mixed>;
+  right(x: mixed): EitherT<mixed, mixed>;
 
   sum(b: ArrowT):   ArrowT;
   fanin(b: ArrowT): mixed;
@@ -75,16 +75,9 @@ const Arrow = (f: Function): ArrowT  => {
   /***
    * arrChoice
    ***/
-  // arr ([t,a]: Either<*,*> ): Either<*,*>
-  // raises a type check error on `t` being `Left` instead of `Right`
-  // and `Right` instead of `Left`
-  // :(
-  f.sum = g => Arrow( match({
-    Left: a => Left.of(f(a)),
-    Right: a => Right.of(g(a))
-  }) )
+  f.sum = g => Arrow( either( a => Left.of(f(a)) )( a => Right.of(g(a)) ) )
 
-  f.fanin = g => f.sum(g).pipe(untag)
+  f.fanin = g => f.sum(g).pipe( either( x => x )( x => x) )
 
   f.left  = x => f.sum(id)(x)
   f.right = x => Arrow(id).sum(f)(x)

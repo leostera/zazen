@@ -1,3 +1,12 @@
+import type {
+  Type,
+  Data,
+} from 'zazen/type'
+
+import {
+  createType,
+} from 'zazen/type'
+
 import {
   atom,
   log,
@@ -9,24 +18,35 @@ import {
   either,
   mirror,
   untag,
+  match,
 } from 'zazen'
 
 const id = x => x
 
-const left   = Left(1)
-const right  = Right(2)
-const center = ['Center', Infinity]
+const left   = Left.of(1)
+const right  = Right.of(2)
 
-const mirrored_left  = Right(1)
-const mirrored_right = Left(2)
+type CenterT<A>  = Type<'Center',  A>
+const Center: Data<CenterT<*>, mixed> = createType('Center')
+const center = Center.of(1)
 
+const mirrored_left  = Right.of(1)
+const mirrored_right = Left.of(2)
+
+const valueOf = match({
+  Left: id,
+  Right: id,
+})
+
+const assertValue = (a, b) =>
+  expect( valueOf(a) ).toEqual( valueOf(b) )
 
 test("an Either executes f for Left", () => {
-  expect( either(id)(id)(left) ).toEqual(untag(left))
+  expect( either(id)(id)(left) ).toEqual( left["@@value"] )
 })
 
 test("an Either executes g for Right", () => {
-  expect( either(id)(id)(right) ).toEqual(untag(right))
+  expect( either(id)(id)(right) ).toEqual( right["@@value"] )
 })
 
 test("either does nothing if it's not tagged Left or Right", () => {
@@ -34,17 +54,17 @@ test("either does nothing if it's not tagged Left or Right", () => {
 })
 
 test("an Either Left becomes an Either Right when mirrored", () => {
-  expect( mirror(left) ).toEqual(mirrored_left)
+  assertValue( mirror(left), mirrored_left )
 })
 
 test("an Either Right becomes an Either Left when mirrored", () => {
-  expect( mirror(right) ).toEqual(mirrored_right)
+  assertValue( mirror(right), mirrored_right )
 })
 
-test("an Either Right can be untagged to it's value", () => {
-  expect( untag(right) ).toEqual(2)
+test("an Either Right can be matched to it's value", () => {
+  expect( valueOf(right) ).toEqual(2)
 })
 
-test("an Either Left can be untagged to it's value", () => {
-  expect( untag(left) ).toEqual(1)
+test("an Either Left can be matched to it's value", () => {
+  expect( valueOf(left) ).toEqual(1)
 })

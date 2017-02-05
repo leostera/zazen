@@ -2,28 +2,43 @@ import {
   untag,
 } from './pair'
 
+import type {
+  Data,
+  Type,
+  TypeChecker,
+} from './type'
+
+import {
+  createType,
+} from './type'
+
 import {
   ap,
   cond,
+  createMatch,
   eq,
 } from './cond'
 
-type LeftT<A>  = ['Left',  A]
-type RightT<B> = ['Right', B]
-export type Either<A, B> = LeftT<A> | RightT<B>
+type LeftT<A>  = Type<'Left',  A>
+type RightT<A> = Type<'Right', A>
+export type EitherT<A, B> = LeftT<A> | RightT<B>
 
-const Left  = (a: mixed): LeftT<*>  => ['Left',  a]
-const Right = (b: mixed): RightT<*> => ['Right', b]
+const Left: Data<LeftT<*>, mixed> = createType('Left')
+const Right: Data<RightT<*>, mixed> = createType('Right')
+
+const eitherId: TypeChecker<EitherT<*,*>> = x => x
+const match = createMatch(eitherId)
 
 type C = ?mixed
 // Can A and B be inferred here?
-type EitherFn = (f:((a:*)=>C)) => (g:((b:*)=>C)) => (e:Either<*,*>) => C
-const either: EitherFn = f => g => ([tag, a]) =>
-  cond(
-    [eq(tag, 'Right'), ap(g, a)],
-    [eq(tag, 'Left'),  ap(f, a)])
+type EitherFn = (f:((a:*)=>C)) => (g:((b:*)=>C)) => (e:EitherT<*,*>) => C
+const either: EitherFn = f => g =>
+  match({
+    Left: a => f(a),
+    Right: a => g(a),
+  })
 
-const mirror = either(Right)(Left)
+const mirror = either(Right.of)(Left.of)
 
 export {
   Left,
