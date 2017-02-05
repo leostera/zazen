@@ -18,6 +18,7 @@ export type Type<A, B> = {
 export type Setoid<A, B> = Type<A, B> & {
   equals(a: Setoid<A, B>): boolean
 }
+type Equals<A> = (x: A) => (y: A) => boolean
 
 export type Functor<A, B> = Type<A, B> & {
   map(f: (a: B) => B): Functor<A, B>
@@ -66,6 +67,14 @@ const createFunctor = (map: Map<any>) => (name: any): any => {
 
   return {of}
 }
+
+const setoid = (equals: Equals<any>) => (createType) => (name) => ((type) => ({
+  ...type,
+  of: x => ({
+    ...type.of(x),
+    equals: equals(x)
+  })
+}))(createType(name))
 
 export {
   createType,
