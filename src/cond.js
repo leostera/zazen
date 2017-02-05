@@ -49,11 +49,14 @@ type createMatchFn = (f: (x: *) => *) => (a: Object) => (b: *) => mixed
 const createMatch: createMatchFn = typeChecker => matches => action =>
   cond(...createConds(matches)(typeChecker(action)))
 
+const match = createMatch(x => x)
+
 export {
   ap,
   cond,
   createMatch,
   eq,
+  match,
   reducer,
   run,
   run_cond,

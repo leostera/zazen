@@ -22,6 +22,7 @@ export {
   eq,
   cond,
   createMatch,
+  match,
 } from './cond'
 
 export {

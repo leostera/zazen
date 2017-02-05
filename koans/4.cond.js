@@ -10,6 +10,7 @@ import {
   eq,
   ap,
   cond,
+  match,
 } from 'zazen'
 
 /*
@@ -70,6 +71,18 @@ koan(`a cond takes N conditions and returns the first match`, ({ok, end}) => {
       [ () => false, 2 ],
       [ true, 3 ]) == ___,
     `a final true can be used like an else`)
+
+  end()
+
+})
+
+focus(`matching on object types`, ({ok, end}) => {
+
+  ok(
+    match({
+      ___: x => x+1
+    })(1) === 2,
+    `the type name corresponds to a branch`)
 
   end()
 
