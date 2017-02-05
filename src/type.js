@@ -35,10 +35,6 @@ export type SemiGroup<A, B> = Type<A, B> & {
 }
 type Concat<A> = (x: A) => (x: A) => A
 
-export type Monoid<A, B> = SemiGroup<A, B> & {
-  id(): Monoid<A, B>
-}
-
 /*
  * Generic Data Type, used to ensure that all lifters can be properly
  * type-checked.
@@ -47,6 +43,11 @@ export type Data<A, B> = {
   '@@type': any,
   of: (x: B) => A
 }
+
+export type Monoid<A, B> = Data<A, B> & {
+  empty(): SemiGroup<any, B>
+}
+type Empty<A> = A
 
 /*
  * Generic Type Creator. If used with Flow's Inference engine, works smoothly
@@ -101,6 +102,27 @@ const setoid = (equals: Equals<any>) => (createType: (name: any) => any) => (nam
     equals: y => equals(x)(y['@@value'])
   })
 }))(createType(name))
+
+const monoid = (concat: Concat<any>, empty: Empty<any>) => (createType: (name: any) => any) => (name: any) => ((type) => {
+  const of = x => ({
+    ...type.of(x),
+    concat: y => of(concat(x)(y['@@value']))
+  })
+
+  return {
+    ...type,
+    of,
+    empty: () => of(empty)
+  }
+})(createType(name))
+
+type SumMonoidT = SemiGroup<'SumMonoid', number>
+const SumMonoid: Monoid<SumMonoidT, number> = monoid(x => y => x + y, 0)(createType)('SumMonoid')
+
+const five = SumMonoid.of(5)
+const six = SumMonoid.of(6)
+
+console.log(five.concat(SumMonoid.empty()).concat(six))
 
 export {
   createType,
