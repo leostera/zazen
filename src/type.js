@@ -59,17 +59,19 @@ const createType = (name: any): any => ({
   })
 })
 
-const createFunctor = (map: Map<any>) => (name: any): any => {
+const functor = (map: Map<any>) => (createType: (name: any) => any) => (name: any) => ((type) => {
   const of = x => ({
-    ...createType(name).of(x),
+    ...type.of(x),
     map: f => of(map(x)(f))
   })
 
-  return {of}
-}
+  return {
+    ...type,
+    of
+  }
+})(createType(name))
 
-const setoid = (equals: Equals<any>) => (createType: (name: any) => any) =>
-  (name: string) => ((type) => ({
+const setoid = (equals: Equals<any>) => (createType: (name: any) => any) => (name: any) => ((type) => ({
   ...type,
   of: x => ({
     ...type.of(x),
@@ -79,6 +81,6 @@ const setoid = (equals: Equals<any>) => (createType: (name: any) => any) =>
 
 export {
   createType,
-  createFunctor,
+  functor,
   setoid,
 }
