@@ -130,3 +130,24 @@ test(`Match works on Primitives`, () => {
   expect(cata(null)).toMatchObject({ x: null })
 
 })
+
+test(`Nested Match`, () => {
+
+  type SomeT = Type<'Some', number>
+
+  const Some: Data<SomeT, number> = createType('Some')
+
+  const id: TypeChecker<SomeT> = x => x
+
+  const match = createMatch(id)
+  const cata = match({
+    Some: match({
+      number: x => x+1,
+      object: x => 0
+    })
+  })
+
+  expect( cata(Some.of(1)) ).toEqual(2)
+  expect( cata(Some.of({})) ).toEqual(0)
+
+})
