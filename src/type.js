@@ -116,18 +116,11 @@ const monoid = (concat: Concat<any>, empty: Empty<any>) => (createType: (name: a
   }
 })(createType(name))
 
-type SumMonoidT = SemiGroup<'SumMonoid', number>
-const SumMonoid: Monoid<SumMonoidT, number> = monoid(x => y => x + y, 0)(createType)('SumMonoid')
-
-const five = SumMonoid.of(5)
-const six = SumMonoid.of(6)
-
-console.log(five.concat(SumMonoid.empty()).concat(six))
-
 export {
   createType,
   foldable,
   functor,
+  monoid,
   semiGroup,
   setoid,
 }

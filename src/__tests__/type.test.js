@@ -1,15 +1,17 @@
 import type {
+  Data,
   Foldable,
   Functor,
+  Monoid,
   SemiGroup,
   Setoid,
-  Data,
 } from 'zazen/type'
 
 import {
   createType,
   foldable,
   functor,
+  monoid,
   semiGroup,
   setoid,
 } from 'zazen/type'
@@ -74,5 +76,22 @@ test(`SemiGroup actually behaves as expected`, () => {
   const b = StringSemigroup.of('b')
 
   expect(a.concat(b)['@@value']).toEqual('a.b')
+
+})
+
+
+test(`Monoid actually behaves as expected`, () => {
+
+  type SumMonoidT = SemiGroup<'SumMonoid', number>
+  const SumMonoid: Monoid<SumMonoidT, number> =
+    monoid(x => y => x + y, 0)(createType)('SumMonoid')
+
+  const five = SumMonoid.of(5)
+  const six  = SumMonoid.of(6)
+  const zero = SumMonoid.empty()
+
+  const a = five.concat(zero).concat(six)["@@value"]
+
+  expect(a).toEqual(11)
 
 })
