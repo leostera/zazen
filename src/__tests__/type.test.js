@@ -32,11 +32,12 @@ test(`Types have a type`, () => {
 
 test(`Functor actually behaves as expected`, () => {
 
-  type IdentityFunctorT = Functor<'IdentityFunctor', any>
-  const IdentityFunctor: Data<IdentityFunctorT, any> =
-    functor(x => f => f(x))(createType)('IdentityFunctor')
+  type IdentityFunctorT = Functor<'IdentityFunctor', number>
+  const IdentityFunctor: Data<IdentityFunctorT, number> =
+    functor(x => f => f(x))('IdentityFunctor')
 
-  const a = IdentityFunctor.of(2).map(x => x + 3)["@@value"]
+  // complains down here, map should return number
+  const a = IdentityFunctor.of(2).map(x => x + '3')["@@value"]
   const b = IdentityFunctor.of(5)["@@value"]
 
   expect(a).toEqual(b)
@@ -47,7 +48,8 @@ test(`Setoid actually behaves as expected`, () => {
 
   type HardEqualitySetoidT = Setoid<'HardEqualitySetoid', any>
   const HardEqualitySetoid: Data<HardEqualitySetoidT, any> =
-    setoid(x => y => x === y)(createType)('HardEqualitySetoid')
+    setoid(x => y => 'what')('HardEqualitySetoid')
+  // Works: complains here ^ this should be boolean
 
   const a = HardEqualitySetoid.of(2)
   const b = HardEqualitySetoid.of(2)
@@ -59,11 +61,13 @@ test(`Foldable actually behaves as expected`, () => {
 
   type IdentityFoldableT = Foldable<'IdentityFoldable', string>
   const IdentityFoldable: Data<IdentityFoldableT, string> =
-    foldable(x => f => f(x))(createType)('IdentityFoldable')
+    foldable(x => f => f(x))('IdentityFoldable')
 
-  const a = IdentityFoldable.of('str')
+  // Works: Complains here, this should be string
+  const a = IdentityFoldable.of(1234)
 
-  expect(a.fold(x => x)).toEqual('str')
+  // Works: Complains here, fold should return a string
+  expect(a.fold(x => false)).toEqual('str')
 
 })
 
@@ -71,10 +75,12 @@ test(`SemiGroup actually behaves as expected`, () => {
 
   type StringSemigroupT = SemiGroup<'StringSemigroup', string>
   const StringSemigroup: Data<StringSemigroupT, string> =
-    semiGroup(x => y => false)(createType)('StringSemigroup')
-    //semiGroup(x => y => `${x}.${y}`)(createType)('StringSemigroup')
+    semiGroup(x => y => false)('StringSemigroup')
+    //semiGroup(x => y => `${x}.${y}`)('StringSemigroup')
+  // Broken: should complain up there, semigruop should return string!
 
-  const a = StringSemigroup.of('a')
+  // Works: complains here, lifted value has to be string
+  const a = StringSemigroup.of(1)
   const b = StringSemigroup.of('b')
 
   expect(a.concat(b)['@@value']).toEqual('a.b')
@@ -86,9 +92,12 @@ test(`Monoid actually behaves as expected`, () => {
 
   type SumMonoidT = SemiGroup<'SumMonoid', number>
   const SumMonoid: Monoid<SumMonoidT, number> =
-    monoid(x => y => x + y, 0)(createType)('SumMonoid')
+    monoid(x => y => false, 0)('SumMonoid')
+    //monoid(x => y => x + y, 0)('SumMonoid')
+  // Broken: should copmlain up here, this monoid is of numbers not booleans
 
-  const five = SumMonoid.of(5)
+  // Works: complains down here, lifted value has to be a number
+  const five = SumMonoid.of('asdf')
   const six  = SumMonoid.of(6)
   const zero = SumMonoid.empty()
 
