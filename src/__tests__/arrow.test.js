@@ -1,3 +1,11 @@
+import type {
+  PairT,
+} from 'zazen/pair'
+
+import type {
+  Type,
+} from 'zazen/type'
+
 import {
   check as verify,
   forall,
@@ -23,11 +31,18 @@ const options = {
 const str  = JSON.stringify
 const add1 = x => x+1
 
-const equal_pairs = ([a,b], [c,d]) => a === c && b === d
+const equal_pairs = ([a,b]: PairT<*,*>, [c,d]: PairT<*,*>): boolean=>
+  a === c && b === d
 
-const eq = (a,b) => {
-  if( a["@@type"] && b["@@type"] ) return eq(a["@@value"], b["@@value"])
-  else if( a.length === 2 && b.length === 2 ) return equal_pairs(a,b)
+type Eq = Type<any, any> | PairT<any, any>
+const eq = (a: Eq, b: Eq): boolean => {
+  if( a.hasOwnProperty('@@type') && a.hasOwnProperty('@@value')
+   && b.hasOwnProperty("@@type") && b.hasOwnProperty('@@value'))
+    return eq(a['@@value'], b['@@value'])
+  else if( Array.isArray(a)
+        && Array.isArray(b)
+        && a.length === 2
+        && b.length === 2 ) return equal_pairs(a,b)
   else return a === b
 }
 

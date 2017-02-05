@@ -50,6 +50,7 @@ test("an Either executes g for Right", () => {
 })
 
 test("either does nothing if it's not tagged Left or Right", () => {
+  // $FlowIgnore
   expect( either(id)(id)(center) ).toEqual(undefined)
 })
 

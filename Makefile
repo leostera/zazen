@@ -29,6 +29,7 @@ dirs:
 
 setup: dirs .npmignore
 	$(SCRIPT_DIR)/symlink.sh
+	$(SCRIPT_DIR)/flow-typed.sh
 
 .npmignore: .gitignore FORCE
 	cat .gitignore | grep -v lib > $@

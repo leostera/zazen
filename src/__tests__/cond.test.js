@@ -76,6 +76,7 @@ test("Cond branching with blowing up function predicate", () => {
   const c = () => {
     return cond(
       [false, () => "I'm always ignored"],
+      // $FlowIgnore
       [() => a < 2, () => "I'm always a run-time error!"],
       [true, "else!"])
   }
@@ -148,6 +149,7 @@ test(`Nested Match`, () => {
   })
 
   expect( cata(Some.of(1)) ).toEqual(2)
+  // $FlowIgnore
   expect( cata(Some.of({})) ).toEqual(0)
 
 })
