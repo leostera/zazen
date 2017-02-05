@@ -1,11 +1,13 @@
 import type {
   Functor,
+  Setoid,
   Data,
 } from 'zazen/type'
 
 import {
   createType,
   createFunctor,
+  setoid,
 } from 'zazen/type'
 
 test(`Types have a type`, () => {
@@ -31,5 +33,17 @@ test(`Functor actually behaves as expected`, () => {
   const b = IdentityFunctor.of(5)["@@value"]
 
   expect(a).toEqual(b)
+
+})
+
+test(`Setoid actually behaves as expected`, () => {
+
+  type HardEqualitySetoidT = Setoid<'HardEqualitySetoid', any>
+  const HardEqualitySetoid: Data<HardEqualitySetoidT, any> =
+    setoid(x => y => x === y['@@value'])(createType)('HardEqualitySetoid')
+
+  const a = HardEqualitySetoid.of(2)
+  const b = HardEqualitySetoid.of(2)
+  expect(a.equals(HardEqualitySetoid.of(2))).toEqual(true)
 
 })
