@@ -55,8 +55,7 @@ const createType = (name: any): any => ({
 
 const createFunctor = (map: Map<any>) => (name: any): any => ({
   of: x => ({
-    '@@type': name,
-    '@@value': x,
+    ...createType(name).of(x),
     map: map(x)
   })
 })
