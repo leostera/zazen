@@ -18,20 +18,23 @@ const just: Just<*> = a => () => a
 type Run = (a: Predicate) => mixed
 const run: Run = a => ((typeof a == 'function' && a || just(a))())
 
-type RunCond = (a: CondPairT) => mixed
-const run_cond: RunCond = ([pred, branch]) => run(pred) && run(branch)
+type RunCond = (a: CondPairT) => CondPairT
+const run_cond: RunCond = ([pred, branch]) =>
+  ( x => [x, x && run(branch)] )(run(pred))
 
 type Reducer = (a: mixed, b: CondPairT) => mixed
 const reducer: Reducer = (a, cond) =>
-  a || ( b => (b === 0 ? 0 : (b || a)) )(run_cond(cond))
+  a || ( ([pred, branch]) => (pred ? branch : a) )( run_cond(cond) )
 
 export type Cond = (...pairs: Array<CondPairT>) => mixed
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
+const withDefault = (a, b, c) => Object.keys(a).indexOf(b) === -1 ? c : a[b]
+
 type matchToCondFn = (a: Object) => (b: *) => (a: *) => CondPairT
 const matchToCond: matchToCondFn = matches => action => match => ([
-  eq(action['@@type'] || typeof action, match),
-  ap(matches[match], action['@@value'] || action)
+  eq(withDefault(action, '@@type', typeof action), match),
+  ap(matches[match], withDefault(action, '@@value', action))
 ])
 
 type _mapKeysFn = (a: Object) => (f: Function) => Array<*>

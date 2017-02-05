@@ -27,10 +27,10 @@ test("Run returns the resulting value if it's passed a function",
   assert( run( () => 1 ) === 1) )
 
 test("A condition evaluates to it's branch function's return value",
-  assert( run_cond([1, () => 2]) === 2) )
+  assert( run_cond([1, () => 2])[1] === 2) )
 
 test("A condition evaluates to it's branch value",
-  assert( run_cond([1, 2]) === 2) )
+  assert( run_cond([1, 2])[1] === 2) )
 
 test("Reducing always returns the first match",
   assert(
@@ -113,11 +113,11 @@ test(`Match on Object Types`, () => {
 
 test(`Match works on Primitives`, () => {
 
-  const match = createMatch( x => x)
+  const match = createMatch( x => x )
   const cata = match({
     number: x => x+1,
     string: x => x+'!',
-    boolean: x => !x,
+    boolean: x => !x
   })
 
   expect(cata(1)).toEqual(2)
