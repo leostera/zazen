@@ -12,7 +12,7 @@ export type Type<A, B> = {
   '@@type': A,
   '@@value': B,
   inspect(): String,
-  is(x: B): boolean
+  is(x: Data<Type<A, B>, any>): boolean
 }
 
 export type Setoid<A, B> = Type<A, B> & {
@@ -42,6 +42,7 @@ export type Monoid<A, B> = SemiGroup<A, B> & {
  * type-checked.
  */
 export type Data<A, B> = {
+  '@@type': any,
   of: (x: B) => A
 }
 
