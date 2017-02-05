@@ -10,7 +10,8 @@ export type TypeChecker<A> = (a: A) => A
  */
 export type Type<A, B> = {
   '@@type': A,
-  '@@value': B
+  '@@value': B,
+  inspect(): String,
 }
 
 export type Setoid<A, B> = Type<A, B> & {
@@ -50,6 +51,7 @@ const createType = (name: any): any => ({
   of: x => ({
     '@@type': name,
     '@@value': x,
+    inspect: () => `${name}(${x})`,
   })
 })
 
