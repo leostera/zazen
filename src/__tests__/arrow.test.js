@@ -26,7 +26,8 @@ const add1 = x => x+1
 const equal_pairs = ([a,b], [c,d]) => a === c && b === d
 
 const eq = (a,b) => {
-  if( a.length === 2 && b.length === 2 ) return equal_pairs(a,b)
+  if( a["@@type"] && b["@@type"] ) return eq(a["@@value"], b["@@value"])
+  else if( a.length === 2 && b.length === 2 ) return equal_pairs(a,b)
   else return a === b
 }
 
@@ -76,23 +77,23 @@ check('an Arrow is fanout-able with other arrows',
 check('an Arrow is summable with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      Arrow(f).sum(Arrow(x => add1(f(x))))(Left(x)),
-      Left(f(x)))))
+      Arrow(f).sum(Arrow(x => add1(f(x))))(Left.of(x)),
+      Left.of(f(x)))))
 
 check('an Arrow is summable with other arrows on Right',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      Arrow(f).sum(Arrow(x => add1(f(x))))(Right(x)),
-      Right(add1(f(x))))))
+      Arrow(f).sum(Arrow(x => add1(f(x))))(Right.of(x)),
+      Right.of(add1(f(x))))))
 
 check('an Arrow is fanin-able with other arrows on Left',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      Arrow(f).fanin(Arrow(x => add1(f(x))))(Left(x)),
+      Arrow(f).fanin(Arrow(x => add1(f(x))))(Left.of(x)),
       f(x))))
 
 check('an Arrow is fanin-able with other arrows on Right',
   forall('integer -> integer', 'integer', nat(100),
     (f, x) => eq(
-      Arrow(f).fanin(Arrow(x => add1(f(x))))(Right(x)),
+      Arrow(f).fanin(Arrow(x => add1(f(x))))(Right.of(x)),
       add1(f(x)))))
