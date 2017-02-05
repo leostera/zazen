@@ -17,6 +17,7 @@ test(`Types have a type`, () => {
   expect( t["@@type"]  ).toEqual('Test')
   expect( t["@@value"] ).toEqual(true)
   expect( t.inspect()  ).toEqual('Test(true)')
+  expect( t.is(Test)   ).toEqual(true)
 
 })
 

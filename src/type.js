@@ -49,6 +49,7 @@ export type Data<A, B> = {
  * to verify that `of` blows up in time for the wrong types.
  */
 const createType = (name: any): any => ({
+  '@@type': name,
   of: x => ({
     '@@type': name,
     '@@value': x,
