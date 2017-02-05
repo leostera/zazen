@@ -1,6 +1,7 @@
 import type {
   Foldable,
   Functor,
+  SemiGroup,
   Setoid,
   Data,
 } from 'zazen/type'
@@ -9,6 +10,7 @@ import {
   createType,
   foldable,
   functor,
+  semiGroup,
   setoid,
 } from 'zazen/type'
 
@@ -59,5 +61,18 @@ test(`Foldable actually behaves as expected`, () => {
   const a = IdentityFoldable.of('str')
 
   expect(a.fold(x => x)).toEqual('str')
+
+})
+
+test(`SemiGroup actually behaves as expected`, () => {
+
+  type StringSemigroupT = SemiGroup<'StringSemigroup', string>
+  const StringSemigroup: Data<StringSemigroupT, string> =
+    semiGroup(x => y => `${x}.${y}`)(createType)('StringSemigroup')
+
+  const a = StringSemigroup.of('a')
+  const b = StringSemigroup.of('b')
+
+  expect(a.concat(b)['@@value']).toEqual('a.b')
 
 })
