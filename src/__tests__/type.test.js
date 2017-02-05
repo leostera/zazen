@@ -40,10 +40,10 @@ test(`Setoid actually behaves as expected`, () => {
 
   type HardEqualitySetoidT = Setoid<'HardEqualitySetoid', any>
   const HardEqualitySetoid: Data<HardEqualitySetoidT, any> =
-    setoid(x => y => x === y['@@value'])(createType)('HardEqualitySetoid')
+    setoid(x => y => x === y)(createType)('HardEqualitySetoid')
 
   const a = HardEqualitySetoid.of(2)
   const b = HardEqualitySetoid.of(2)
-  expect(a.equals(HardEqualitySetoid.of(2))).toEqual(true)
+  expect(a.equals(b)).toEqual(true)
 
 })

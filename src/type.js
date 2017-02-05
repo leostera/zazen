@@ -75,7 +75,7 @@ const setoid = (equals: Equals<any>) => (createType: (name: any) => any) => (nam
   ...type,
   of: x => ({
     ...type.of(x),
-    equals: equals(x)
+    equals: y => equals(x)(y['@@value'])
   })
 }))(createType(name))
 
