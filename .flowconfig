@@ -6,6 +6,7 @@ all=true
 .*/src/.*
 
 [ignore]
+.*/.cache/.*
 .*/koans/.*
 .*/coverage/.*
 .*/__tests__/.*
