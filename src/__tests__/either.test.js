@@ -42,11 +42,11 @@ const assertValue = (a, b) =>
   expect( valueOf(a) ).toEqual( valueOf(b) )
 
 test("an Either executes f for Left", () => {
-  expect( either(id)(id)(left) ).toEqual( left["@@value"] )
+  expect( either(id)(id)(left) ).toEqual( valueOf(left) )
 })
 
 test("an Either executes g for Right", () => {
-  expect( either(id)(id)(right) ).toEqual( right["@@value"] )
+  expect( either(id)(id)(right) ).toEqual( valueOf(right) )
 })
 
 test("either does nothing if it's not tagged Left or Right", () => {
