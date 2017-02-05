@@ -39,29 +39,29 @@ koan(`a cond takes N conditions and returns the first match`, ({ok, end}) => {
 
   ok(
     cond(
-      [ true, 3 ]) == ___,
+      [ true, 3 ]) === ___,
     `the true condition always matches`)
 
   ok(
     cond(
       [ ___, 3 ],
-      [ true,  4 ]) == 4,
+      [ true,  4 ]) === 4,
     `the false condition never matches`)
 
   ok(
     cond(
-      [ ___, 3 ]) == undefined,
+      [ ___, 3 ]) === undefined,
     `if no match is found, nothing is returned`)
 
   ok(
     cond(
       [ () => false, 3 ],
-      [ () => ___,  4 ]) == 4,
+      [ () => ___,  4 ]) === 4,
     `conditions can be predicates (boolean functions)`)
 
   ok(
     cond(
-      [ () => true, () => ___(41) ]) == 42,
+      [ () => true, () => ___(41) ]) === 42,
     `the returning expression can be a function that will be evaluated
      if and only if the predicate passes`)
 
@@ -69,7 +69,7 @@ koan(`a cond takes N conditions and returns the first match`, ({ok, end}) => {
     cond(
       [ () => false, 1 ],
       [ () => false, 2 ],
-      [ true, 3 ]) == ___,
+      [ true, 3 ]) === ___,
     `a final true can be used like an else`)
 
   end()

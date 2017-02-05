@@ -48,7 +48,7 @@ test:
 	NODE_ENV=test $(BIN_DIR)/jest -c .jestrc
 
 lint:
-	$(BIN_DIR)/eslint ./src
+	$(BIN_DIR)/standard --fix ./src/**/*.js
 
 build: dirs
 	touch $(CACHE_DIR)/browserify-cache.json

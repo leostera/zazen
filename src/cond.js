@@ -16,7 +16,7 @@ type Just<A> = (a: A) => () => A
 const just: Just<*> = a => () => a
 
 type Run = (a: Predicate) => mixed
-const run: Run = a => ((typeof a == 'function' && a || just(a))())
+const run: Run = a => ((typeof a === 'function' && a || just(a))())
 
 type RunCond = (a: CondPairT) => CondPairT
 const run_cond: RunCond = ([pred, branch]) =>

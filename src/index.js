@@ -1,20 +1,20 @@
 export {
-  Arrow,
+  Arrow
 } from './arrow'
 
 export {
-  Cell,
+  Cell
 } from './cell'
 
 export {
   Left,
   Right,
   either,
-  mirror,
+  mirror
 } from './either'
 
 export {
-  Stream,
+  Stream
 } from './stream'
 
 export {
@@ -22,11 +22,11 @@ export {
   eq,
   cond,
   createMatch,
-  match,
+  match
 } from './cond'
 
 export {
   swap,
   untag,
-  Pair,
+  Pair
 } from './pair'

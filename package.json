@@ -53,5 +53,7 @@
     "small",
     "arrows"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "standard": "^8.6.0"
+  }
 }

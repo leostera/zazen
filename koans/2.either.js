@@ -55,10 +55,10 @@ koan(`an Either chooses between two code paths, Left or Right`, ({ok, end}) => {
 
   const path = either(add1)(mul3)
 
-  ok( 4 == path(___(3)),
+  ok( 4 === path(___(3)),
     `the left branch of this either adds 1`)
 
-  ok( 9 == path(___(3)),
+  ok( 9 === path(___(3)),
     `the right branch of this either multiplies by 3`)
 
   end()

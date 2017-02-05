@@ -34,10 +34,10 @@ koan(`an arrow is just a function`, ({ok, end}) => {
 
   const arr1 = Arrow(add1)
 
-  ok(`function` == typeof ___,
+  ok(`function` === typeof ___,
     `the type of an arrow is function`)
 
-  ok(2 == ___,
+  ok(2 === ___,
     `we can invoke an arrow`)
 
   end()
@@ -50,16 +50,16 @@ koan(`an arrow can be composed with another arrow`, ({ok, end}) => {
 
   const arr3 = Arrow(mul3)
 
-  ok(4 == arr1.___(arr3)(1),
+  ok(4 === arr1.___(arr3)(1),
     `the output of arr3 goes into arr1`)
 
-  ok(6 == arr1.___(arr3)(1),
+  ok(6 === arr1.___(arr3)(1),
     `the output of arr1 goes into arr3`)
 
-  ok(10 == arr3.pipe(arr1)(___),
+  ok(10 === arr3.pipe(arr1)(___),
     `the output of arr3 goes into arr1`)
 
-  ok(9 == arr3.compose(arr1)(___),
+  ok(9 === arr3.compose(arr1)(___),
     `the output of arr1 goes into arr3`)
 
   end()
