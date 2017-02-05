@@ -60,7 +60,7 @@ const createFunctor = (map: Map<any>) => (name: any): any => {
   })
 
   return {of}
-})
+}
 
 export {
   createType,
