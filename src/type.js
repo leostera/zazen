@@ -12,6 +12,7 @@ export type Type<A, B> = {
   '@@type': A,
   '@@value': B,
   inspect(): String,
+  is(x: B): boolean
 }
 
 export type Setoid<A, B> = Type<A, B> & {
@@ -52,6 +53,7 @@ const createType = (name: any): any => ({
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x})`,
+    is: y => y['@@type'] === name
   })
 })
 
