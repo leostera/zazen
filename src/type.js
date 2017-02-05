@@ -28,6 +28,7 @@ type Map<A> = (x: A) => (f: (a: A) => A) => Functor<*, A>
 export type Foldable<A, B> = Type<A, B> & {
   fold(f: (a: B) => B): B
 }
+type Fold<A> = (a: A) => (f: (a: A) => A) => A
 
 export type SemiGroup<A, B> = Type<A, B> & {
   concat(x: SemiGroup<A, B>): SemiGroup<A, B>
@@ -60,6 +61,14 @@ const createType = (name: any): any => ({
   })
 })
 
+const foldable = (fold: Fold<any>) => (createType: (name: any) => any) => (name: any) => ((type) => ({
+  ...type,
+  of: x => ({
+    ...type.of(x),
+    fold: fold(x)
+  })
+}))(createType(name))
+
 const functor = (map: Map<any>) => (createType: (name: any) => any) => (name: any) => ((type) => {
   const of = x => ({
     ...type.of(x),
@@ -82,6 +91,7 @@ const setoid = (equals: Equals<any>) => (createType: (name: any) => any) => (nam
 
 export {
   createType,
+  foldable,
   functor,
   setoid,
 }

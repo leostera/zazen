@@ -1,4 +1,5 @@
 import type {
+  Foldable,
   Functor,
   Setoid,
   Data,
@@ -6,6 +7,7 @@ import type {
 
 import {
   createType,
+  foldable,
   functor,
   setoid,
 } from 'zazen/type'
@@ -45,5 +47,16 @@ test(`Setoid actually behaves as expected`, () => {
   const a = HardEqualitySetoid.of(2)
   const b = HardEqualitySetoid.of(2)
   expect(a.equals(b)).toEqual(true)
+
+})
+
+test(`Foldable actually behaves as expected`, () => {
+
+  type IdentityFoldableT = Foldable<'IdentityFoldable', string>
+  const IdentityFoldable: Data<IdentityFoldableT, string> = foldable(x => f => f(x))(createType)('IdentityFoldable')
+
+  const a = IdentityFoldable.of('str')
+
+  expect(a.fold(x => x)).toEqual('str')
 
 })
