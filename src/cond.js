@@ -29,7 +29,8 @@ const reducer: Reducer = (a, cond) =>
 export type Cond = (...pairs: Array<CondPairT>) => mixed
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
-const withDefault = (a, b, c) => Object.keys(a).indexOf(b) === -1 ? c : a[b]
+const withDefault = (a, b, c) =>
+  (a === null || a === undefined || Object.keys(a).indexOf(b) === -1) ? c : a[b]
 
 type matchToCondFn = (a: Object) => (b: *) => (a: *) => CondPairT
 const matchToCond: matchToCondFn = matches => action => match => ([

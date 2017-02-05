@@ -117,11 +117,16 @@ test(`Match works on Primitives`, () => {
   const cata = match({
     number: x => x+1,
     string: x => x+'!',
-    boolean: x => !x
+    boolean: x => !x,
+    undefined: x => "undefined",
+    object: x => ({ x: x }),
   })
 
   expect(cata(1)).toEqual(2)
   expect(cata('hello')).toEqual('hello!')
   expect(cata(true)).toEqual(false)
+  expect(cata({x: 1})).toMatchObject({ x: {x: 1} })
+  expect(cata(undefined)).toEqual("undefined")
+  expect(cata(null)).toMatchObject({ x: null })
 
 })
