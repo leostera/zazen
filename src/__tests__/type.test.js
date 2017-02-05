@@ -37,7 +37,8 @@ test(`Functor actually behaves as expected`, () => {
     functor(x => f => f(x))('IdentityFunctor')
 
   // complains down here, map should return number
-  const a = IdentityFunctor.of(2).map(x => x + '3')["@@value"]
+  // const a = IdentityFunctor.of(2).map(x => x + '3')["@@value"]
+  const a = IdentityFunctor.of(2).map(x => x + 3)["@@value"]
   const b = IdentityFunctor.of(5)["@@value"]
 
   expect(a).toEqual(b)
@@ -48,7 +49,8 @@ test(`Setoid actually behaves as expected`, () => {
 
   type HardEqualitySetoidT = Setoid<'HardEqualitySetoid', any>
   const HardEqualitySetoid: Data<HardEqualitySetoidT, any> =
-    setoid(x => y => 'what')('HardEqualitySetoid')
+    setoid(x => y => x === y)('HardEqualitySetoid')
+    //setoid(x => y => 'what')('HardEqualitySetoid')
   // Works: complains here ^ this should be boolean
 
   const a = HardEqualitySetoid.of(2)
@@ -64,10 +66,12 @@ test(`Foldable actually behaves as expected`, () => {
     foldable(x => f => f(x))('IdentityFoldable')
 
   // Works: Complains here, this should be string
-  const a = IdentityFoldable.of(1234)
+  // const a = IdentityFoldable.of(1234)
+  const a = IdentityFoldable.of('str')
 
   // Works: Complains here, fold should return a string
-  expect(a.fold(x => false)).toEqual('str')
+  // expect(a.fold(x => false)).toEqual('str')
+  expect(a.fold(x => x)).toEqual('str')
 
 })
 
@@ -80,7 +84,8 @@ test(`SemiGroup actually behaves as expected`, () => {
   // Broken: should complain up there, semigruop should return string!
 
   // Works: complains here, lifted value has to be string
-  const a = StringSemigroup.of(1)
+  // const a = StringSemigroup.of(1)
+  const a = StringSemigroup.of('a')
   const b = StringSemigroup.of('b')
 
   expect(a.concat(b)['@@value']).toEqual('a.b')
@@ -97,7 +102,8 @@ test(`Monoid actually behaves as expected`, () => {
   // Broken: should copmlain up here, this monoid is of numbers not booleans
 
   // Works: complains down here, lifted value has to be a number
-  const five = SumMonoid.of('asdf')
+  // const five = SumMonoid.of('asdf')
+  const five = SumMonoid.of(5)
   const six  = SumMonoid.of(6)
   const zero = SumMonoid.empty()
 
