@@ -20,7 +20,7 @@ export type Setoid<A, B> = Type<A, B> & {
 export type Functor<A, B> = Type<A, B> & {
   map(f: (a: B) => B): Functor<A, B>
 }
-type Map = (f: (a: *) => *) => Functor<*, *>
+type Map<A> = (x: A) => (f: (a: A) => A) => Functor<*, A>
 
 export type Foldable<A, B> = Type<A, B> & {
   fold(f: (a: B) => B): B
@@ -53,7 +53,7 @@ const createType = (name: any): any => ({
   })
 })
 
-const createFunctor = (map: Map) => (name: any): any => ({
+const createFunctor = (map: Map<any>) => (name: any): any => ({
   of: x => ({
     '@@type': name,
     '@@value': x,
