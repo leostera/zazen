@@ -11,8 +11,8 @@ export type TypeChecker<A> = (a: A) => A
 export type Type<A, B> = {
   '@@type': A,
   '@@value': B,
-  inspect(): String,
-  is(x: Data<Type<A, B>, any>): boolean
+  inspect: () => string,
+  is: (x: Data<Type<A, B>, any>) => boolean,
 }
 
 export type Setoid<A, B> = Type<A, B> & {
@@ -30,10 +30,11 @@ export type Foldable<A, B> = Type<A, B> & {
 }
 type Fold<A> = (a: A) => (f: (a: A) => A) => A
 
+type Concat<A> = (x: A) => (x: A) => A
 export type SemiGroup<A, B> = Type<A, B> & {
+  '@@concat': Concat<B>,
   concat(x: SemiGroup<A, B>): SemiGroup<A, B>
 }
-type Concat<A> = (x: A) => (x: A) => A
 
 /*
  * Generic Data Type, used to ensure that all lifters can be properly
@@ -41,7 +42,7 @@ type Concat<A> = (x: A) => (x: A) => A
  */
 export type Data<A, B> = {
   '@@type': any,
-  of: (x: B) => A
+  of(x: B): A
 }
 
 export type Monoid<A, B> = Data<A, B> & {
@@ -63,58 +64,74 @@ const createType = (name: any): any => ({
   })
 })
 
-const foldable = (fold: Fold<any>) => (createType: (name: any) => any) => (name: any) => ((type) => ({
-  ...type,
+const foldable = (fold: Fold<any>) => (name: any) => ({
+  '@@type': name,
   of: x => ({
-    ...type.of(x),
+    '@@type': name,
+    '@@value': x,
+    inspect: () => `${name}(${x})`,
+    is: y => y['@@type'] === name,
     fold: fold(x)
   })
-}))(createType(name))
+})
 
-const functor = (map: Map<any>) => (createType: (name: any) => any) => (name: any) => ((type) => {
-  const of = x => ({
-    ...type.of(x),
+const functor = (map: Map<any>) => (name: any) => {
+  const of = (x: *): Functor<*,*> => ({
+    '@@type': name,
+    '@@value': x,
+    inspect: () => `${name}(${x})`,
+    is: y => y['@@type'] === name,
     map: f => of(map(x)(f))
   })
 
   return {
-    ...type,
+    '@@type': name,
     of
   }
-})(createType(name))
+}
 
-const semiGroup = (concat: Concat<any>) => (createType: (name: any) => any) => (name: any) => ((type) => {
-  const of = x => ({
-    ...type.of(x),
+const semiGroup = (concat: Concat<any>) => (name: any) => {
+  const of = (x: *): SemiGroup<*,*> => ({
+    '@@type': name,
+    '@@value': x,
+    inspect: () => `${name}(${x})`,
+    is: y => y['@@type'] === name,
+    '@@concat': concat,
     concat: y => of(concat(x)(y['@@value']))
   })
 
   return {
-    ...type,
+    '@@type': name,
     of
   }
-})(createType(name))
+}
 
-const setoid = (equals: Equals<any>) => (createType: (name: any) => any) => (name: any) => ((type) => ({
-  ...type,
+const setoid = (equals: Equals<any>) => (name: any) => ({
+  '@@type': name,
   of: x => ({
-    ...type.of(x),
+    '@@type': name,
+    '@@value': x,
+    inspect: () => `${name}(${x})`,
+    is: y => y['@@type'] === name,
     equals: y => equals(x)(y['@@value'])
   })
-}))(createType(name))
+})
 
-const monoid = (concat: Concat<any>, empty: Empty<any>) => (createType: (name: any) => any) => (name: any) => ((type) => {
+const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
   const of = x => ({
-    ...type.of(x),
+    '@@type': name,
+    '@@value': x,
+    inspect: () => `${name}(${x})`,
+    is: y => y['@@type'] === name,
     concat: y => of(concat(x)(y['@@value']))
   })
 
   return {
-    ...type,
+    '@@type': name,
     of,
     empty: () => of(empty)
   }
-})(createType(name))
+}
 
 export {
   createType,

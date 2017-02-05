@@ -5,6 +5,7 @@ import type {
   Monoid,
   SemiGroup,
   Setoid,
+  TypeChecker,
 } from 'zazen/type'
 
 import {
@@ -70,7 +71,8 @@ test(`SemiGroup actually behaves as expected`, () => {
 
   type StringSemigroupT = SemiGroup<'StringSemigroup', string>
   const StringSemigroup: Data<StringSemigroupT, string> =
-    semiGroup(x => y => `${x}.${y}`)(createType)('StringSemigroup')
+    semiGroup(x => y => false)(createType)('StringSemigroup')
+    //semiGroup(x => y => `${x}.${y}`)(createType)('StringSemigroup')
 
   const a = StringSemigroup.of('a')
   const b = StringSemigroup.of('b')
