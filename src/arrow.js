@@ -79,10 +79,10 @@ const Arrow = (f: Function): ArrowT  => {
   // raises a type check error on `t` being `Left` instead of `Right`
   // and `Right` instead of `Left`
   // :(
-  f.sum = g => Arrow( ([t,a]) =>
-    cond(
-      [eq(t, 'Left'),  Left(f(a))],
-      [eq(t, 'Right'), Right(g(a))]))
+  f.sum = g => Arrow( match({
+    Left: a => Left.of(f(a)),
+    Right: a => Right.of(g(a))
+  }) )
 
   f.fanin = g => f.sum(g).pipe(untag)
 
