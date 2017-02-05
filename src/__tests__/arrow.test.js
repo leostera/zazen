@@ -26,7 +26,7 @@ const add1 = x => x+1
 const equal_pairs = ([a,b], [c,d]) => a === c && b === d
 
 const eq = (a,b) => {
-  if( a["@@type"] && b["@@type"] ) return eq(a["@@value"], a["@@value"])
+  if( a["@@type"] && b["@@type"] ) return eq(a["@@value"], b["@@value"])
   else if( a.length === 2 && b.length === 2 ) return equal_pairs(a,b)
   else return a === b
 }
