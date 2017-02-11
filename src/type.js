@@ -15,25 +15,24 @@ export type Type<A, B> = {
   is: (x: Data<Type<A, B>, any>) => boolean,
 }
 
+export type Equals<A> = (x: A) => (y: A) => boolean
 export type Setoid<A, B> = Type<A, B> & {
-  equals(a: Setoid<A, B>): boolean
+  equals: (a: Setoid<A, B>) => boolean
 }
-type Equals<A> = (x: A) => (y: A) => boolean
 
+export type Map<A> = (x: A) => (f: (a: A) => A) => A
 export type Functor<A, B> = Type<A, B> & {
-  map(f: (a: B) => B): Functor<A, B>
+  map: (f: (a: B) => B) => Functor<A, B>
 }
-type Map<A> = (x: A) => (f: (a: A) => A) => A
 
+export type Fold<A> = (a: A) => (f: (a: A) => A) => A
 export type Foldable<A, B> = Type<A, B> & {
-  fold(f: (a: B) => B): B
+  fold: (f: (a: B) => B) => B
 }
-type Fold<A> = (a: A) => (f: (a: A) => A) => A
 
-type Concat<A> = (x: A) => (x: A) => A
+export type Concat<A> = (x: A) => (x: A) => A
 export type SemiGroup<A, B> = Type<A, B> & {
-  '@@concat': Concat<B>,
-  concat(x: SemiGroup<A, B>): SemiGroup<A, B>
+  concat: (x: SemiGroup<A, B>) => SemiGroup<A, B>
 }
 
 /*
@@ -42,19 +41,19 @@ export type SemiGroup<A, B> = Type<A, B> & {
  */
 export type Data<A, B> = {
   '@@type': any,
-  of(x: B): A
+  of: (x: B) => A
 }
 
 export type Monoid<A, B> = Data<A, B> & {
-  empty(): SemiGroup<any, B>
+  empty: () => SemiGroup<any, B>
 }
-type Empty<A> = A
+export type Empty<A> = A
 
 /*
  * Generic Type Creator. If used with Flow's Inference engine, works smoothly
  * to verify that `of` blows up in time for the wrong types.
  */
-const createType = (name: any): any => ({
+const type = (name: any): any => ({
   '@@type': name,
   of: x => ({
     '@@type': name,
@@ -90,14 +89,13 @@ const functor = (map: Map<any>) => (name: any) => {
   }
 }
 
-const semiGroup = (concat: Concat<any>) => (name: any) => {
+const semigroup = (concat: Concat<any>) => (name: any) => {
   const of = (x: *): SemiGroup<*,*> => ({
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x})`,
     is: (y: *) => y['@@type'] === name,
-    '@@concat': concat,
-    concat: y => of(concat(x)(y['@@value']))
+    concat: (y: *) => of(concat(x)(y['@@value']))
   })
 
   return {
@@ -121,9 +119,8 @@ const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
   const of = (x: *) => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${x.toString()})`,
     is: (y: *) => y['@@type'] === name,
-    '@@concat': concat,
     concat: (y: *) => of(concat(x)(y['@@value']))
   })
 
@@ -135,10 +132,10 @@ const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
 }
 
 export {
-  createType,
   foldable,
   functor,
   monoid,
-  semiGroup,
+  semigroup,
   setoid,
+  type,
 }

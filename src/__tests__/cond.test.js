@@ -1,5 +1,5 @@
 import {
-  createType,
+  type,
 } from 'zazen/type'
 
 import type {
@@ -90,10 +90,10 @@ test(`Match on Object Types`, () => {
   type ResetT = Type<'Reset', number>
   type WhatT = Type<'What', number>
 
-  const IncAction: Data<IncT, number> = createType('Inc')
-  const DecAction: Data<DecT, number> = createType('Dec')
-  const ResetAction: Data<ResetT, null> = createType('Reset')
-  const WhatAction: Data<WhatT, number> = createType('What')
+  const IncAction: Data<IncT, number> = type('Inc')
+  const DecAction: Data<DecT, number> = type('Dec')
+  const ResetAction: Data<ResetT, null> = type('Reset')
+  const WhatAction: Data<WhatT, number> = type('What')
 
   type ActionT = IncT | DecT | ResetT
   const id: TypeChecker<ActionT> = x => x
@@ -136,7 +136,7 @@ test(`Nested Match`, () => {
 
   type SomeT = Type<'Some', number>
 
-  const Some: Data<SomeT, number> = createType('Some')
+  const Some: Data<SomeT, number> = type('Some')
 
   const id: TypeChecker<SomeT> = x => x
 

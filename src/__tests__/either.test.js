@@ -4,7 +4,7 @@ import type {
 } from 'zazen/type'
 
 import {
-  createType,
+  type,
 } from 'zazen/type'
 
 import {
@@ -27,7 +27,7 @@ const left   = Left.of(1)
 const right  = Right.of(2)
 
 type CenterT<A>  = Type<'Center',  A>
-const Center: Data<CenterT<*>, mixed> = createType('Center')
+const Center: Data<CenterT<*>, mixed> = type('Center')
 const center = Center.of(1)
 
 const mirrored_left  = Right.of(1)
