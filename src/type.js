@@ -58,12 +58,14 @@ const type = (name: any): any => ({
   of: x => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x.inspect && x.inspect() || x.toString()})`,
+    inspect: () => `${name}(${x && x.inspect && x.inspect() || JSON.stringify(x)})`,
     is: y => y['@@type'] === name
-  })
+  }),
+  inspect: () => `TypeClass ${name}`
 })
 
 const foldable = (fold: Fold<any>) => (name: any) => ({
+
   '@@type': name,
   of: (x: *): Foldable<*,*> => ({
     '@@type': name,
