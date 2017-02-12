@@ -31,8 +31,8 @@ export type Foldable<A, B> = Type<A, B> & {
 }
 
 export type Concat<A> = (x: A) => (x: A) => A
-export type SemiGroup<A, B> = Type<A, B> & {
-  concat: (x: SemiGroup<A, B>) => SemiGroup<A, B>
+export type Semigroup<A, B> = Type<A, B> & {
+  concat: (x: Semigroup<A, B>) => Semigroup<A, B>
 }
 
 /*
@@ -45,7 +45,7 @@ export type Data<A, B> = {
 }
 
 export type Monoid<A, B> = Data<A, B> & {
-  empty: () => SemiGroup<any, B>
+  empty: () => Semigroup<any, B>
 }
 export type Empty<A> = A
 
@@ -90,7 +90,7 @@ const functor = (map: Map<any>) => (name: any) => {
 }
 
 const semigroup = (concat: Concat<any>) => (name: any) => {
-  const of = (x: *): SemiGroup<*,*> => ({
+  const of = (x: *): Semigroup<*,*> => ({
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x})`,

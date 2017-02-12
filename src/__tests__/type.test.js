@@ -8,7 +8,7 @@ import type {
   Functor,
   Map,
   Monoid,
-  SemiGroup,
+  Semigroup,
   Setoid,
   TypeChecker,
 } from 'zazen/type'
@@ -79,11 +79,11 @@ test(`Foldable actually behaves as expected`, () => {
 
 })
 
-test(`SemiGroup actually behaves as expected`, () => {
+test(`Semigroup actually behaves as expected`, () => {
 
   const concat: Concat<string> = x => y => `${x}.${y}`
 
-  type StringSemigroupT = SemiGroup<'StringSemigroup', Concat<string>>
+  type StringSemigroupT = Semigroup<'StringSemigroup', Concat<string>>
   const StringSemigroup: Data<StringSemigroupT, string> =
     semigroup(concat)('StringSemigroup')
 
@@ -99,7 +99,7 @@ test(`Monoid actually behaves as expected`, () => {
   const concat: Concat<number> = x => y => x+y
   const empty: Empty<number> = 0
 
-  type SumMonoidT = SemiGroup<'SumMonoid', number>
+  type SumMonoidT = Semigroup<'SumMonoid', number>
   const SumMonoid: Monoid<SumMonoidT, number> =
     monoid(concat, empty)('SumMonoid')
 
