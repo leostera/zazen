@@ -58,7 +58,7 @@ const type = (name: any): any => ({
   of: x => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${x.toString()})`,
     is: y => y['@@type'] === name
   })
 })
