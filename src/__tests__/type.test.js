@@ -48,6 +48,7 @@ test(`Functor actually behaves as expected`, () => {
 
   expect(a['@@value']).toEqual(b['@@value'])
   expect(a.inspect()).toEqual('IdentityFunctor(5)')
+  expect(a.is(IdentityFunctor)).toBeTruthy()
 
 })
 
@@ -64,6 +65,7 @@ test(`Setoid actually behaves as expected`, () => {
 
   expect(a.equals(b)).toEqual(true)
   expect(a.inspect()).toEqual('HardEqualitySetoid(2)')
+  expect(a.is(HardEqualitySetoid)).toBeTruthy()
 
 })
 
@@ -79,6 +81,7 @@ test(`Foldable actually behaves as expected`, () => {
 
   expect(a.fold(x => x)).toEqual('str')
   expect(a.inspect()).toEqual('IdentityFoldable(str)')
+  expect(a.is(IdentityFoldable)).toBeTruthy()
 
 })
 
@@ -95,6 +98,7 @@ test(`Semigroup actually behaves as expected`, () => {
 
   expect(a.concat(b)['@@value']).toEqual('a.b')
   expect(a.inspect()).toEqual('StringSemigroup(a)')
+  expect(a.is(StringSemigroup)).toBeTruthy()
 
 })
 
@@ -115,5 +119,6 @@ test(`Monoid actually behaves as expected`, () => {
 
   expect(a['@@value']).toEqual(11)
   expect(a.inspect()).toEqual('SumMonoid(11)')
+  expect(a.is(SumMonoid)).toBeTruthy()
 
 })

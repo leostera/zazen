@@ -12,7 +12,7 @@ export type Type<A, B> = {
   '@@type': A,
   '@@value': B,
   inspect: () => string,
-  is: (x: Data<Type<A, B>, any>) => boolean,
+  is: (x: Data<any, any>) => boolean,
 }
 
 export type Equals<A> = (x: A) => (y: A) => boolean
@@ -65,11 +65,11 @@ const type = (name: any): any => ({
 
 const foldable = (fold: Fold<any>) => (name: any) => ({
   '@@type': name,
-  of: (x: *) => ({
+  of: (x: *): Foldable<*,*> => ({
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x})`,
-    is: (y: *) => y['@@type'] === name,
+    is: y => y['@@type'] === name,
     fold: fold(x)
   })
 })
@@ -79,7 +79,7 @@ const functor = (map: Map<any>) => (name: any) => {
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x})`,
-    is: (y: *) => y['@@type'] === name,
+    is: y => y['@@type'] === name,
     map: f => of(map(x)(f))
   })
 
@@ -94,8 +94,8 @@ const semigroup = (concat: Concat<any>) => (name: any) => {
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x})`,
-    is: (y: *) => y['@@type'] === name,
-    concat: (y: *) => of(concat(x)(y['@@value']))
+    is: y => y['@@type'] === name,
+    concat: y => of(concat(x)(y['@@value']))
   })
 
   return {
@@ -106,22 +106,22 @@ const semigroup = (concat: Concat<any>) => (name: any) => {
 
 const setoid = (equals: Equals<any>) => (name: any) => ({
   '@@type': name,
-  of: (x: *) => ({
+  of: (x: *): Setoid<*,*> => ({
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x})`,
-    is: (y: *) => y['@@type'] === name,
-    equals: (y: *) => equals(x)(y['@@value'])
+    is: y => y['@@type'] === name,
+    equals: y => equals(x)(y['@@value'])
   })
 })
 
 const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
-  const of = (x: *) => ({
+  const of = (x: *): Semigroup<*,*> => ({
     '@@type': name,
     '@@value': x,
     inspect: () => `${name}(${x.toString()})`,
-    is: (y: *) => y['@@type'] === name,
-    concat: (y: *) => of(concat(x)(y['@@value']))
+    is: y => y['@@type'] === name,
+    concat: y => of(concat(x)(y['@@value']))
   })
 
   return {
