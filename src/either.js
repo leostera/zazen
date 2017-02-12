@@ -9,7 +9,7 @@ import type {
 } from './type'
 
 import {
-  createType,
+  type,
 } from './type'
 
 import {
@@ -23,8 +23,8 @@ type LeftT<A>  = Type<'Left',  A>
 type RightT<A> = Type<'Right', A>
 export type EitherT<A, B> = LeftT<A> | RightT<B>
 
-const Left: Data<LeftT<any>, mixed> = createType('Left')
-const Right: Data<RightT<any>, mixed> = createType('Right')
+const Left: Data<LeftT<any>, mixed> = type('Left')
+const Right: Data<RightT<any>, mixed> = type('Right')
 
 const eitherId: TypeChecker<EitherT<*,*>> = x => x
 const match = createMatch(eitherId)

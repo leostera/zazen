@@ -22,13 +22,16 @@ VERSION   = $(shell git describe --tags HEAD)
 REVISION  = $(shell git rev-parse HEAD)
 STAMP     = $(REVISION).$(shell date +%s)
 
-all: setup build lint check test bench
+all: check #setup build lint check test bench
 
 dirs:
 	mkdir -p $(DIST_DIR) $(BUILD_DIR) $(COVERAGE_DIR) $(CACHE_DIR)
 
-setup: dirs .npmignore
+setup: flow-typed dirs .npmignore
 	$(SCRIPT_DIR)/symlink.sh
+
+flow-typed:
+	$(SCRIPT_DIR)/flow-typed.sh
 
 .npmignore: .gitignore FORCE
 	cat .gitignore | grep -v lib > $@
