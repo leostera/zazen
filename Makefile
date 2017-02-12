@@ -2,7 +2,7 @@
 .PHONY: bench test lint build check package
 .PHONY: clean tags
 
-LIB_NAME   = zazen.js
+LIB_NAME     = zazen.js
 
 BIN_DIR      = ./node_modules/.bin
 BUILD_DIR    = lib
