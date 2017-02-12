@@ -28,8 +28,8 @@ test(`Types have a type`, () => {
 
   const t = Test.of(true)
 
-  expect( t["@@type"]  ).toEqual('Test')
-  expect( t["@@value"] ).toEqual(true)
+  expect( t['@@type']  ).toEqual('Test')
+  expect( t['@@value'] ).toEqual(true)
   expect( t.inspect()  ).toEqual('Test(true)')
   expect( t.is(Test)   ).toEqual(true)
 
@@ -46,7 +46,7 @@ test(`Functor actually behaves as expected`, () => {
   const a = IdentityFunctor.of(2).map(x => x + 3)
   const b = IdentityFunctor.of(5)
 
-  expect(a["@@value"]).toEqual(b["@@value"])
+  expect(a['@@value']).toEqual(b['@@value'])
   expect(a.inspect()).toEqual('IdentityFunctor(5)')
 
 })
@@ -113,7 +113,7 @@ test(`Monoid actually behaves as expected`, () => {
 
   const a = five.concat(zero).concat(six)
 
-  expect(a["@@value"]).toEqual(11)
+  expect(a['@@value']).toEqual(11)
   expect(a.inspect()).toEqual('SumMonoid(11)')
 
 })
