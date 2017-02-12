@@ -1,45 +1,26 @@
-import type {
-  ArrowT,
-} from 'zazen/arrow'
-
-import {
-  cond,
-} from './cond'
-
 import {
   Arrow,
 } from './arrow'
 
-export type CellT = ArrowT & {
-  last_args: [];
-  last_val: ?mixed;
-  dirty: Boolean;
+import {
+  Left,
+  Right,
+} from './either'
+
+const id = x => x
+
+const Cell = f => {
+  const c = Arrow(
+    x => (([head, tail]) => head === tail[0]
+      ? Left.of(tail)
+      : Right.of([head, tail[1]])
+    )(Arrow(f).product(Arrow(id).product(id))(x))
+  )
+
+  c.sum = g => 
 }
 
-export type CellFn = (fn: Function, child: CellT) => CellT
-const Cell: CellFn = (fn, child) => {
+const a = Cell( x => x * 2 )
+const b = Cell( x => x + 2 )
 
-  const _call = args => () => {
-    cell_fn.last_args = args
-    cell_fn.last_val = fn.apply({}, args)
-    child(cell_fn.last_val)
-    return cell_fn.last_val
-  }
-
-  const _dirty = args => () => cell_fn.last_args[0] !== args [0]
-
-  const cell_fn = Arrow((...args) => cond(
-    [ _dirty(args), _call(args) ],
-    [ true, cell_fn.last_val ]
-  ))
-
-  cell_fn.last_args = []
-  cell_fn.last_val = undefined
-  cell_fn.dirty = true
-
-  return cell_fn
-}
-
-export {
-  Cell,
-}
+console.log(a.sum(b)([2, [2, null]]))
