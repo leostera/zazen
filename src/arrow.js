@@ -41,8 +41,6 @@ export type ArrowT = Function & {
 
   sum(b: ArrowT):   ArrowT;
   fanin(b: ArrowT): mixed;
-
-  loop(b: Object, g: ArrowT): mixed;
 }
 
 const pair = f => g => ([a,b]) => [f(a), g(b)]
