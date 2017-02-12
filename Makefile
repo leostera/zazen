@@ -43,6 +43,9 @@ check:
 	$(BIN_DIR)/flow
 	$(SCRIPT_DIR)/check-coverage.sh
 
+repl:
+	$(BIN_DIR)/babel-node
+
 bench: $(PERF_TESTS) FORCE
 $(PERF_DIR)/%.perf.js:
 	$(NODE) $@
