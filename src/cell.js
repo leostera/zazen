@@ -28,27 +28,12 @@ const Cell = (f, next) => {
       Recompute: ([arg, [expected, tail]]) => (
         result => result === expected
           ? Stable.of([expected, tail])
-          : Recompute.of([
-            result,
-            next(Recompute.of([result, tail]))
-          ])
+          : Recompute.of([result, tail])
       )(f(arg))
     })
   )
 
-  // TODO:
-  // 1. Revert the constructor
-  // 2. Use product composing from the inside out
-  c.product = g => x => match({
-    Stable: Stable.of,
-    Recompute: ([head, [_, tail]]) => Recompute.of([
-      head,
-      g(Recompute.of([head, tail])
-    ])
-  })(c(x))
-
-  // c.pipe = Cell.pipe(c)
-
+  c.product = Cell.product(c)
 
   return c
 }
@@ -64,23 +49,38 @@ const Cell = (f, next) => {
 //     ])
 //   }
 // })(c(x)))
-//
-// Cell.of = f => {
-//   const c = Arrow(f)
-//
-//   c.pipe = g => {
-//     console.log('piping', g)
-//     return Cell.pipe(c)(g)
-//   }
-//
-//   return c
-// }
 
-const c = Cell( x => x.toUpperCase(), x => x)
-const b = Cell( x => `${x} of Cells`, c )
-const a = Cell( x => `${x} world`, b )
+Cell.product = c => g =>
+  Cell.of(
+    x => match({
+      Stable: y => Stable.of(y),
+      Recompute: ([head, [_, tail]]) => Recompute.of([
+        head,
+        g(Recompute.of([head, tail]))
+      ])
+    })(c(x))
+  )
 
-const result = a(Recompute.of(['hello', ['not expected', ['wat', ['HELLO WORLD OF CELLS', []]]]]))
+Cell.of = f => {
+  const c = Arrow(f)
+
+  c.product = Cell.product(c)
+
+  return c
+}
+
+const c = Cell( x => x.toUpperCase() )
+const b = Cell( x => `${x} of Cells` ).product(c)
+const a = Cell( x => `${x} world` ).product(b)
+
+// const result = a(Recompute.of(['hello', ['not expected', ['wat', ['HELLO WORLD OF CELLS', []]]]]))
+//
+// console.log(result)
+// console.log(result['@@value'])
+// console.log(result['@@value'][1]['@@value'])
+// console.log(result['@@value'][1]['@@value'][1]['@@value'])
+
+const result = a(Recompute.of(['hello', ['not expected', ['as', ['asd', ['adsf', []]]]]]))
 
 console.log(result)
 console.log(result['@@value'])
