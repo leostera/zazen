@@ -35,7 +35,7 @@
     "browserify-incremental": "^3.1.1",
     "codecov": "^1.0.1",
     "eslint": "^3.0.0",
-    "eslint-plugin-react": "6.9.0",
+    "eslint-plugin-react": "6.10.0",
     "exorcist": "^0.4.0",
     "flow-bin": "^0.38.0",
     "flow-typed": "^2.0.0",
