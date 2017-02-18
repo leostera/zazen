@@ -11,6 +11,10 @@ import {
   swap,
 } from './pair'
 
+import type {
+  PairT
+} from './pair'
+
 import {
   either,
 } from './either'
@@ -32,12 +36,13 @@ const retag = ([fa, [b, c]]) =>
 const flattenEither = either(x => Stable.of(x))(id)
 
 const matchedSwap = match({
-  Left:  ([h,t]) => Left.of([t,h]),
-  Right: ([h,t]) => Right.of([t,h]),
+  Left:  ([h,t]: PairT<*,*>) => Stable.of([t,h]),
+  Right: ([h,t]: PairT<*,*>) => Recompute.of([t,h]),
 })
 
 // (id +++ (f *** id) >>> retag) >>> flatten
-const Cell = f =>
+type CellFn = (f: Function) => Arrow
+const Cell: CellFn = f =>
   Arrow(id).sum(
     Arrow(f)
     .product(id)

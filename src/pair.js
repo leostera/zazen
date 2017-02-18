@@ -10,8 +10,8 @@ const untag: UntagFn = ([tag, value]) => value
 type PairFn = (a: mixed, b: mixed) => PairT<*,*>
 const Pair: PairFn = (a, b) => [a, b]
 
-const first  = ([a, b]) => a
-const second = ([a, b]) => b
+const first  = ([a, b]: PairT<*,*>): * => a
+const second = ([a, b]: PairT<*,*>): * => b
 
 export {
   Pair,
