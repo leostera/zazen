@@ -1,3 +1,7 @@
+import {
+  cond,
+} from './cond'
+
 /*
  * Generic TypeChecker used to coerce inputs of functions when using them.
  * See: https://github.com/ostera/zazen/pull/20
@@ -49,6 +53,12 @@ export type Monoid<A, B> = Data<A, B> & {
 }
 export type Empty<A> = A
 
+const inspect = (a: mixed): string => cond(
+  [ a instanceof Array, () => (a instanceof Array) && `[${a.map(inspect)}]` ],
+  [ a && a.inspect, a && a.inspect ],
+  [ true, () => JSON.stringify(a) ]
+)
+
 /*
  * Generic Type Creator. If used with Flow's Inference engine, works smoothly
  * to verify that `of` blows up in time for the wrong types.
@@ -58,7 +68,7 @@ const type = (name: any): any => ({
   of: x => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x && x.inspect && x.inspect() || JSON.stringify(x)})`,
+    inspect: () => `${name}(${inspect(x)})`,
     is: y => y['@@type'] === name
   }),
   inspect: () => `TypeClass ${name}`

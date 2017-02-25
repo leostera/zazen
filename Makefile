@@ -22,7 +22,8 @@ VERSION   = $(shell git describe --tags HEAD)
 REVISION  = $(shell git rev-parse HEAD)
 STAMP     = $(REVISION).$(shell date +%s)
 
-all: setup build lint check test bench
+all: #setup build lint check test bench
+	babel-node test.js
 
 dirs:
 	mkdir -p $(DIST_DIR) $(BUILD_DIR) $(COVERAGE_DIR) $(CACHE_DIR)

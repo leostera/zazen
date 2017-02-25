@@ -1,0 +1,43 @@
+
+
+Arrow( x => x+1 )
+  .first()
+  .pipe( (last_output, [this_input, [this_output, ...stuff]) =>
+    // more stuff here
+  )
+
+
+/* Cells segun Fernando */
+const a = cell(id)
+const idA = a.pipe(a)
+
+a(1) == 1
+idA(1, 1) == 1
+idA(1, 3) == 1
+
+/* Cells segun Leandro */
+const a = cell(id)
+const idA = a.pipe(a)
+
+a([1, [1, Nothing]]) == [1, [1, Nothing]]
+idA([1, [1, [1, Nothing]]]) == [1, [1, [1, Nothing]]]
+
+
+const recompute = ([H1, [H2, T]]) =>
+  H1 === H2 ? Right.of([H1,[H2,T]]) : Left.of([H1,[H2,T]])
+
+const Cell = f =>
+  Arrow(recompute)
+    .pipe(Arrow(id).sum(f))
+
+    .sum( Arrow(f), id )
+    .sum( Arrow(g), id )
+    .sum( Arrow(h), Arrow(i) )
+
+So any cell will return either Left for the recomputed value
+or Right for the previous output (no difference in outputs)
+
+When we Sum cells we get either Rigth (again) for the previous output, or Left
+for the recomputed value from the next cell in the computation graph
+
+
