@@ -19,8 +19,6 @@ import {
 
 const snd = either(second)(second)
 
-const log = (m, x) => (console.log(m, x), x)
-
 const remap = which => newIn => n => cond(
   [ n instanceof Array, () => n.map(remap(which)(newIn)) ],
   [ true, () => which.of([newIn, snd(n)]) ])
@@ -33,7 +31,7 @@ const matcher = which => subtree => subtreeIO => ([nodeIn, nodeOut]) =>
   cond(
     [ subtree.length > 0, () => [
         which.of([nodeIn, nodeOut]),
-        ...subtree.map( (t,i) => runGraph([t])(
+        ...subtree.map( (t,i) => Graph([t])(
           [ subtreeIO.map(newNextIO(subtree)(which)(nodeOut))[i] ],
         ))
       ]
@@ -43,16 +41,16 @@ const matcher = which => subtree => subtreeIO => ([nodeIn, nodeOut]) =>
 const isSubtree = node => io => node instanceof Array && io instanceof Array
 const isNil = (x: mixed): boolean => x === undefined || x === null
 
-type runGraphFn = (a: *) => (b: *) => *
-const runGraph: runGraphFn = ([node, ...subtree]) => ([nodeIO, ...subtreeIO]) =>
+type GraphFn = (a: *) => (b: *) => *
+const Graph: GraphFn = ([node, ...subtree]) => ([nodeIO, ...subtreeIO]) =>
   cond(
     [ isNil(node), undefined ],
-    [ isSubtree(node)(nodeIO), () => runGraph(node)(nodeIO) ],
+    [ isSubtree(node)(nodeIO), () => Graph(node)(nodeIO) ],
     [ true, () => match({
                     Left: matcher(Left)(subtree)(subtreeIO),
                     Right: matcher(Right)(subtree)(subtreeIO),
                   })( node(nodeIO) )])
 
 export {
-  runGraph,
+  Graph,
 }

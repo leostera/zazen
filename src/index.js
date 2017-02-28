@@ -8,6 +8,10 @@ export {
 } from './cell'
 
 export {
+  Graph,
+} from './incremental'
+
+export {
   Left,
   Right,
   either,
