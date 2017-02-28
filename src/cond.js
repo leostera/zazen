@@ -26,7 +26,7 @@ type Reducer = (a: mixed, b: CondPairT) => mixed
 const reducer: Reducer = (a, cond) =>
   a || ( ([pred, branch]) => (pred ? branch : a) )( run_cond(cond) )
 
-export type Cond = (...pairs: Array<CondPairT>) => *
+export type Cond = (...pairs: Array<CondPairT>) => any 
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
 const withDefault = (a, b, c) =>
