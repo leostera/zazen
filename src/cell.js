@@ -56,7 +56,7 @@ const Cell: CellFn = f => {
   return _cell
 }
 
-type runCellFn = (c: Cell) => (a: mixed) => mixed
+type runCellFn = (c: Cell) => (a: mixed) => *
 const runCell: runCellFn = c => a => c(Right.of([a, undefined]))
 
 export {
