@@ -1,3 +1,7 @@
+import {
+  cond,
+} from './cond'
+
 /*
  * Generic TypeChecker used to coerce inputs of functions when using them.
  * See: https://github.com/ostera/zazen/pull/20
@@ -49,6 +53,12 @@ export type Monoid<A, B> = Data<A, B> & {
 }
 export type Empty<A> = A
 
+const inspect = (a: Object): string => {
+  if( a instanceof Array )  return `[${a.map(inspect)}]`
+  if( a instanceof Object ) return JSON.stringify(a)
+  return a.toString()
+}
+
 /*
  * Generic Type Creator. If used with Flow's Inference engine, works smoothly
  * to verify that `of` blows up in time for the wrong types.
@@ -58,9 +68,10 @@ const type = (name: any): any => ({
   of: x => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${inspect(x)})`,
     is: y => y['@@type'] === name
-  })
+  }),
+  inspect: () => `TypeClass ${name}`
 })
 
 const foldable = (fold: Fold<any>) => (name: any) => ({
@@ -68,7 +79,7 @@ const foldable = (fold: Fold<any>) => (name: any) => ({
   of: (x: *): Foldable<*,*> => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${inspect(x)})`,
     is: y => y['@@type'] === name,
     fold: fold(x)
   })
@@ -78,7 +89,7 @@ const functor = (map: Map<any>) => (name: any) => {
   const of = (x: *): Functor<*,*> => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${inspect(x)})`,
     is: y => y['@@type'] === name,
     map: f => of(map(x)(f))
   })
@@ -93,7 +104,7 @@ const semigroup = (concat: Concat<any>) => (name: any) => {
   const of = (x: *): Semigroup<*,*> => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${inspect(x)})`,
     is: y => y['@@type'] === name,
     concat: y => of(concat(x)(y['@@value']))
   })
@@ -109,7 +120,7 @@ const setoid = (equals: Equals<any>) => (name: any) => ({
   of: (x: *): Setoid<*,*> => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x})`,
+    inspect: () => `${name}(${inspect(x)})`,
     is: y => y['@@type'] === name,
     equals: y => equals(x)(y['@@value'])
   })
@@ -119,7 +130,7 @@ const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
   const of = (x: *): Semigroup<*,*> => ({
     '@@type': name,
     '@@value': x,
-    inspect: () => `${name}(${x.toString()})`,
+    inspect: () => `${name}(${inspect(x)})`,
     is: y => y['@@type'] === name,
     concat: y => of(concat(x)(y['@@value']))
   })

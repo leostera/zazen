@@ -9,49 +9,44 @@ import {
 } from './either'
 
 import type {
-  Pair,
+  PairT,
 } from './pair'
 
 import {
+  dupe,
+  runPair,
   swap,
-  untag,
 } from './pair'
 
 import {
-  eq,
-  cond,
-} from './cond'
+  compose,
+  id,
+} from './prelude'
 
-export type ArrowT = Function & {
+/*
+ * Arrow type should type check on (a -> b) or ((a,b) -> (c,d)) functions
+ */
+export type ArrowT = (a: *) => * & {
   '@@type': 'Arrow';
+  '@@value': (a: *) => *;
+  inspect: () => string;
 
-  id(b: mixed): mixed;
+  first:  (p: PairT<*, *>) => ArrowT;
+  second: (p: PairT<*, *>) => ArrowT;
 
-  first(p: Pair<mixed, mixed>):  ArrowT;
-  second(p: Pair<mixed, mixed>): ArrowT;
+  compose: (b: ArrowT) => ArrowT;
+  pipe:    (b: ArrowT) => ArrowT;
 
-  compose(b: ArrowT): ArrowT;
-  pipe(b: ArrowT):    ArrowT;
+  product: (b: ArrowT) => ArrowT;
+  fanout:  (b: ArrowT) => ArrowT;
 
-  product(b: ArrowT): ArrowT;
-  fanout (b: ArrowT): ArrowT;
+  sum:   (b: ArrowT) => ArrowT;
+  fanin: (b: ArrowT) => *;
 
-  left(x: mixed):  EitherT<mixed, mixed>;
-  right(x: mixed): EitherT<mixed, mixed>;
+  left:  (x: *) => EitherT<*, *>;
+  right: (x: *) => EitherT<*, *>;
 
-  sum(b: ArrowT):   ArrowT;
-  fanin(b: ArrowT): mixed;
-
-  loop(b: Object, g: ArrowT): mixed;
 }
-
-const pair = f => g => ([a,b]) => [f(a), g(b)]
-
-const dupe = x => [x,x]
-
-const compose = f => g => x => f(g(x))
-
-const id = x => x
 
 // Lifts a function into an arr
 // arrow :: (b -> c) -> arr b c
@@ -64,19 +59,18 @@ const Arrow = (f: Function): ArrowT  => {
    * arr
    ***/
   f.first   = x => f.product(id)(x)
-  f.second  = x => swap(f.first(id)(swap(x)))
+  f.second  = x => swap(f.first(swap(x)))
 
   f.compose = g => Arrow( compose(f)(g) )
   f.pipe    = g => Arrow(g).compose(f) //reverse compose
 
-  f.product = g => Arrow( pair(f)(g) )
+  f.product = g => Arrow( runPair(f)(g) )
   f.fanout  = g => f.product(g).compose(dupe)
 
   /***
    * arrChoice
    ***/
   f.sum = g => Arrow( either( a => Left.of(f(a)) )( a => Right.of(g(a)) ) )
-
   f.fanin = g => f.sum(g).pipe( either( x => x )( x => x ) )
 
   f.left  = x => f.sum(id)(x)

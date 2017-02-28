@@ -19,24 +19,20 @@ import {
   eq,
 } from './cond'
 
+// $FlowIgnore
 type LeftT<A>  = Type<'Left',  A>
+// $FlowIgnore
 type RightT<A> = Type<'Right', A>
 export type EitherT<A, B> = LeftT<A> | RightT<B>
 
-const Left: Data<LeftT<any>, mixed> = type('Left')
-const Right: Data<RightT<any>, mixed> = type('Right')
+const Left: Data<LeftT<*>, *> = type('Left')
+const Right: Data<RightT<*>, *> = type('Right')
 
 const eitherId: TypeChecker<EitherT<*,*>> = x => x
 const match = createMatch(eitherId)
 
-type C = ?mixed
-// Can A and B be inferred here?
-type EitherFn = (f:((a:*)=>C)) => (g:((b:*)=>C)) => (e:EitherT<*,*>) => C
-const either: EitherFn = f => g =>
-  match({
-    Left: f,
-    Right: g,
-  })
+type EitherFn = (f: Function) => (g: Function) => (e:EitherT<*,*>) => *
+const either: EitherFn = f => g => match({ Left: f, Right: g })
 
 const mirror = either(Right.of)(Left.of)
 

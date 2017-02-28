@@ -8,11 +8,6 @@ import {
 } from 'zazen/type'
 
 import {
-  atom,
-  log,
-} from 'zazen/utils'
-
-import {
   Left,
   Right,
   either,

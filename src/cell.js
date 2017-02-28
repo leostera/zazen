@@ -1,6 +1,14 @@
+/*
+ * Type imports
+ */
+
 import type {
   ArrowT,
-} from 'zazen/arrow'
+} from './arrow'
+
+/*
+ * Dependencies
+ */
 
 import {
   cond,
@@ -10,36 +18,48 @@ import {
   Arrow,
 } from './arrow'
 
+import {
+  either,
+  Left,
+  Right,
+} from './either'
+
+const id = x => x
+
+const dupeFirst = ([a, b]) => [a, [a, b]]
+
+const retag = ([fa, [a, b]]) =>
+  cond(
+    [ fa !== b , Right.of([a, fa]) ],
+    [ true, Left.of([a, b]) ])
+
+const flattenEither = either(Left.of)(id)
+
 export type CellT = ArrowT & {
-  last_args: [];
-  last_val: ?mixed;
-  dirty: Boolean;
+  '@@type': 'Cell';
+  '@@value': ArrowT;
 }
 
-export type CellFn = (fn: Function, child: CellT) => CellT
-const Cell: CellFn = (fn, child) => {
+type CellFn = (f: Function) => CellT
+const Cell: CellFn = f => {
+  // _cell = (id +++ ( dupeFirst >>> (f *** id) >>> retag) >>> flatten
+  const _cell = Arrow(id).sum(
+    Arrow(dupeFirst)
+      .pipe(Arrow(f).product(id))
+      .pipe(retag)
+  ).pipe(flattenEither)
 
-  const _call = args => () => {
-    cell_fn.last_args = args
-    cell_fn.last_val = fn.apply({}, args)
-    child(cell_fn.last_val)
-    return cell_fn.last_val
-  }
+  _cell['@@type']  = 'Cell'
+  _cell['@@value'] = f
+  _cell.inspect = () => `${_cell['@@type']}(${f.toString()})`
 
-  const _dirty = args => () => cell_fn.last_args[0] !== args [0]
-
-  const cell_fn = Arrow((...args) => cond(
-    [ _dirty(args), _call(args) ],
-    [ true, cell_fn.last_val ]
-  ))
-
-  cell_fn.last_args = []
-  cell_fn.last_val = undefined
-  cell_fn.dirty = true
-
-  return cell_fn
+  return _cell
 }
+
+type runCellFn = (c: Cell) => (a: mixed) => *
+const runCell: runCellFn = c => a => c(Right.of([a, undefined]))
 
 export {
+  runCell,
   Cell,
 }

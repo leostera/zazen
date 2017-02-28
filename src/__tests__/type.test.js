@@ -28,9 +28,23 @@ test(`Types have a type`, () => {
 
   const t = Test.of(true)
 
+  expect( Test.inspect() ).toEqual('TypeClass Test')
   expect( t['@@type']  ).toEqual('Test')
   expect( t['@@value'] ).toEqual(true)
   expect( t.inspect()  ).toEqual('Test(true)')
+  expect( t.is(Test)   ).toEqual(true)
+
+})
+
+test(`Types can hold objects too`, () => {
+
+  const Test = type('Test')
+
+  const t = Test.of({ hello: "world" })
+
+  expect( t['@@type']  ).toEqual('Test')
+  expect( t['@@value'] ).toMatchObject({ hello: "world" })
+  expect( t.inspect()  ).toEqual('Test({"hello":"world"})')
   expect( t.is(Test)   ).toEqual(true)
 
 })

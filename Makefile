@@ -2,7 +2,7 @@
 .PHONY: bench test lint build check package
 .PHONY: clean tags
 
-LIB_NAME   = zazen.js
+LIB_NAME     = zazen.js
 
 BIN_DIR      = ./node_modules/.bin
 BUILD_DIR    = lib
@@ -22,7 +22,7 @@ VERSION   = $(shell git describe --tags HEAD)
 REVISION  = $(shell git rev-parse HEAD)
 STAMP     = $(REVISION).$(shell date +%s)
 
-all: check #setup build lint check test bench
+all: setup build lint check test bench
 
 dirs:
 	mkdir -p $(DIST_DIR) $(BUILD_DIR) $(COVERAGE_DIR) $(CACHE_DIR)
@@ -42,6 +42,9 @@ flow-stop:
 check:
 	$(BIN_DIR)/flow
 	$(SCRIPT_DIR)/check-coverage.sh
+
+repl:
+	$(BIN_DIR)/babel-node
 
 bench: $(PERF_TESTS) FORCE
 $(PERF_DIR)/%.perf.js:

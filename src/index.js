@@ -4,7 +4,12 @@ export {
 
 export {
   Cell,
+  runCell,
 } from './cell'
+
+export {
+  Graph,
+} from './incremental'
 
 export {
   Left,
@@ -26,7 +31,9 @@ export {
 } from './cond'
 
 export {
+  Pair,
+  first,
+  second,
   swap,
   untag,
-  Pair,
 } from './pair'

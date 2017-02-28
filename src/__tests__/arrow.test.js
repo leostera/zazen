@@ -14,15 +14,18 @@ import {
 } from 'jsverify'
 
 import {
-  log,
-  atom,
-} from 'zazen/utils'
+  Arrow,
+} from '../arrow'
 
 import {
-  Arrow,
+  either,
   Left,
   Right,
-} from 'zazen'
+} from '../either'
+
+import {
+  id,
+} from '../prelude'
 
 const options = {
   quiet: true,
@@ -52,6 +55,44 @@ const eq = (a: Eq, b: Eq): boolean => {
     return a === b
   }
 }
+
+test(`an Arrow can be inspected`, () => {
+  const arr = Arrow( x => x )
+
+  expect(typeof arr.inspect).toEqual('function')
+  // Why this weird inspection? Because istanbul, that's why.
+  expect(arr.inspect()).toEqual('Arrow(function (x) /* istanbul ignore next */{return x;})')
+})
+
+test(`an Arrow can be lifted to work on the first side of a tuple`, () => {
+  const arr = Arrow( x => x+1 )
+  expect( arr.first([1,1]) ).toEqual( [2, 1] )
+})
+
+test(`an Arrow can be lifted to work on the second side of a tuple`, () => {
+  const arr = Arrow( x => x+1 )
+  expect( arr.second([1,1]) ).toEqual( [1, 2] )
+})
+
+test(`an Arrow can be summed over Lefts`, () => {
+  const arr = Arrow( x => x+1 )
+
+  const a = either(id)(id)( arr.left(Left.of(1)) )
+  const b = either(id)(id)( arr.left(Right.of(1)) )
+
+  expect( a ).toEqual(2)
+  expect( b ).toEqual(1)
+})
+
+test(`an Arrow can be summed over Rights`, () => {
+  const arr = Arrow( x => x+1 )
+
+  const a = either(id)(id)( arr.right(Left.of(1)) )
+  const b = either(id)(id)( arr.right(Right.of(1)) )
+
+  expect( a ).toEqual(1)
+  expect( b ).toEqual(2)
+})
 
 const check = (name, predicate) => {
   test(name, () => {

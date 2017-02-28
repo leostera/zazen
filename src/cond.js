@@ -26,28 +26,28 @@ type Reducer = (a: mixed, b: CondPairT) => mixed
 const reducer: Reducer = (a, cond) =>
   a || ( ([pred, branch]) => (pred ? branch : a) )( run_cond(cond) )
 
-export type Cond = (...pairs: Array<CondPairT>) => mixed
+export type Cond = (...pairs: Array<CondPairT>) => any 
 const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
 const withDefault = (a, b, c) =>
   (a === null || a === undefined || Object.keys(a).indexOf(b) === -1) ? c : a[b]
 
 type matchToCondFn = (a: Object) => (b: *) => (a: *) => CondPairT
-const matchToCond: matchToCondFn = matches => action => match => ([
-  eq(withDefault(action, '@@type', typeof action), match),
-  ap(matches[match], withDefault(action, '@@value', action))
+const matchToCond: matchToCondFn = matches => value => match => ([
+  eq(withDefault(value, '@@type', typeof value), match),
+  ap(matches[match], withDefault(value, '@@value', value))
 ])
 
 type _mapKeysFn = (a: Object) => (f: Function) => Array<*>
 const _mapKeys: _mapKeysFn = a => f => Object.keys(a).map(f)
 
 type createCondsFn = (a: Object) => (b: *) => Array<CondPairT>
-const createConds: createCondsFn = matches => action =>
-  _mapKeys(matches)(matchToCond(matches)(action))
+const createConds: createCondsFn = matches => value =>
+  _mapKeys(matches)(matchToCond(matches)(value))
 
 type createMatchFn = (f: (x: *) => *) => (a: Object) => (b: *) => mixed
-const createMatch: createMatchFn = typeChecker => matches => action =>
-  cond(...createConds(matches)(typeChecker(action)))
+const createMatch: createMatchFn = typeChecker => matches => value =>
+  cond(...createConds(matches)(typeChecker(value)))
 
 const match = createMatch(x => x)
 
