@@ -17,9 +17,12 @@ const str  = JSON.stringify
 const add1 = Arrow(x => x + 1)
 
 test(`a Cell is just a function`, () => {
-  const c = Cell( add1 )
+  const c = Cell( id )
 
   expect( typeof c ).toEqual('function')
+  expect( typeof c.inspect ).toEqual('function')
+  // Why this weird inspection? Because istanbul, that's why.
+  expect( c.inspect() ).toEqual('Cell(function (x) /* istanbul ignore next */{return x;})')
 })
 
 test(`a Cell is an Arrow`, () => {
