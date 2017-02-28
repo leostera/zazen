@@ -58,7 +58,7 @@ const hasInspect = (a: Object): bool =>
 
 const inspect = (a: Object): string => cond(
   [ a instanceof Array, () => (a instanceof Array) && `[${a.map(inspect)}]` ],
-  [ hasInspect(a) ? a.inspect : false, () => a.inspect() ],
+  [ hasInspect(a), () => a.inspect() ],
   [ true, () => JSON.stringify(a) ]
 )
 
