@@ -1,5 +1,3 @@
-import { log } from './utils'
-
 import {
   match,
   cond,
@@ -39,7 +37,7 @@ const retag = ([fa, [a, b]]) =>
     [ fa !== b , Recompute.of([a, fa]) ],
     [ true, Stable.of([a, b]) ])
 
-const flattenEither = either(x => Stable.of(x))(id)
+const flattenEither = either(Stable.of)(id)
 
 /*
  * Flipping the values would make Cell's composable, but would use the
@@ -51,68 +49,63 @@ const matchedSwap = match({
   Right: ([h,t]: PairT<*,*>) => Recompute.of([t,h]),
 })
 
+const signature = f => f.toString().replace('function','').replace('return','').replace(/\(|\)|;/g,'').split('{').map( s => s.replace('}','').trim() ).join(' => ')
+
 // (id +++ (f *** id) >>> retag) >>> flatten
 type CellFn = (f: Function) => Arrow
-const Cell: CellFn = f =>
-  Arrow(id).sum(
+const Cell: CellFn = f => {
+  const _cell = Arrow(id).sum(
     Arrow(f)
     .product(id)
     .pipe(retag)
     .compose( ([a, b]) => [a, [a, b]] )
   ).pipe(flattenEither)
 
-/*
-const compute = ([f, g]) =>
-  match({
-    Left: Left.of,
-    Right: ([A, B]) => ( fa => Right.of( [ either(first)(first)(fa), (
-      g.map( gi =>
-        match({
-          Left:  ([fa1, fa2]) => gi(Left.of(  [ fa2, either(second)(second)(B) ] )),
-          Right: ([fa1, fa2]) => gi(Right.of( [ fa2, either(second)(second)(B) ] ))
-        })(log(fa))
-      )
-    )]) )( f( Right.of([A, either(first)(first)(B) ]) ) )
-  })
-  */
+  _cell['@@type']  = 'Cell'
+  _cell['@@value'] = f
+  _cell.inspect = () => `${_cell['@@type']}(${signature(f)})`
 
-const compute = ([f, g]) => match({
-  Left: Left.of,
-  Right: ([a, eitherB]) => (fa => Right.of([
-    either(first)(first)(fa),
-    Right.of([
-      either(second)(second)(fa),
-      g.map( (gi, index) => match({
-        Left: ([faInput, faOutput]) => gi(
-          Left.of([ faOutput, either(second)(second)(eitherB)[index]])),
-        Right: ([faInput, faOutput]) => gi(
-          Right.of([ faOutput, either(second)(second)(eitherB)[index]]))
-      })(fa))
-    ])
-  ]))(
-    f(
-      Right.of([a, either(first)(first)(eitherB)])
-    )
-  )})
+  return _cell
+}
 
+const remap = which => newIn => next =>
+  next
+    .map( (n,j) => cond(
+      [ log(`is next io (${j}) an array?`)(n instanceof Array),
+        () => remap(which)(newIn)(log("next")(n)) ],
+      [ true, () => (
+        ([_,out]) => which.of([newIn, out])
+      )(either(id)(id)(log("not an array")(n))) ]))
 
-/*
-const remap = Which => children => ios => ([inn, out]) => ([
-  Which.of([inn, out]),
-  children.map( c => compute(c)([Which.of(inn), ios]) )
-])
+const newNextIO = subtree => nexts => which => newIn =>
+  nexts.map( (next,i) => cond(
+    [ isSubtree(subtree[i])(next), () => remap(which)(newIn)(next) ],
+    [ true, () => remap(which)(newIn)([next])[0] ]))
 
-const compute = ([node, children]) => ([inn, [out, rest]]) =>
-  match({
-    Cell: node => match({
-      Left:  remap(Left)(children)(rest),
-      Right: remap(Right)(children)(rest)
-    })( node(inn) ),
-    Graph: node => compute(node)(n),
-  })(node)
-*/
+const matcher = which => subtree => subtreeIO => ([nodeIn, nodeOut]) =>
+  subtree.length > 0
+  ? [
+    which.of([nodeIn, nodeOut]),
+    ...subtree.map( (t,i) => Graph([t])(
+      [log("New Next IO")(newNextIO(subtree)(subtreeIO)(which)(nodeOut))[i]],
+    ))
+  ]
+  : which.of([nodeIn, nodeOut])
 
-const Graph = cells => io => compute(cells)(io)
+const isSubtree = node => io => node instanceof Array && io instanceof Array
+const isNil = x => x === undefined || x === null
+
+const log = n => x => (console.log(n,"::",x), x)
+
+const Graph = ([node, ...subtree]) => ([nodeIO, ...subtreeIO]) => cond(
+  [ isNil(node), undefined ],
+  [ isSubtree(node)(nodeIO), () => Graph(node)(nodeIO) ],
+  [ true, () => match ({
+                  Left: matcher(Left)(subtree)(subtreeIO),
+                  Right: matcher(Right)(subtree)(subtreeIO),
+                })(log("node")(node)(log("io")(nodeIO)))
+  ])
+
 
 export {
   Cell,

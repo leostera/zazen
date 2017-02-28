@@ -75,7 +75,6 @@ const type = (name: any): any => ({
 })
 
 const foldable = (fold: Fold<any>) => (name: any) => ({
-
   '@@type': name,
   of: (x: *): Foldable<*,*> => ({
     '@@type': name,
