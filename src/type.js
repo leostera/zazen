@@ -53,14 +53,11 @@ export type Monoid<A, B> = Data<A, B> & {
 }
 export type Empty<A> = A
 
-const hasInspect = (a: Object): bool =>
-  typeof a === "object" && typeof a.inspect === 'function'
-
-const inspect = (a: Object): string => cond(
-  [ a instanceof Array, () => (a instanceof Array) && `[${a.map(inspect)}]` ],
-  [ hasInspect(a), () => a.inspect() ],
-  [ true, () => JSON.stringify(a) ]
-)
+const inspect = (a: Object): string => {
+  if( a instanceof Array )  return `[${a.map(inspect)}]`
+  if( a instanceof Object ) return JSON.stringify(a)
+  return a.toString()
+}
 
 /*
  * Generic Type Creator. If used with Flow's Inference engine, works smoothly
