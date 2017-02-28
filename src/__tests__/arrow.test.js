@@ -14,11 +14,6 @@ import {
 } from 'jsverify'
 
 import {
-  log,
-  atom,
-} from 'zazen/utils'
-
-import {
   Arrow,
   Left,
   Right,

@@ -6,11 +6,6 @@ import {
 } from 'jsverify'
 
 import {
-  log,
-  atom,
-} from 'zazen/utils'
-
-import {
   Stream,
 } from 'zazen'
 
