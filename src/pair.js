@@ -13,9 +13,16 @@ const Pair: PairFn = (a, b) => [a, b]
 const first  = ([a, b]: PairT<*,*>): * => a
 const second = ([a, b]: PairT<*,*>): * => b
 
+const dupe = (x: *): PairT<*,*> => [x,x]
+
+type runPairFn = (f: Function) => (g: Function) => (ab: PairT<*,*>) => PairT<*,*>
+const runPair: runPairFn = f => g => ([a,b]) => [f(a), g(b)]
+
 export {
   Pair,
+  dupe,
   first,
+  runPair,
   second,
   swap,
   untag,
