@@ -70,8 +70,8 @@ const Arrow = (f: Function): ArrowT  => {
   /***
    * arrChoice
    ***/
-  f.sum = g => Arrow( either( a => Left.of(f(a)) )( a => Right.of(g(a)) ) )
-  f.fanin = g => f.sum(g).pipe( either( x => x )( x => x ) )
+  f.sum   = g => Arrow( either( a => Left.of(f(a)) )( a => Right.of(g(a)) ) )
+  f.fanin = g => f.sum(g).pipe( either(id)(id) )
 
   f.left  = x => f.sum(id)(x)
   f.right = x => Arrow(id).sum(f)(x)
