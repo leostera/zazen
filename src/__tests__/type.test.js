@@ -80,7 +80,7 @@ test(`Foldable actually behaves as expected`, () => {
   const a = IdentityFoldable.of('str')
 
   expect(a.fold(x => x)).toEqual('str')
-  expect(a.inspect()).toEqual('IdentityFoldable(str)')
+  expect(a.inspect()).toEqual('IdentityFoldable("str")')
   expect(a.is(IdentityFoldable)).toBeTruthy()
 
 })
@@ -97,7 +97,7 @@ test(`Semigroup actually behaves as expected`, () => {
   const b = StringSemigroup.of('b')
 
   expect(a.concat(b)['@@value']).toEqual('a.b')
-  expect(a.inspect()).toEqual('StringSemigroup(a)')
+  expect(a.inspect()).toEqual('StringSemigroup("a")')
   expect(a.is(StringSemigroup)).toBeTruthy()
 
 })
