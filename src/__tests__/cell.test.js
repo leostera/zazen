@@ -1,6 +1,7 @@
 import {
   Arrow,
   Cell,
+  runCell,
   Left,
   Right,
   either,
@@ -83,5 +84,16 @@ test(`a Cell returns Left on same-output values`, () => {
   const value = either(id)(id)(result)
 
   expect(result.is(Left)).toBeTruthy()
+  expect(value).toEqual([1,2])
+})
+
+test(`runCell always recomputes the value`, () => {
+  const c = Cell( add1 )
+
+  const result = runCell(c)(1)
+  const value = either(id)(id)(result)
+
+  expect(result.is(Left)).toBeFalsy()
+  expect(result.is(Right)).toBeTruthy()
   expect(value).toEqual([1,2])
 })
