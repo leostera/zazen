@@ -17,6 +17,10 @@ import {
   second,
 } from './pair'
 
+import {
+  isNil
+} from './prelude'
+
 const snd = either(second)(second)
 
 const remap = which => newIn => n => cond(
@@ -39,10 +43,9 @@ const matcher = which => subtree => subtreeIO => ([nodeIn, nodeOut]) =>
     [true, () => which.of([nodeIn, nodeOut]) ])
 
 const isSubtree = node => io => node instanceof Array && io instanceof Array
-const isNil = (x: mixed): boolean => x === undefined || x === null
 
 type GraphFn = (a: *) => (b: *) => *
-const Graph: GraphFn = ([node, ...subtree]) => ([nodeIO, ...subtreeIO]) =>
+export const Graph: GraphFn = ([node, ...subtree]) => ([nodeIO, ...subtreeIO]) =>
   cond(
     [ isNil(node), undefined ],
     [ isSubtree(node)(nodeIO), () => Graph(node)(nodeIO) ],
@@ -50,7 +53,3 @@ const Graph: GraphFn = ([node, ...subtree]) => ([nodeIO, ...subtreeIO]) =>
                     Left: matcher(Left)(subtree)(subtreeIO),
                     Right: matcher(Right)(subtree)(subtreeIO),
                   })( node(nodeIO) )])
-
-export {
-  Graph,
-}

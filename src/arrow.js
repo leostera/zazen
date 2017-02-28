@@ -50,7 +50,7 @@ export type ArrowT = (a: *) => * & {
 
 // Lifts a function into an arr
 // arrow :: (b -> c) -> arr b c
-const Arrow = (f: Function): ArrowT  => {
+export const Arrow = (f: Function): ArrowT  => {
   f['@@type']  = 'Arrow'
   f['@@value'] = f
   f.inspect = () => `${f['@@type']}(${f.toString()})`
@@ -77,8 +77,4 @@ const Arrow = (f: Function): ArrowT  => {
   f.right = x => Arrow(id).sum(f)(x)
 
   return f
-}
-
-export {
-  Arrow,
 }

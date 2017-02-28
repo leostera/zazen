@@ -13,9 +13,7 @@ import {
   cond,
   createMatch,
   eq,
-  reducer,
   run,
-  run_cond,
 } from 'zazen/cond'
 
 const assert = (x) => () => expect(x).toEqual(true)
@@ -25,25 +23,6 @@ test("Run returns the value if it's a value",
 
 test("Run returns the resulting value if it's passed a function",
   assert( run( () => 1 ) === 1) )
-
-test("A condition evaluates to it's branch function's return value",
-  assert( run_cond([1, () => 2])[1] === 2) )
-
-test("A condition evaluates to it's branch value",
-  assert( run_cond([1, 2])[1] === 2) )
-
-test("Reducing always returns the first match",
-  assert(
-    reducer(
-      undefined,
-      [ 1, () => 1 ],
-      [ 2, () => 2 ] ) === 1) )
-
-test("Reducing is it's default value if there are no matches",
-  assert(
-    reducer(
-      undefined,
-      [ false, () => 2 ] ) === undefined) )
 
 test("Cond always returns the value of the first matching branch",
   assert(

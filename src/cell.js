@@ -41,7 +41,7 @@ export type CellT = ArrowT & {
 }
 
 type CellFn = (f: Function) => CellT
-const Cell: CellFn = f => {
+export const Cell: CellFn = f => {
   // _cell = (id +++ ( dupeFirst >>> (f *** id) >>> retag) >>> flatten
   const _cell = Arrow(id).sum(
     Arrow(dupeFirst)
@@ -57,9 +57,4 @@ const Cell: CellFn = f => {
 }
 
 type runCellFn = (c: Cell) => (a: mixed) => *
-const runCell: runCellFn = c => a => c(Right.of([a, undefined]))
-
-export {
-  runCell,
-  Cell,
-}
+export const runCell: runCellFn = c => a => c(Right.of([a, undefined]))

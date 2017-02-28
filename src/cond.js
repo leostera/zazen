@@ -7,16 +7,16 @@ type Predicate = mixed | PredicateFn
 export type CondPairT = PairT<Predicate, mixed>
 
 type Eq = (a: mixed, b: mixed) => PredicateFn
-const eq: Eq = (a,b) => () => a === b
+export const eq: Eq = (a,b) => () => a === b
 
 type Ap = (f: Function, a: mixed) => PredicateFn
-const ap: Ap = (f, a) => () => f(a)
+export const ap: Ap = (f, a) => () => f(a)
 
 type Just<A> = (a: A) => () => A
-const just: Just<*> = a => () => a
+export const just: Just<*> = a => () => a
 
 type Run = (a: Predicate) => mixed
-const run: Run = a => ((typeof a == 'function' && a || just(a))())
+export const run: Run = a => ((typeof a == 'function' && a || just(a))())
 
 type RunCond = (a: CondPairT) => CondPairT
 const run_cond: RunCond = ([pred, branch]) =>
@@ -26,8 +26,8 @@ type Reducer = (a: mixed, b: CondPairT) => mixed
 const reducer: Reducer = (a, cond) =>
   a || ( ([pred, branch]) => (pred ? branch : a) )( run_cond(cond) )
 
-export type Cond = (...pairs: Array<CondPairT>) => any 
-const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
+export type Cond = (...pairs: Array<CondPairT>) => any
+export const cond: Cond = (...conds) => conds.reduce(reducer, undefined)
 
 const withDefault = (a, b, c) =>
   (a === null || a === undefined || Object.keys(a).indexOf(b) === -1) ? c : a[b]
@@ -46,18 +46,7 @@ const createConds: createCondsFn = matches => value =>
   _mapKeys(matches)(matchToCond(matches)(value))
 
 type createMatchFn = (f: (x: *) => *) => (a: Object) => (b: *) => mixed
-const createMatch: createMatchFn = typeChecker => matches => value =>
+export const createMatch: createMatchFn = typeChecker => matches => value =>
   cond(...createConds(matches)(typeChecker(value)))
 
-const match = createMatch(x => x)
-
-export {
-  ap,
-  cond,
-  createMatch,
-  eq,
-  match,
-  reducer,
-  run,
-  run_cond,
-}
+export const match = createMatch(x => x)

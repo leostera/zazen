@@ -1,10 +1,6 @@
-
 type composeFn = (f: Function) => (g: Function) => *
-const compose: composeFn = f => g => x => f(g(x))
+export const compose: composeFn = f => g => x => f(g(x))
 
-const id = (x: *): * => x
+export const id = (x: *): * => x
 
-export {
-  compose,
-  id,
-}
+export const isNil = (x: mixed): boolean => x === undefined || x === null
