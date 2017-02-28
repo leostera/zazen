@@ -40,7 +40,7 @@ export type CellT = ArrowT & {
   '@@value': ArrowT;
 }
 
-type CellFn = (f: Function) => Cell
+type CellFn = (f: Function) => CellT
 const Cell: CellFn = f => {
   // _cell = (id +++ ( dupeFirst >>> (f *** id) >>> retag) >>> flatten
   const _cell = Arrow(id).sum(

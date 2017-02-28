@@ -28,24 +28,24 @@ import {
  */
 export type ArrowT = (a: *) => * & {
   '@@type': 'Arrow';
-  '@@value': Function;
+  '@@value': (a: *) => *;
+  inspect: () => string;
 
-  id(b: mixed): mixed;
+  first:  (p: PairT<*, *>) => ArrowT;
+  second: (p: PairT<*, *>) => ArrowT;
 
-  first(p: PairT<mixed, mixed>):  ArrowT;
-  second(p: PairT<mixed, mixed>): ArrowT;
+  compose: (b: ArrowT) => ArrowT;
+  pipe:    (b: ArrowT) => ArrowT;
 
-  compose(b: ArrowT): ArrowT;
-  pipe(b: ArrowT):    ArrowT;
+  product: (b: ArrowT) => ArrowT;
+  fanout:  (b: ArrowT) => ArrowT;
 
-  product(b: ArrowT): ArrowT;
-  fanout (b: ArrowT): ArrowT;
+  sum:   (b: ArrowT) => ArrowT;
+  fanin: (b: ArrowT) => *;
 
-  left(x: mixed):  EitherT<mixed, mixed>;
-  right(x: mixed): EitherT<mixed, mixed>;
+  left:  (x: *) => EitherT<*, *>;
+  right: (x: *) => EitherT<*, *>;
 
-  sum(b: ArrowT):   ArrowT;
-  fanin(b: ArrowT): mixed;
 }
 
 // Lifts a function into an arr
@@ -71,7 +71,6 @@ const Arrow = (f: Function): ArrowT  => {
    * arrChoice
    ***/
   f.sum = g => Arrow( either( a => Left.of(f(a)) )( a => Right.of(g(a)) ) )
-
   f.fanin = g => f.sum(g).pipe( either( x => x )( x => x ) )
 
   f.left  = x => f.sum(id)(x)
