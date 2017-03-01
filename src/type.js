@@ -149,4 +149,5 @@ export {
   semigroup,
   setoid,
   type,
+  inspect,
 }
