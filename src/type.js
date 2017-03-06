@@ -1,6 +1,6 @@
 import {
   cond,
-} from './cond'
+} from './prelude'
 
 /*
  * Generic TypeChecker used to coerce inputs of functions when using them.
@@ -63,7 +63,7 @@ const inspect = (a: Object): string => {
  * Generic Type Creator. If used with Flow's Inference engine, works smoothly
  * to verify that `of` blows up in time for the wrong types.
  */
-const type = (name: any): any => ({
+export const type = (name: any): any => ({
   '@@type': name,
   of: x => ({
     '@@type': name,
@@ -74,7 +74,7 @@ const type = (name: any): any => ({
   inspect: () => `TypeClass ${name}`
 })
 
-const foldable = (fold: Fold<any>) => (name: any) => ({
+export const foldable = (fold: Fold<any>) => (name: any) => ({
   '@@type': name,
   of: (x: *): Foldable<*,*> => ({
     '@@type': name,
@@ -85,7 +85,7 @@ const foldable = (fold: Fold<any>) => (name: any) => ({
   })
 })
 
-const functor = (map: Map<any>) => (name: any) => {
+export const functor = (map: Map<any>) => (name: any) => {
   const of = (x: *): Functor<*,*> => ({
     '@@type': name,
     '@@value': x,
@@ -100,7 +100,7 @@ const functor = (map: Map<any>) => (name: any) => {
   }
 }
 
-const semigroup = (concat: Concat<any>) => (name: any) => {
+export const semigroup = (concat: Concat<any>) => (name: any) => {
   const of = (x: *): Semigroup<*,*> => ({
     '@@type': name,
     '@@value': x,
@@ -115,7 +115,7 @@ const semigroup = (concat: Concat<any>) => (name: any) => {
   }
 }
 
-const setoid = (equals: Equals<any>) => (name: any) => ({
+export const setoid = (equals: Equals<any>) => (name: any) => ({
   '@@type': name,
   of: (x: *): Setoid<*,*> => ({
     '@@type': name,
@@ -126,7 +126,7 @@ const setoid = (equals: Equals<any>) => (name: any) => ({
   })
 })
 
-const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
+export const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
   const of = (x: *): Semigroup<*,*> => ({
     '@@type': name,
     '@@value': x,
@@ -140,13 +140,4 @@ const monoid = (concat: Concat<any>, empty: Empty<any>) => (name: any) => {
     of,
     empty: () => of(empty)
   }
-}
-
-export {
-  foldable,
-  functor,
-  monoid,
-  semigroup,
-  setoid,
-  type,
 }

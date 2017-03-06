@@ -1,11 +1,19 @@
+/*
+ * Type imports
+ */
+
 import type {
   EitherT,
 } from './either'
 
+/*
+ * Dependencies
+ */
+
 import {
   cond,
   match,
-} from './cond'
+} from './prelude'
 
 import {
   either,

@@ -12,7 +12,7 @@ import type {
 
 import {
   cond,
-} from './cond'
+} from './prelude'
 
 import {
   Arrow,
@@ -24,13 +24,17 @@ import {
   Right,
 } from './either'
 
-const id = x => x
+import {
+  id,
+  eq,
+  not,
+} from './prelude'
 
 const dupeFirst = ([a, b]) => [a, [a, b]]
 
 const retag = ([fa, [a, b]]) =>
   cond(
-    [ fa !== b , Right.of([a, fa]) ],
+    [ not(eq(fa)(b)), Right.of([a, fa]) ],
     [ true, Left.of([a, b]) ])
 
 const flattenEither = either(Left.of)(id)

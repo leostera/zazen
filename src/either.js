@@ -17,7 +17,7 @@ import {
   cond,
   createMatch,
   eq,
-} from './cond'
+} from './prelude'
 
 // $FlowIgnore
 type LeftT<A>  = Type<'Left',  A>
