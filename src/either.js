@@ -13,7 +13,6 @@ import {
 } from './type'
 
 import {
-  ap,
   cond,
   createMatch,
   eq,

@@ -2,7 +2,7 @@ import type {
   PairT,
 } from './pair'
 
-export const log = x => (console.log(x), x)
+export const log = (x: *): * => (console.log(x), x)
 
 type composeFn = (f: Function) => (g: Function) => *
 export const compose: composeFn = f => g => x => f(g(x))
@@ -11,28 +11,36 @@ export const id = (x: *): * => x
 
 export const isNil = (x: mixed): boolean => x === undefined || x === null
 
-export const and = a => b => a && b
-export const or  = a => b => a || b
-export const not = x => !x
+export const and = (a: boolean) => (b: boolean): boolean => a && b
+export const or = (a: boolean) => (b: boolean): boolean => a || b
+export const not = (x: boolean): boolean => !x
 
-export const isArray = Array.isArray
-export const isObject = x => and( not(isArray(x)) )(x instanceof Object)
+export const isArray: (x: mixed) => boolean = Array.isArray
+export const isObject = (x: mixed): boolean => and( not(isArray(x)) )(x instanceof Object)
 
-export const eqList = eq => a => b =>
+type eqFn = (a: mixed) => (b: mixed) => boolean
+type eqListFn = (eq: eqFn) => (a: mixed[]) => (b: mixed[]) => boolean
+export const eqList: eqListFn = eq => a => b =>
   a.length === b.length
   ? zip(a)(b).map( ([a,b]) => eq(a)(b) ).reduce( (acc,e) => and(acc)(e), true)
   : false
 
-const toPropList = a => Object.keys(a).sort().map( name => [name, a[name]] )
+type PropT = [string, mixed]
+type PropListT = Array<PropT>
+const toPropList = (a: Object): PropListT => Object.keys(a).sort().map( name => [name, a[name]] )
 
-export const eqObj = eq => a => b => eq( toPropList(a) )( toPropList(b) )
+type eqObjFn = (eq: eqFn) => (a: Object) => (a: Object) => boolean
+export const eqObj: eqObjFn = eq => a => b => eq(toPropList(a))(toPropList(b))
 
-export const eq = a => b => cond(
+export const eq: eqFn = a => b => cond(
+  // $FlowIgnore
   [ isArray(a)  && isArray(b),  () => eqList(eq)(a)(b) ],
+  // $FlowIgnore
   [ isObject(a) && isObject(b), () => eqObj(eq)(a)(b)  ],
   [ true, a === b ])
 
-export const zip = ([a, ...as]) => ([b, ...bs]) => [
+type zipFn = (a: mixed[]) => (b: mixed[]) => mixed[][]
+export const zip: zipFn = ([a, ...as]) => ([b, ...bs]) => [
   [a,b], ...( as.length > 0 && bs.length > 0 ? zip(as)(bs) : [] )
 ]
 

@@ -9,7 +9,6 @@ import type {
 } from 'zazen/type'
 
 import {
-  ap,
   cond,
   createMatch,
   eq,
