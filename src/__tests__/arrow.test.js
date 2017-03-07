@@ -61,7 +61,7 @@ test(`an Arrow can be inspected`, () => {
 
   expect(typeof arr.inspect).toEqual('function')
   // Why this weird inspection? Because istanbul, that's why.
-  expect(arr.inspect()).toEqual('Arrow(function (x) /* istanbul ignore next */{return x;})')
+  expect(arr.inspect()).toEqual('Arrow(function (x) {return x;})')
 })
 
 test(`an Arrow can be lifted to work on the first side of a tuple`, () => {

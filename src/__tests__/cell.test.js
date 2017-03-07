@@ -22,7 +22,7 @@ test(`a Cell is just a function`, () => {
   expect( typeof c ).toEqual('function')
   expect( typeof c.inspect ).toEqual('function')
   // Why this weird inspection? Because istanbul, that's why.
-  expect( c.inspect() ).toEqual('Cell(function (x) /* istanbul ignore next */{return x;})')
+  expect( c.inspect() ).toEqual('Cell(function (x) {return x;})')
 })
 
 test(`a Cell is an Arrow`, () => {
