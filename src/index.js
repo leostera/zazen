@@ -1,6 +1,5 @@
 export * from './arrow'
 export * from './cell'
-export * from './cond'
 export * from './either'
 export * from './incremental'
 export * from './pair'

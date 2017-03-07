@@ -9,12 +9,11 @@ import type {
 } from 'zazen/type'
 
 import {
-  ap,
   cond,
   createMatch,
   eq,
   run,
-} from 'zazen/cond'
+} from 'zazen/prelude'
 
 const assert = (x) => () => expect(x).toEqual(true)
 
