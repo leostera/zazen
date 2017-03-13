@@ -13,6 +13,15 @@ const Data = name => ({
   })
 })
 
+const DepType = name => constraints => ({
+  '@@type': [...constraints, 'Type'],
+  of: (...args) => ({
+    '@@type': // name + constraints,
+    '@@value': // the value
+    inspect, // well
+  })
+})
+
 const SumType = (...names) => ({
   '@@type': names,
   constructors: map(Data)(names)
