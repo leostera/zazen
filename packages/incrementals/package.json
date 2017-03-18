@@ -3,7 +3,7 @@
   "description": "An implementation of an incremental computation graph",
   "license": "BSD-3-Clause",
   "main": "src/index.js",
-  "name": "incremental",
+  "name": "incrementals",
   "repository": "https://github.com/ostera/zazen",
   "version": "0.0.1"
 }
