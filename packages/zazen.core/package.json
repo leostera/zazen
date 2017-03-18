@@ -1,0 +1,9 @@
+{
+  "author": "Leandro Ostera <leandro@ostera.io>",
+  "description": "Zazen's Core Features",
+  "license": "BSD-3-Clause",
+  "main": "src/index.js",
+  "name": "zazen.core",
+  "repository": "https://github.com/ostera/zazen/",
+  "version": "0.0.1"
+}
