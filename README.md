@@ -1,8 +1,8 @@
-# zazen
+# `zazen`
 
 <img src="https://raw.githubusercontent.com/ostera/zazen/master/assets/zazen-600.png" align="right" height="100" />
 
-> 🙏 sit, breathe, stream.
+> 🙏 sit, breathe, code.
 
 [![Travis-CI](https://api.travis-ci.org/ostera/zazen.svg)](https://travis-ci.org/ostera/zazen)
 [![Codecov branch](https://codecov.io/gh/ostera/zazen/master.svg)](https://codecov.io/gh/ostera/zazen)
