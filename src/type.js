@@ -56,7 +56,7 @@ export type Empty<A> = A
 
 const inspect = (a: Object): string => {
   if( a instanceof Array )  return `[${a.map(inspect)}]`
-  if( a instanceof Object ) return JSON.stringify(a)
+  // if( a instanceof Object ) return JSON.stringify(a)
   if( isNil(a) ) return "Nil"
   return a.toString()
 }
