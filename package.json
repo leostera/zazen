@@ -42,7 +42,7 @@
     "jsverify": "^0.8.0",
     "regenerator": "^0.9.0",
     "static-server": "^2.0.3",
-    "uglify-js": "^2.6.4"
+    "uglify-js": "^3.0.7"
   },
   "scripts": {
     "prepublish": "make clean setup build"
