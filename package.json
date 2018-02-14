@@ -34,7 +34,7 @@
     "browserify-incremental": "^3.1.1",
     "codecov": "^2.0.1",
     "eslint": "^3.0.0",
-    "exorcist": "^0.4.0",
+    "exorcist": "^1.0.1",
     "flow-bin": "^0.42.0",
     "flow-typed": "^2.0.0",
     "jest": "^19.0.1",
